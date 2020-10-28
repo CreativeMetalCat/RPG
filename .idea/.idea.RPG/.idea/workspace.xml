@@ -18,8 +18,8 @@
         <option value="$PROJECT_DIR$/Source/RPG/Enemy/EnemyBase.h" />
         <option value="$PROJECT_DIR$/Source/RPG/Enemy/EnemyBase.cpp" />
         <option value="$PROJECT_DIR$/Source/RPG/InteractionInterface.h" />
-        <option value="$PROJECT_DIR$/Source/RPG/RPGCharacter.h" />
         <option value="$PROJECT_DIR$/Source/RPG/Quest/Quest.h" />
+        <option value="$PROJECT_DIR$/Source/RPG/RPGCharacter.h" />
         <option value="$PROJECT_DIR$/Source/RPG/RPGCharacter.cpp" />
       </list>
     </option>

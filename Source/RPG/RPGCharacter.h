@@ -23,6 +23,8 @@ enum class EDirection:uint8
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnQuestFinished,FQuest,Quest);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLevelUped,int,CurrentLevel);
 /**
  * This class is the default character for RPG, and it is responsible for all
  * physical interaction between the player and the world.
@@ -113,6 +115,12 @@ protected:
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Display)
 	void UpdateQuestDisplayInfo();
 
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Exp)
+	void AddExp(int amount);
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Exp)
+	void LevelUp();
+
 	/*This return COPY of quest info, changing it will NOT affect original info. See: @ChangeQuestInfo for that
 	 *
 	 */
@@ -133,15 +141,24 @@ protected:
 public:
 	UPROPERTY(BlueprintAssignable)
 	FOnQuestFinished OnQuestFinished;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnLevelUped OnLevelUped;
 	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Direction)
 	EDirection CurrentDirection;
 
-	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Exp)
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Info)
 	int Experience = 0;
 	
-	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Exp)
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Info)
 	int Level = 0;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Info)
+	int Money = 0;
+	
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Level)
+	int NeededExperienceMultiplier = 100;
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Sound)
 	USoundBase *AttackSound  = nullptr;
@@ -156,3 +173,5 @@ public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 };
+
+

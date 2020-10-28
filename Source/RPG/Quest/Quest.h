@@ -51,6 +51,24 @@ public:
  UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Progress)
  bool bAllowProgressBeforeGiven = true;
 
+ /*
+  * If set to 0 this reward will NOT be displayed
+  */
+ UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Reward)
+ int ExperienceReward = 0;
+
+ /*
+ * If set to 0 this reward will NOT be displayed
+ */
+ UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Reward)
+ int MoneyReward = 0;
+
+ /*
+  * This quest can not be started until all this are completed
+  */
+ UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Requirements)
+ TArray<FString> NeededQuests;
+
  /*When game starts player already has all quests, but game can only mark it as completed if was given to player.
   *if bShow is true than player was given this quest, if false - not*/
  UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Dev)

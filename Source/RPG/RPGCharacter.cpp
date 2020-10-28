@@ -259,6 +259,11 @@ void ARPGCharacter::UpdateQuestDisplayInfo_Implementation()
 {
 }
 
+void ARPGCharacter::LevelUp_Implementation()
+{
+	
+}
+
 FQuest ARPGCharacter::GetQuestInfo(FString devName,bool&hasQuest)
 {
 	hasQuest = false;
@@ -299,6 +304,16 @@ void ARPGCharacter::BeginPlay()
 			PC->bShowMouseCursor = true;
 			PC->SetInputMode(FInputModeGameAndUI());
 		}
+	}
+}
+
+void ARPGCharacter::AddExp_Implementation(int amount)
+{
+	Experience += amount;
+	
+	if(Experience >= Level * NeededExperienceMultiplier)
+	{
+		LevelUp();
 	}
 }
 
