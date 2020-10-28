@@ -110,6 +110,9 @@ protected:
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Quest)
 	void ChangeQuestInfo(FQuest newQuestInfo);
 
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Display)
+	void UpdateQuestDisplayInfo();
+
 	/*This return COPY of quest info, changing it will NOT affect original info. See: @ChangeQuestInfo for that
 	 *
 	 */

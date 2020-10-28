@@ -163,8 +163,9 @@ bool ARPGCharacter::AddQuest_Implementation(FQuest quest)
 					Quests[i].bShow = true;
 					if(Quests[i].CurrentProgress >= Quests[i].NeededProgress)
 					{
-						
+						CompleteQuest(Quests[i].DevName,i);
 					}
+					UpdateQuestDisplayInfo();
 					return true;
 				}
 			}			
@@ -173,6 +174,7 @@ bool ARPGCharacter::AddQuest_Implementation(FQuest quest)
 	
 	quest.bShow = true;
 	Quests.Add(quest);
+	UpdateQuestDisplayInfo();
 	return true;
 }
 
@@ -189,11 +191,13 @@ bool ARPGCharacter::AddQuestToQuestArray(FQuest quest)
 			}			
 		}
 		Quests.Add(quest);
+		UpdateQuestDisplayInfo();
 		return true;
 	}
 	else
 	{
 		Quests.Add(quest);
+		UpdateQuestDisplayInfo();
 		return true;
 	}
 }
@@ -209,6 +213,7 @@ bool ARPGCharacter::CompleteQuest_Implementation(const FString& devName,int ques
 
 void ARPGCharacter::MakeProgress_Implementation(const FString& devName, int amount)
 {
+	
 	if(Quests.Num() > 0)
 	{
 		for(int i=0;i < Quests.Num(); i++)
@@ -217,11 +222,13 @@ void ARPGCharacter::MakeProgress_Implementation(const FString& devName, int amou
 			{
 				if(Quests[i].bShow || Quests[i].bAllowProgressBeforeGiven)
 				{
-					Quests[i].NeededProgress += amount;
+					Quests[i].CurrentProgress += amount;
 					if(Quests[i].bShow && Quests[i].CurrentProgress >= Quests[i].NeededProgress)
 					{
 						CompleteQuest(Quests[i].DevName,i);
 					}
+					UpdateQuestDisplayInfo();
+					return;
 				}
 				else
 				{
@@ -241,9 +248,15 @@ void ARPGCharacter::ChangeQuestInfo_Implementation(FQuest newQuestInfo)
 			if(Quests[i].DevName == newQuestInfo.DevName)
 			{
 				Quests[i] = newQuestInfo;
+				break;
 			}
 		}
 	}
+	UpdateQuestDisplayInfo();
+}
+
+void ARPGCharacter::UpdateQuestDisplayInfo_Implementation()
+{
 }
 
 FQuest ARPGCharacter::GetQuestInfo(FString devName,bool&hasQuest)
@@ -306,7 +319,7 @@ void ARPGCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 void ARPGCharacter::MoveRight(float Value)
 {
 	/*UpdateChar();*/
-	if ( (Controller != NULL) && (Value != 0.0f) )
+	if ( (Controller != nullptr) && (Value != 0.0f) )
 	{
 		AddMovementInput(FVector(1,0,0), Value);
 	}

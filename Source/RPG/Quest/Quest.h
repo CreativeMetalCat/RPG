@@ -11,7 +11,7 @@
 /**
  * 
  */
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FQuest :public
 FTableRowBase
 {
