@@ -106,6 +106,12 @@ protected:
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Quest)
 	bool CompleteQuest(const FString &devName,int questId);
 
+	/*Used by dialog system to mark quests as rewarded and avoid giving reward more than once
+	 * Do not use manually
+	 */
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Quest)
+	void MarkQuestAsRewarded(const FString &devName);
+
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Quest)
 	void MakeProgress(const FString &devName,int amount);
 
@@ -115,11 +121,17 @@ protected:
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Display)
 	void UpdateQuestDisplayInfo();
 
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Display)
+	void UpdatePlayerInfo();
+
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Exp)
 	void AddExp(int amount);
 
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Exp)
 	void LevelUp();
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Money)
+    void AddMoney(int amount);
 
 	/*This return COPY of quest info, changing it will NOT affect original info. See: @ChangeQuestInfo for that
 	 *
@@ -156,6 +168,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Info)
 	int Money = 0;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Skill)
+	int SkillPoints = 0;
 	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Level)
 	int NeededExperienceMultiplier = 100;

@@ -202,6 +202,20 @@ bool ARPGCharacter::AddQuestToQuestArray(FQuest quest)
 	}
 }
 
+void ARPGCharacter::MarkQuestAsRewarded_Implementation(const FString& devName)
+{
+	if(Quests.Num() > 0)
+	{
+		for(int i=0;i < Quests.Num(); i++)
+		{
+			if(Quests[i].DevName == devName)
+			{
+				Quests[i].bRewarded = true;
+			}
+		}
+	}
+}
+
 bool ARPGCharacter::CompleteQuest_Implementation(const FString& devName,int questId)
 {
 	if(Quests[questId].bCompleted){return false;}
@@ -261,7 +275,20 @@ void ARPGCharacter::UpdateQuestDisplayInfo_Implementation()
 
 void ARPGCharacter::LevelUp_Implementation()
 {
-	
+	Experience = (Experience-Level*NeededExperienceMultiplier <= 0)? 0: Experience-Level*NeededExperienceMultiplier;
+	Level++;
+	SkillPoints += FMath::RandRange(0,5);
+	UpdatePlayerInfo();
+}
+
+void ARPGCharacter::AddMoney_Implementation(int amount)
+{
+	Money+=amount;
+	UpdatePlayerInfo();
+}
+
+void ARPGCharacter::UpdatePlayerInfo_Implementation()
+{
 }
 
 FQuest ARPGCharacter::GetQuestInfo(FString devName,bool&hasQuest)
@@ -315,6 +342,7 @@ void ARPGCharacter::AddExp_Implementation(int amount)
 	{
 		LevelUp();
 	}
+	UpdatePlayerInfo();
 }
 
 void ARPGCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)

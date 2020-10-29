@@ -74,6 +74,13 @@ public:
  UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Dev)
  bool bShow = false;
 
+ /*
+  * Used if reward for quest isn't given right away(player has to talk to someone to get reward)
+  * Changed ONLY in code
+  */
+ UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Dev)
+ bool bRewarded = false;
+
  /*DO NOT TOUCH THIS. THIS VALUE IS FOR CODE*/
  UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Dev)
  bool bCompleted = false;
