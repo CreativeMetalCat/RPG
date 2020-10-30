@@ -157,28 +157,34 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnLevelUped OnLevelUped;
 	
-	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Direction)
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Direction,SaveGame)
 	EDirection CurrentDirection;
 
-	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Info)
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Info,SaveGame)
 	int Experience = 0;
 	
-	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Info)
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Info,SaveGame)
 	int Level = 0;
 
-	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Info)
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Info,SaveGame)
 	int Money = 0;
 
-	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Skill)
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Skill,SaveGame)
 	int SkillPoints = 0;
 	
-	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Level)
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Level,SaveGame)
 	int NeededExperienceMultiplier = 100;
 
-	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Sound)
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Stats,SaveGame)
+	int AttackPower = 1;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Stats,SaveGame)
+	int Defense = 1;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Sound,SaveGame)
 	USoundBase *AttackSound  = nullptr;
 
-	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Quest)
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Quest,SaveGame)
 	TArray<FQuest> Quests;
 	
 	ARPGCharacter();

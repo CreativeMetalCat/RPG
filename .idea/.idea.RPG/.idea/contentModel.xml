@@ -45539,6 +45539,7 @@
       <e p="UE4Game.Target.cs" t="Include" />
     </e>
     <e p="C:\UnrealProjects\RPG" t="IncludeFlat">
+      <e p=".gitignore" t="Include" />
       <e p="Config" t="Include">
         <e p="DefaultEditor.ini" t="Include" />
         <e p="DefaultEditorPerProjectUserSettings.ini" t="Include" />
@@ -45554,6 +45555,7 @@
         <e p="UE4.vcxproj" t="IncludeRecursive" />
       </e>
       <e p="packages" t="ExcludeRecursive" />
+      <e p="README.md" t="Include" />
       <e p="Retro8BitSounds.png" t="Include" />
       <e p="RPG.sln" t="IncludeFlat" />
       <e p="RPG.uproject" t="Include" />
@@ -45565,6 +45567,12 @@
           </e>
           <e p="InteractionInterface.cpp" t="Include" />
           <e p="InteractionInterface.h" t="Include" />
+          <e p="Items" t="Include">
+            <e p="ItemInfo.cpp" t="Include" />
+            <e p="ItemInfo.h" t="Include" />
+            <e p="ItemSpecialEffect.cpp" t="Include" />
+            <e p="ItemSpecialEffect.h" t="Include" />
+          </e>
           <e p="Quest" t="Include">
             <e p="Quest.cpp" t="Include" />
             <e p="Quest.h" t="Include" />
