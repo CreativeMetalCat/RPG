@@ -3,7 +3,6 @@
 
 #include "ItemSpecialEffect.h"
 
-void UItemSpecialEffect::ApplyEffect_Implementation(AActor* CreatorOfEffect, FVector Origin)
+void AItemSpecialEffect::ApplyEffect_Implementation(AActor* CreatorOfEffect, FVector Origin)
 {
-    
 }

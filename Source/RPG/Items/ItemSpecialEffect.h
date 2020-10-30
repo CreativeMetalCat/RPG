@@ -8,8 +8,8 @@
 #include "ItemSpecialEffect.generated.h"
 
 /*Used by items that create special effects on use. For example: Magic wand that shoot lightning,or grenade that explodes*/
-UCLASS(Blueprintable)
-class RPG_API UItemSpecialEffect : public UObject
+UCLASS(Blueprintable,notplaceable, meta=(ChildCanTick, KismetHideOverrides = "ReceiveAnyDamage,ReceivePointDamage,ReceiveRadialDamage,ReceiveActorBeginOverlap,ReceiveActorEndOverlap,ReceiveHit,ReceiveDestroyed,ReceiveActorBeginCursorOver,ReceiveActorEndCursorOver,ReceiveActorOnClicked,ReceiveActorOnReleased,ReceiveActorOnInputTouchBegin,ReceiveActorOnInputTouchEnd,ReceiveActorOnInputTouchEnter,ReceiveActorOnInputTouchLeave"), HideCategories=(Collision,Rendering,"Utilities|Transformation"))
+class RPG_API AItemSpecialEffect : public AActor
 {
 	GENERATED_BODY()
 	public:

@@ -45573,6 +45573,10 @@
             <e p="ItemSpecialEffect.cpp" t="Include" />
             <e p="ItemSpecialEffect.h" t="Include" />
           </e>
+          <e p="Levels" t="Include">
+            <e p="LevelScriptActorBase.cpp" t="Include" />
+            <e p="LevelScriptActorBase.h" t="Include" />
+          </e>
           <e p="Quest" t="Include">
             <e p="Quest.cpp" t="Include" />
             <e p="Quest.h" t="Include" />

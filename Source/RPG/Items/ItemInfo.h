@@ -58,7 +58,7 @@ public:
 
     /*Used by items that create special effects on use. For example: Magic wand that shoot lightning,or grenade that explodes*/
     UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Stats)
-    TSubclassOf<UItemSpecialEffect> SpecialEffect; 
+    TSubclassOf<AItemSpecialEffect> SpecialEffect; 
 
     /**
      * What type of item this is

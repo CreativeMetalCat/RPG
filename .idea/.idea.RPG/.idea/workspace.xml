@@ -22,9 +22,9 @@
         <option value="$PROJECT_DIR$/Source/RPG/RPGCharacter.h" />
         <option value="$PROJECT_DIR$/Source/RPG/RPGCharacter.cpp" />
         <option value="$PROJECT_DIR$/Source/RPG/Weapon/WeaponInfo.h" />
-        <option value="$PROJECT_DIR$/Source/RPG/Items/ItemSpecialEffect.cpp" />
-        <option value="$PROJECT_DIR$/Source/RPG/Items/ItemInfo.h" />
         <option value="$PROJECT_DIR$/Source/RPG/Items/ItemSpecialEffect.h" />
+        <option value="$PROJECT_DIR$/Source/RPG/Items/ItemInfo.h" />
+        <option value="$PROJECT_DIR$/Source/RPG/Items/ItemSpecialEffect.cpp" />
       </list>
     </option>
   </component>
