@@ -293,6 +293,65 @@ void ARPGCharacter::UpdatePlayerInfo_Implementation()
 {
 }
 
+FItemInfo ARPGCharacter::GetItemById(int32 id, bool& hasItem)
+{
+	hasItem = false;
+	if (Items.IsValidIndex(id))
+	{
+		hasItem = true;
+		return Items[id];
+	}
+	else { return FItemInfo(); }
+}
+
+bool ARPGCharacter::AddItem_Implementation(FItemInfo item)
+{
+	if(Items.Num() > 0)
+	{
+		for(int i =0 ;i<Items.Num();i++)
+		{
+			if(Items[i].DevName == item.DevName && Items[i].MaxStackAmount > Items[i].CurrentAmount)
+			{
+				Items[i].CurrentAmount++;
+			}
+		}
+	}
+	Items.Add(item);
+	
+	return true;
+}
+
+bool ARPGCharacter::SetCurrentItemById_Implementation(int id, EItemType type)
+{
+	bool hasItem = false;
+	const FItemInfo item = GetItemById(id, hasItem);
+	if (hasItem)
+	{
+		if (item.Type == type)
+		{
+			switch (type)
+			{
+			case EItemType::EIT_ArmorTop:
+				TopPartArmorItemId = id;
+				return true;
+			case EItemType::EIT_ArmorBottom:
+				BottomPartArmorItemId = id;
+				return true;
+			case EItemType::EIT_ArmorMiddle:
+				MiddlePartArmorItemId = id;
+				return true;
+			case EItemType::EIT_Weapon:
+				CurrentWeaponId = id;
+				return true;
+			default:
+				/*nothing else can be equipped*/
+				return false;
+			}
+		}
+	}
+	return false;
+}
+
 FQuest ARPGCharacter::GetQuestInfo(FString devName,bool&hasQuest)
 {
 	hasQuest = false;

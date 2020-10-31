@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "PaperCharacter.h"
 #include "Components/BoxComponent.h"
+#include "Items/ItemInfo.h"
 #include "Quest/Quest.h"
 
 
@@ -133,6 +134,17 @@ protected:
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Money)
     void AddMoney(int amount);
 
+	UFUNCTION(BlueprintCallable,Category= Items)
+	virtual FItemInfo GetItemById(int32 id,bool&hasItem);
+
+	/*Add new item to player's inventory. Never returns false(added for future)*/
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Items)
+	bool AddItem(FItemInfo item);
+
+	/*Set current weapon,armor to be one of the items from inventory. Use this to equip weapons etc.*/
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Items)
+	bool SetCurrentItemById(int id,EItemType type);
+
 	/*This return COPY of quest info, changing it will NOT affect original info. See: @ChangeQuestInfo for that
 	 *
 	 */
@@ -186,6 +198,38 @@ public:
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Quest,SaveGame)
 	TArray<FQuest> Quests;
+
+	/*Every item player has*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Items,SaveGame)
+	TArray<FItemInfo>Items;
+
+	/*
+	 * To avoid issues with structs(the ones related to creating copies instead of working with originals) id will be used
+	 * To get item Use @GetItemById
+	 */
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Items_Weapon,SaveGame)
+	int32 CurrentWeaponId = -1;
+
+	/*
+	* To avoid issues with structs(the ones related to creating copies instead of working with originals) id will be used
+	* To get item Use @GetItemById
+	*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Items_Armor,SaveGame)
+	int32 TopPartArmorItemId = -1;
+
+	/*
+	* To avoid issues with structs(the ones related to creating copies instead of working with originals) id will be used
+	* To get item Use @GetItemById
+	*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Items_Armor,SaveGame)
+	int32 MiddlePartArmorItemId = -1;
+
+	/*
+	* To avoid issues with structs(the ones related to creating copies instead of working with originals) id will be used
+	* To get item Use @GetItemById
+	*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Items_Armor,SaveGame)
+	int32 BottomPartArmorItemId = -1;
 	
 	ARPGCharacter();
 

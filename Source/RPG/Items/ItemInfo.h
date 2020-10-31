@@ -14,12 +14,14 @@ UENUM(Blueprintable)
 enum class EItemType :uint8
 {
     EIT_Weapon UMETA(DisplayName = "Weapon"),
-    EIT_Armor UMETA(DisplayName = "Armor"),
+    EIT_ArmorTop UMETA(DisplayName = "ArmorTop"),
+    EIT_ArmorMiddle UMETA(DisplayName = "ArmorMiddle"),
+    EIT_ArmorBottom UMETA(DisplayName = "ArmorBottom"),
     EIT_Other UMETA(DisplayName = "Other",Description = "For items that can not be worn or used")
 };
 
 /**
- * 
+ * Struct that has all info about the item. Please note that instances of the item in the world must not be changed
  */
 USTRUCT(BlueprintType)
 struct FItemInfo :public
@@ -66,4 +68,16 @@ public:
      */
     UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Type)
     EItemType Type = EItemType::EIT_Other;
+
+    /*If player can cary more than of item of this type in one slot*/
+    UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Count)
+    bool bCanBeStacked = false;
+
+    /*How many of this items can player cary in one slot*/
+    UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Count)
+    int32 MaxStackAmount = 2;
+
+    /*How many items are in this slot*/
+    UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Count)
+    int32 CurrentAmount = 0;
 };
