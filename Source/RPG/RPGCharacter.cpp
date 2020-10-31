@@ -276,11 +276,13 @@ void ARPGCharacter::UpdateQuestDisplayInfo_Implementation()
 void ARPGCharacter::LevelUp_Implementation()
 {
 	Level++;
-	
-	Experience = (Experience-Level*NeededExperienceMultiplier <= 0)? 0: Experience-Level*NeededExperienceMultiplier;
+
+	Experience = (Experience-Level*NeededExperienceMultiplier <= 0)? 0: Experience-Level*NeededExperienceMultiplier;	
 	
 	SkillPoints += FMath::RandRange(0,5);
 	UpdatePlayerInfo();
+
+	if (Experience >= Level * NeededExperienceMultiplier) { LevelUp(); }
 }
 
 void ARPGCharacter::AddMoney_Implementation(int amount)
