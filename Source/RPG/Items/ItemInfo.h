@@ -69,6 +69,10 @@ public:
     UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Type)
     EItemType Type = EItemType::EIT_Other;
 
+    /*For Weapons. What kind of damage this weapon deals*/
+    UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Weapons_Damage)
+    TSubclassOf<UDamageType> DamageType = UDamageType::StaticClass();
+
     /*If player can cary more than of item of this type in one slot*/
     UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Count)
     bool bCanBeStacked = false;

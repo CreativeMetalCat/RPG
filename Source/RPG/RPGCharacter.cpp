@@ -412,9 +412,9 @@ void ARPGCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	
-	PlayerInputComponent->BindAction("Attack", IE_Released, this, &ARPGCharacter::Attack);
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ARPGCharacter::Attack);
 
-	PlayerInputComponent->BindAction("Interact", IE_Released, this, &ARPGCharacter::Interact);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ARPGCharacter::Interact);
 	
 	PlayerInputComponent->BindAxis("MoveRight", this, &ARPGCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("MoveUp", this, &ARPGCharacter::MoveUp);
@@ -492,8 +492,20 @@ void ARPGCharacter::Attack_Implementation()
 			LeftCollision->GetOverlappingActors(AttackedActors);
 			break;
 	}
+	bool hasItem;
+	FItemInfo Item = GetItemById(CurrentWeaponId,hasItem);
+	if(hasItem)
+	{
+		if(Item.Type == EItemType::EIT_Weapon)
+		{
+			if(Item.SpecialEffect != nullptr)
+			{
+				Item.SpecialEffect.GetDefaultObject()->ApplyEffect(this,GetActorLocation());
+			}
+		}
+	}
 
-	if(AttackedActors.Num()>0)
+	if(AttackedActors.Num() > 0)
 	{
 		for(int i=0;i<AttackedActors.Num();i++)
 		{
@@ -503,7 +515,7 @@ void ARPGCharacter::Attack_Implementation()
 				10.f/*will be based on weapon*/,
 				GetController(),
 				this,
-				UDamageType::StaticClass()/*will be based on weapon*/
+				hasItem?Item.DamageType:UDamageType::StaticClass()/*will be based on weapon*/
 			);
 		}
 	}
