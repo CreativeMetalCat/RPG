@@ -354,6 +354,56 @@ bool ARPGCharacter::SetCurrentItemById_Implementation(int id, EItemType type)
 	return false;
 }
 
+bool ARPGCharacter::UseAbility(int id)
+{
+	if(Abilities.IsValidIndex(id))
+	{
+		Abilities[id].AbilityClass.GetDefaultObject()->ApplyEffect(this,GetActorLocation());
+	}
+	return false;
+}
+
+bool ARPGCharacter::UseAbilityByName(FString Name)
+{
+	if (Abilities.Num() > 0)
+	{
+		for (int i = 0; i < Abilities.Num(); i++)
+		{
+			if(Abilities[i].DevName == Name)
+			{
+				Abilities[i].AbilityClass.GetDefaultObject()->ApplyEffect(this,GetActorLocation());
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+FAbilityInfo ARPGCharacter::GetAbilityInfo(int id, bool& has)
+{
+	has = false;
+	if(Abilities.IsValidIndex(id))
+	{
+		has = true;
+		return Abilities[id];
+	}
+	return FAbilityInfo();
+}
+
+FAbilityInfo ARPGCharacter::GetAbilityInfoByName(FString name, bool& has)
+{
+	has = false;
+	if (Abilities.Num() > 0)
+	{
+		for (int i = 0; i < Abilities.Num(); i++)
+		{
+			if(Abilities[i].DevName == name){has = true; return Abilities[i];}
+		}
+	}
+	
+	return FAbilityInfo();
+}
+
 FQuest ARPGCharacter::GetQuestInfo(FString devName,bool&hasQuest)
 {
 	hasQuest = false;

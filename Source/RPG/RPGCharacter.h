@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PaperCharacter.h"
+#include "Abilities/AbilityInfo.h"
 #include "Components/BoxComponent.h"
 #include "Items/ItemInfo.h"
 #include "Quest/Quest.h"
@@ -145,6 +146,20 @@ protected:
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Items)
 	bool SetCurrentItemById(int id,EItemType type);
 
+	/*Returns false if ability can not be used*/
+	UFUNCTION(BlueprintCallable)
+	virtual bool UseAbility(int id);
+	
+	/*Returns false if ability can not be used*/
+	UFUNCTION(BlueprintCallable)
+    virtual bool UseAbilityByName(FString Name);
+
+	UFUNCTION(BlueprintCallable)
+	virtual FAbilityInfo GetAbilityInfo(int id,bool&has);
+
+	UFUNCTION(BlueprintCallable)
+    virtual FAbilityInfo GetAbilityInfoByName(FString name,bool&has);
+
 	/*This return COPY of quest info, changing it will NOT affect original info. See: @ChangeQuestInfo for that
 	 *
 	 */
@@ -198,6 +213,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Quest,SaveGame)
 	TArray<FQuest> Quests;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Abilities,SaveGame)
+	TArray<FAbilityInfo>Abilities;
 
 	/*Every item player has*/
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Items,SaveGame)
