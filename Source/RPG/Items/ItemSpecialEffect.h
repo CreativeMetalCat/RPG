@@ -13,6 +13,32 @@ class RPG_API AItemSpecialEffect : public AActor
 {
 	GENERATED_BODY()
 	public:
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Info)
+	AActor*Creator = nullptr;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Info)
+	FVector EffectOrigin = FVector::ZeroVector;
+	
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
 	void ApplyEffect(AActor*CreatorOfEffect,FVector Origin);
+
+	/* Called when effect's life span ends
+	 * Called only if bDoesEffectLasts = true
+	 */
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	void OnEffectEnds();
+
+	/*If false effect will be fired and that's all(like an explosion) if true effect will last for some time(like poison)*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= EffectTime)
+	bool bDoesEffectLasts = false;
+
+	/*How long will this effect last for
+	 * bDoesEffectLasts must be true for this to take effect
+	 */
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= EffectTime)
+	float EffectLifeSpan = 1.f;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Setup)
+	bool bLasts = false;
 };

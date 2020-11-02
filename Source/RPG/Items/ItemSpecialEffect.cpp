@@ -6,3 +6,7 @@
 void AItemSpecialEffect::ApplyEffect_Implementation(AActor* CreatorOfEffect, FVector Origin)
 {
 }
+
+void AItemSpecialEffect::OnEffectEnds_Implementation()
+{
+}

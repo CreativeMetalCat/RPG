@@ -45555,12 +45555,37 @@
         <e p="UE4.vcxproj" t="IncludeRecursive" />
       </e>
       <e p="packages" t="ExcludeRecursive" />
+      <e p="Plugins" t="Include">
+        <e p="RPGCore" t="Include">
+          <e p="Resources" t="Include">
+            <e p="Icon128.png" t="Include" />
+          </e>
+          <e p="RPGCore.uplugin" t="Include" />
+          <e p="Source" t="Include">
+            <e p="RPGCore" t="Include">
+              <e p="Private" t="Include">
+                <e p="RPGCharacterBase.cpp" t="Include" />
+                <e p="RPGCore.cpp" t="Include" />
+              </e>
+              <e p="Public" t="Include">
+                <e p="RPGCharacterBase.h" t="Include" />
+                <e p="RPGCore.h" t="Include" />
+              </e>
+              <e p="RPGCore.Build.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
       <e p="README.md" t="Include" />
       <e p="Retro8BitSounds.png" t="Include" />
       <e p="RPG.sln" t="IncludeFlat" />
       <e p="RPG.uproject" t="Include" />
       <e p="Source" t="Include">
         <e p="RPG" t="Include">
+          <e p="Abilities" t="Include">
+            <e p="AbilityInfo.cpp" t="Include" />
+            <e p="AbilityInfo.h" t="Include" />
+          </e>
           <e p="Enemy" t="Include">
             <e p="EnemyBase.cpp" t="Include" />
             <e p="EnemyBase.h" t="Include" />

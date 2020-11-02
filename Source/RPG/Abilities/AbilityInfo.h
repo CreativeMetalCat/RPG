@@ -37,6 +37,8 @@ public:
     UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Setup)
     TSubclassOf<AItemSpecialEffect> AbilityClass;
 
+   
+
     /*Set to 0 if this ability doesn't cost anything*/
     UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Cost)
     int MannaUsage = 0;
