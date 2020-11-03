@@ -45540,13 +45540,6 @@
     </e>
     <e p="C:\UnrealProjects\RPG" t="IncludeFlat">
       <e p=".gitignore" t="Include" />
-      <e p="Config" t="Include">
-        <e p="DefaultEditor.ini" t="Include" />
-        <e p="DefaultEditorPerProjectUserSettings.ini" t="Include" />
-        <e p="DefaultEngine.ini" t="Include" />
-        <e p="DefaultGame.ini" t="Include" />
-        <e p="DefaultInput.ini" t="Include" />
-      </e>
       <e p="Engine" t="Include" />
       <e p="Games" t="Include" />
       <e p="Intermediate\Build\Unused" t="ExcludeRecursive" />
@@ -45555,37 +45548,156 @@
         <e p="UE4.vcxproj" t="IncludeRecursive" />
       </e>
       <e p="packages" t="ExcludeRecursive" />
+      <e p="Plugins" t="Include">
+        <e p="CustomConfig" t="Include">
+          <e p="CustomConfig.uplugin" t="Include" />
+          <e p="Resources" t="Include">
+            <e p="Icon128.png" t="Include" />
+          </e>
+          <e p="Source" t="Include">
+            <e p="CustomConfig" t="Include">
+              <e p="CustomConfig.Build.cs" t="Include" />
+              <e p="Private" t="Include">
+                <e p="CustomConfig.cpp" t="Include" />
+                <e p="CustomConfigObject.cpp" t="Include" />
+              </e>
+              <e p="Public" t="Include">
+                <e p="CustomConfig.h" t="Include" />
+                <e p="CustomConfigObject.h" t="Include" />
+              </e>
+            </e>
+          </e>
+        </e>
+        <e p="DialoguePlugin" t="Include">
+          <e p="DialoguePlugin.uplugin" t="Include" />
+          <e p="Source" t="Include">
+            <e p="DialoguePlugin" t="Include">
+              <e p="DialoguePlugin.Build.cs" t="Include" />
+              <e p="Private" t="Include">
+                <e p="Dialogue.cpp" t="Include" />
+                <e p="DialoguePluginModule.cpp" t="Include" />
+                <e p="DialoguePluginPrivatePCH.h" t="Include" />
+                <e p="DialogueUserWidget.cpp" t="Include" />
+              </e>
+              <e p="Public" t="Include">
+                <e p="Dialogue.h" t="Include" />
+                <e p="DialoguePluginModule.h" t="Include" />
+                <e p="DialogueUserWidget.h" t="Include" />
+              </e>
+            </e>
+            <e p="DialoguePluginEditor" t="Include">
+              <e p="DialoguePluginEditor.Build.cs" t="Include" />
+              <e p="Private" t="Include">
+                <e p="DialogueAssetTypeActions.cpp" t="Include" />
+                <e p="DialogueAssetTypeActions.h" t="Include" />
+                <e p="DialogueEditor.cpp" t="Include" />
+                <e p="DialogueEditor.h" t="Include" />
+                <e p="DialogueEditorActions.cpp" t="Include" />
+                <e p="DialogueEditorActions.h" t="Include" />
+                <e p="DialogueEditorStyle.cpp" t="Include" />
+                <e p="DialogueEditorStyle.h" t="Include" />
+                <e p="DialogueFactory.cpp" t="Include" />
+                <e p="DialogueFactory.h" t="Include" />
+                <e p="DialogueNodeWidget.cpp" t="Include" />
+                <e p="DialogueNodeWidget.h" t="Include" />
+                <e p="DialoguePluginEditor.cpp" t="Include" />
+                <e p="DialoguePluginEditor.h" t="Include" />
+                <e p="DialoguePluginEditorPrivatePCH.h" t="Include" />
+                <e p="DialoguePluginEditorSettingsDetails.cpp" t="Include" />
+                <e p="DialoguePluginEditorSettingsDetails.h" t="Include" />
+                <e p="DialogueViewportWidget.cpp" t="Include" />
+                <e p="DialogueViewportWidget.h" t="Include" />
+              </e>
+              <e p="Public" t="Include">
+                <e p="IDialoguePluginEditorModule.h" t="Include" />
+              </e>
+            </e>
+          </e>
+        </e>
+        <e p="EasyMultiSave" t="Include">
+          <e p="EasyMultiSave.uplugin" t="Include" />
+          <e p="Resources" t="Include">
+            <e p="Icon128.png" t="Include" />
+          </e>
+          <e p="Source" t="Include">
+            <e p="EasyMultiSave" t="Include">
+              <e p="EasyMultiSave.Build.cs" t="Include" />
+              <e p="Private" t="Include">
+                <e p="EasyMultiSave.cpp" t="Include" />
+                <e p="EMSAsyncLoadGame.cpp" t="Include" />
+                <e p="EMSAsyncSaveGame.cpp" t="Include" />
+                <e p="EMSFunctionLibrary.cpp" t="Include" />
+                <e p="EMSObject.cpp" t="Include" />
+              </e>
+              <e p="Public" t="Include">
+                <e p="EasyMultiSave.h" t="Include" />
+                <e p="EMSActorSaveInterface.h" t="Include" />
+                <e p="EMSAsyncLoadGame.h" t="Include" />
+                <e p="EMSAsyncSaveGame.h" t="Include" />
+                <e p="EMSData.h" t="Include" />
+                <e p="EMSFunctionLibrary.h" t="Include" />
+                <e p="EMSInfoSaveGame.h" t="Include" />
+                <e p="EMSObject.h" t="Include" />
+                <e p="EMSPersistentSaveGame.h" t="Include" />
+                <e p="EMSPluginSettings.h" t="Include" />
+                <e p="EMSProfileSaveGame.h" t="Include" />
+              </e>
+            </e>
+          </e>
+        </e>
+        <e p="RPGCore" t="Include">
+          <e p="Resources" t="Include">
+            <e p="Icon128.png" t="Include" />
+          </e>
+          <e p="RPGCore.uplugin" t="Include" />
+          <e p="Source" t="Include">
+            <e p="RPGCore" t="Include">
+              <e p="Private" t="Include">
+                <e p="Ability" t="Include">
+                  <e p="AbilityInfo.cpp" t="Include" />
+                </e>
+                <e p="EnemyCharacterBase.cpp" t="Include" />
+                <e p="Interaction.cpp" t="Include" />
+                <e p="Item" t="Include">
+                  <e p="ItemInfo.cpp" t="Include" />
+                  <e p="SpecialEffect.cpp" t="Include" />
+                </e>
+                <e p="Quest" t="Include">
+                  <e p="QuestInfo.cpp" t="Include" />
+                </e>
+                <e p="RPGCharacterBase.cpp" t="Include" />
+                <e p="RPGCore.cpp" t="Include" />
+              </e>
+              <e p="Public" t="Include">
+                <e p="Ability" t="Include">
+                  <e p="AbilityInfo.h" t="Include" />
+                </e>
+                <e p="EnemyCharacterBase.h" t="Include" />
+                <e p="Interaction.h" t="Include" />
+                <e p="Item" t="Include">
+                  <e p="ItemInfo.h" t="Include" />
+                  <e p="SpecialEffect.h" t="Include" />
+                </e>
+                <e p="Quest" t="Include">
+                  <e p="QuestInfo.h" t="Include" />
+                </e>
+                <e p="RPGCharacterBase.h" t="Include" />
+                <e p="RPGCore.h" t="Include" />
+              </e>
+              <e p="RPGCore.Build.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
       <e p="README.md" t="Include" />
       <e p="Retro8BitSounds.png" t="Include" />
       <e p="RPG.sln" t="IncludeFlat" />
       <e p="RPG.uproject" t="Include" />
       <e p="Source" t="Include">
         <e p="RPG" t="Include">
-          <e p="Enemy" t="Include">
-            <e p="EnemyBase.cpp" t="Include" />
-            <e p="EnemyBase.h" t="Include" />
-          </e>
-          <e p="InteractionInterface.cpp" t="Include" />
-          <e p="InteractionInterface.h" t="Include" />
-          <e p="Items" t="Include">
-            <e p="ItemInfo.cpp" t="Include" />
-            <e p="ItemInfo.h" t="Include" />
-            <e p="ItemSpecialEffect.cpp" t="Include" />
-            <e p="ItemSpecialEffect.h" t="Include" />
-          </e>
-          <e p="Levels" t="Include">
-            <e p="LevelScriptActorBase.cpp" t="Include" />
-            <e p="LevelScriptActorBase.h" t="Include" />
-          </e>
-          <e p="Quest" t="Include">
-            <e p="Quest.cpp" t="Include" />
-            <e p="Quest.h" t="Include" />
-          </e>
           <e p="RPG.Build.cs" t="Include" />
           <e p="RPG.cpp" t="Include" />
           <e p="RPG.h" t="Include" />
-          <e p="RPGCharacter.cpp" t="Include" />
-          <e p="RPGCharacter.h" t="Include" />
           <e p="RPGGameMode.cpp" t="Include" />
           <e p="RPGGameMode.h" t="Include" />
         </e>
