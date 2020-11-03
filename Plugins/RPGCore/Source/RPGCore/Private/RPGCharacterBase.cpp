@@ -212,6 +212,7 @@ void ARPGCharacterBase::MarkQuestAsRewarded_Implementation(const FString& devNam
 			if(Quests[i].DevName == devName)
 			{
 				Quests[i].bRewarded = true;
+				return;
 			}
 		}
 	}
