@@ -6,13 +6,13 @@
 
 #include "Engine/DataTable.h"
 #include "Engine/UserDefinedStruct.h"
-#include "Quest.generated.h"
+#include "QuestInfo.generated.h"
 
 /**
  * 
  */
 USTRUCT(BlueprintType)
-struct FQuest :public
+struct FQuestInfo :public
 FTableRowBase
 {
  GENERATED_BODY()

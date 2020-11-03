@@ -5,11 +5,11 @@
 #include "CoreMinimal.h"
 
 #include "UObject/NoExportTypes.h"
-#include "ItemSpecialEffect.generated.h"
+#include "SpecialEffect.generated.h"
 
 /*Used by items that create special effects on use. For example: Magic wand that shoot lightning,or grenade that explodes*/
 UCLASS(Blueprintable,notplaceable, meta=(ChildCanTick, KismetHideOverrides = "ReceiveAnyDamage,ReceivePointDamage,ReceiveRadialDamage,ReceiveActorBeginOverlap,ReceiveActorEndOverlap,ReceiveHit,ReceiveDestroyed,ReceiveActorBeginCursorOver,ReceiveActorEndCursorOver,ReceiveActorOnClicked,ReceiveActorOnReleased,ReceiveActorOnInputTouchBegin,ReceiveActorOnInputTouchEnd,ReceiveActorOnInputTouchEnter,ReceiveActorOnInputTouchLeave"), HideCategories=(Collision,Rendering,"Utilities|Transformation"))
-class RPG_API AItemSpecialEffect : public AActor
+class RPGCORE_API ASpecialEffect : public AActor
 {
 	GENERATED_BODY()
 	public:
@@ -21,21 +21,21 @@ class RPG_API AItemSpecialEffect : public AActor
 	FVector EffectOrigin = FVector::ZeroVector;
 	
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
-	void ApplyEffect(AActor*CreatorOfEffect,FVector Origin);
+    void ApplyEffect(AActor*CreatorOfEffect,FVector Origin);
 
 	/* Called when effect's life span ends
-	 * Called only if bDoesEffectLasts = true
-	 */
+	* Called only if bDoesEffectLasts = true
+	*/
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
-	void OnEffectEnds();
+    void OnEffectEnds();
 
 	/*If false effect will be fired and that's all(like an explosion) if true effect will last for some time(like poison)*/
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= EffectTime)
 	bool bDoesEffectLasts = false;
 
 	/*How long will this effect last for
-	 * bDoesEffectLasts must be true for this to take effect
-	 */
+	* bDoesEffectLasts must be true for this to take effect
+	*/
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= EffectTime)
 	float EffectLifeSpan = 1.f;
 

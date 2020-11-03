@@ -45540,13 +45540,6 @@
     </e>
     <e p="C:\UnrealProjects\RPG" t="IncludeFlat">
       <e p=".gitignore" t="Include" />
-      <e p="Config" t="Include">
-        <e p="DefaultEditor.ini" t="Include" />
-        <e p="DefaultEditorPerProjectUserSettings.ini" t="Include" />
-        <e p="DefaultEngine.ini" t="Include" />
-        <e p="DefaultGame.ini" t="Include" />
-        <e p="DefaultInput.ini" t="Include" />
-      </e>
       <e p="Engine" t="Include" />
       <e p="Games" t="Include" />
       <e p="Intermediate\Build\Unused" t="ExcludeRecursive" />
@@ -45660,17 +45653,33 @@
           <e p="Source" t="Include">
             <e p="RPGCore" t="Include">
               <e p="Private" t="Include">
-                <e p="EnemyCharacterBase.cpp" t="Include" />
-                <e p="Quest" t="Include">
+                <e p="Ability" t="Include">
                   <e p="AbilityInfo.cpp" t="Include" />
+                </e>
+                <e p="EnemyCharacterBase.cpp" t="Include" />
+                <e p="Interaction.cpp" t="Include" />
+                <e p="Item" t="Include">
+                  <e p="ItemInfo.cpp" t="Include" />
+                  <e p="SpecialEffect.cpp" t="Include" />
+                </e>
+                <e p="Quest" t="Include">
+                  <e p="QuestInfo.cpp" t="Include" />
                 </e>
                 <e p="RPGCharacterBase.cpp" t="Include" />
                 <e p="RPGCore.cpp" t="Include" />
               </e>
               <e p="Public" t="Include">
-                <e p="EnemyCharacterBase.h" t="Include" />
-                <e p="Quest" t="Include">
+                <e p="Ability" t="Include">
                   <e p="AbilityInfo.h" t="Include" />
+                </e>
+                <e p="EnemyCharacterBase.h" t="Include" />
+                <e p="Interaction.h" t="Include" />
+                <e p="Item" t="Include">
+                  <e p="ItemInfo.h" t="Include" />
+                  <e p="SpecialEffect.h" t="Include" />
+                </e>
+                <e p="Quest" t="Include">
+                  <e p="QuestInfo.h" t="Include" />
                 </e>
                 <e p="RPGCharacterBase.h" t="Include" />
                 <e p="RPGCore.h" t="Include" />
@@ -45686,35 +45695,9 @@
       <e p="RPG.uproject" t="Include" />
       <e p="Source" t="Include">
         <e p="RPG" t="Include">
-          <e p="Abilities" t="Include">
-            <e p="AbilityInfo.cpp" t="Include" />
-            <e p="AbilityInfo.h" t="Include" />
-          </e>
-          <e p="Enemy" t="Include">
-            <e p="EnemyBase.cpp" t="Include" />
-            <e p="EnemyBase.h" t="Include" />
-          </e>
-          <e p="InteractionInterface.cpp" t="Include" />
-          <e p="InteractionInterface.h" t="Include" />
-          <e p="Items" t="Include">
-            <e p="ItemInfo.cpp" t="Include" />
-            <e p="ItemInfo.h" t="Include" />
-            <e p="ItemSpecialEffect.cpp" t="Include" />
-            <e p="ItemSpecialEffect.h" t="Include" />
-          </e>
-          <e p="Levels" t="Include">
-            <e p="LevelScriptActorBase.cpp" t="Include" />
-            <e p="LevelScriptActorBase.h" t="Include" />
-          </e>
-          <e p="Quest" t="Include">
-            <e p="Quest.cpp" t="Include" />
-            <e p="Quest.h" t="Include" />
-          </e>
           <e p="RPG.Build.cs" t="Include" />
           <e p="RPG.cpp" t="Include" />
           <e p="RPG.h" t="Include" />
-          <e p="RPGCharacter.cpp" t="Include" />
-          <e p="RPGCharacter.h" t="Include" />
           <e p="RPGGameMode.cpp" t="Include" />
           <e p="RPGGameMode.h" t="Include" />
         </e>

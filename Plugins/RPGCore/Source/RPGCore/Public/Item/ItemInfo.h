@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 
 
-#include "ItemSpecialEffect.h"
+#include "SpecialEffect.h"
 #include "Engine/DataTable.h"
 #include "Engine/UserDefinedStruct.h"
 #include "ItemInfo.generated.h"
@@ -60,7 +60,7 @@ public:
 
     /*Used by items that create special effects on use. For example: Magic wand that shoot lightning,or grenade that explodes*/
     UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Stats)
-    TSubclassOf<AItemSpecialEffect> SpecialEffect; 
+    TSubclassOf<ASpecialEffect> SpecialEffect; 
 
     /**
      * What type of item this is

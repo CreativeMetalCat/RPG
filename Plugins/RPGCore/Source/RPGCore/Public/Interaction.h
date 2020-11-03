@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "InteractionInterface.generated.h"
+#include "Interaction.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UInteractionInterface : public UInterface
+class UInteraction : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,13 +16,12 @@ class UInteractionInterface : public UInterface
 /**
  * 
  */
-class RPG_API IInteractionInterface
+class RPGCORE_API IInteraction
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
-public:
-
+public:	
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category=Interaction)
-	void Interact(AActor*Interactor);
+    void Interact(AActor*Interactor);
 };

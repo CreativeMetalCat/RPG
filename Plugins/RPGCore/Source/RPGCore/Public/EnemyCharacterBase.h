@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "RPGCharacterBase.h"
+#include "RPGCore/Public/RPGCharacterBase.h"
 #include "EnemyCharacterBase.generated.h"
 
 /**
