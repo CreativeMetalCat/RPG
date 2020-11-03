@@ -27,6 +27,7 @@
         <option value="$PROJECT_DIR$/Source/RPG/Items/ItemSpecialEffect.cpp" />
         <option value="$PROJECT_DIR$/Source/RPG/Items/ItemSpecialEffect.h" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/RPGCharacterBase.h" />
+        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/RPGCore.Build.cs" />
       </list>
     </option>
   </component>
