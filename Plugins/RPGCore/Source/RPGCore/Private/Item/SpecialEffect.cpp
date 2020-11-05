@@ -9,4 +9,6 @@ void ASpecialEffect::ApplyEffect_Implementation(AActor* CreatorOfEffect, FVector
 
 void ASpecialEffect::OnEffectEnds_Implementation()
 {
+    Destroy();
 }
+

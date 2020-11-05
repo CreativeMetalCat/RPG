@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "Interaction.h"
 #include "PaperCharacter.h"
 #include "RPGCore/Public/Ability/AbilityInfo.h"
 #include "Components/BoxComponent.h"
@@ -27,6 +29,8 @@ enum class EDirection:uint8
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnQuestFinished,FQuestInfo,Quest);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLevelUped,int,CurrentLevel);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDied);
 /**
  * This class is the default character for RPG, and it is responsible for all
  * physical interaction between the player and the world.
@@ -36,7 +40,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLevelUped,int,CurrentLevel);
  * The Sprite component (inherited from APaperCharacter) handles the visuals
  */
 UCLASS(config=Game)
-class ARPGCharacterBase : public APaperCharacter
+class ARPGCharacterBase : public APaperCharacter, public IInteraction
 {
 	GENERATED_BODY()
 
@@ -88,7 +92,7 @@ protected:
 	void Attack();
 
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Interaction)
-	void Interact();
+	void InteractAction();
 
 	/*This function is NOT for gameplay purposes, but for development*/
 	UFUNCTION(BlueprintCallable,Category=Dev)
@@ -146,6 +150,9 @@ protected:
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Items)
 	bool SetCurrentItemById(int id,EItemType type);
 
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Death)
+	void Die();
+
 	/*Returns false if ability can not be used*/
 	UFUNCTION(BlueprintCallable)
 	virtual bool UseAbility(int id);
@@ -159,6 +166,26 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
     virtual FAbilityInfo GetAbilityInfoByName(FString name,bool&has);
+
+	/*This function exists only make code look prettier*/
+	UFUNCTION(BlueprintPure,Category=Items)
+	FItemInfo GetCurrentWeapon(bool &has);
+
+	/*This function exists only make code look prettier*/
+	UFUNCTION(BlueprintPure,Category=Items)
+    FItemInfo GetCurrentTopPartArmor(bool &has);
+
+	/*This function exists only make code look prettier*/
+	UFUNCTION(BlueprintPure,Category=Items)
+    FItemInfo GetCurrentBottomPartArmor(bool &has);
+
+	/*This function exists only make code look prettier*/
+	UFUNCTION(BlueprintPure,Category=Items)
+    FItemInfo GetCurrentMiddleArmor(bool &has);
+	
+
+
+	virtual int DealDamage_Implementation(int Damage, TSubclassOf<ASpecialEffect> SpecialEffect) override;
 
 	/*This return COPY of quest info, changing it will NOT affect original info. See: @ChangeQuestInfo for that
 	 *
@@ -183,6 +210,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnLevelUped OnLevelUped;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnDied OnDied;
 	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Direction,SaveGame)
 	EDirection CurrentDirection;
@@ -207,6 +237,10 @@ public:
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Stats,SaveGame)
 	int Defense = 1;
+
+	/*The health is amount of hits player can take(techincally some attacks deal more then one damage)*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Stats|Health",SaveGame)
+	int Health = 5;
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Sound,SaveGame)
 	USoundBase *AttackSound  = nullptr;

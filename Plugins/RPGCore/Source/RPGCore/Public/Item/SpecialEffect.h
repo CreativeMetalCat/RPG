@@ -41,4 +41,5 @@ class RPGCORE_API ASpecialEffect : public AActor
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Setup)
 	bool bLasts = false;
+
 };

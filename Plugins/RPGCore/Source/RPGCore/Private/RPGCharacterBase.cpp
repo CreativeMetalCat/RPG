@@ -131,7 +131,7 @@ void ARPGCharacterBase::Tick(float DeltaSeconds)
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void ARPGCharacterBase::Interact_Implementation()
+void ARPGCharacterBase::InteractAction_Implementation()
 {
 	TArray<AActor*> Interacted;
 	InteractionCollision->GetOverlappingActors(Interacted);
@@ -356,6 +356,19 @@ bool ARPGCharacterBase::SetCurrentItemById_Implementation(int id, EItemType type
 	return false;
 }
 
+void ARPGCharacterBase::Die_Implementation()
+{
+	if(GetController())
+	{
+		APlayerController *PC = Cast<APlayerController>(GetController());
+		if(PC)
+		{
+			DisableInput(PC);
+		}
+	}
+	OnDied.Broadcast();
+}
+
 bool ARPGCharacterBase::UseAbility(int id)
 {
 	if(Abilities.IsValidIndex(id))
@@ -404,6 +417,42 @@ FAbilityInfo ARPGCharacterBase::GetAbilityInfoByName(FString name, bool& has)
 	}
 	
 	return FAbilityInfo();
+}
+
+FItemInfo ARPGCharacterBase::GetCurrentWeapon(bool& has)
+{
+	has = false;
+	if(Items.IsValidIndex(CurrentWeaponId)){has = true; return Items[CurrentWeaponId];}
+	return FItemInfo();
+}
+
+FItemInfo ARPGCharacterBase::GetCurrentTopPartArmor(bool& has)
+{
+	has = false;
+	if(Items.IsValidIndex(TopPartArmorItemId)){has = true; return Items[TopPartArmorItemId];}
+	return FItemInfo();
+}
+
+FItemInfo ARPGCharacterBase::GetCurrentBottomPartArmor(bool& has)
+{
+	has = false;
+	if(Items.IsValidIndex(BottomPartArmorItemId)){has = true; return Items[BottomPartArmorItemId];}
+	return FItemInfo();
+}
+
+FItemInfo ARPGCharacterBase::GetCurrentMiddleArmor(bool& has)
+{
+	has = false;
+	if(Items.IsValidIndex(BottomPartArmorItemId)){has = true; return Items[BottomPartArmorItemId];}
+	return FItemInfo();
+}
+
+int ARPGCharacterBase::DealDamage_Implementation(int Damage, TSubclassOf<ASpecialEffect> SpecialEffect)
+{
+	//TODO: Add damage reduction based on stats and whether player holds shield or not
+	Health-=Damage;
+	if(Health <= 0){Health = 0; Die();}
+	return Damage;
 }
 
 FQuestInfo ARPGCharacterBase::GetQuestInfo(FString devName,bool&hasQuest)
@@ -468,7 +517,7 @@ void ARPGCharacterBase::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ARPGCharacterBase::Attack);
 
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ARPGCharacterBase::Interact);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ARPGCharacterBase::InteractAction);
 	
 	PlayerInputComponent->BindAxis("MoveRight", this, &ARPGCharacterBase::MoveRight);
 	PlayerInputComponent->BindAxis("MoveUp", this, &ARPGCharacterBase::MoveUp);
@@ -547,7 +596,7 @@ void ARPGCharacterBase::Attack_Implementation()
 			break;
 	}
 	bool hasItem;
-	FItemInfo Item = GetItemById(CurrentWeaponId,hasItem);
+	const FItemInfo Item = GetItemById(CurrentWeaponId,hasItem);
 	if(hasItem)
 	{
 		if(Item.Type == EItemType::EIT_Weapon)
@@ -563,14 +612,20 @@ void ARPGCharacterBase::Attack_Implementation()
 	{
 		for(int i=0;i<AttackedActors.Num();i++)
 		{
-			UGameplayStatics::ApplyDamage
+			if (AttackedActors[i] != this && (AttackedActors[i]->Implements<UInteraction>() || (Cast<IInteraction>(GetOwner()) != nullptr)))
+			{
+				IInteraction::Execute_DealDamage(AttackedActors[i], Item.Attack+AttackPower, Item.SpecialEffect);
+			}
+			
+			//TODO: Remove this old damage code(only after new one is tested well enough)
+			/*UGameplayStatics::ApplyDamage
 			(
 				AttackedActors[i],
-				10.f/*will be based on weapon*/,
+				10.f,
 				GetController(),
 				this,
-				hasItem?Item.DamageType:UDamageType::StaticClass()/*will be based on weapon*/
-			);
+				hasItem?Item.DamageType:UDamageType::StaticClass()
+			);*/
 		}
 	}
 }
