@@ -33,5 +33,5 @@ public:
 	 * Returns damage that was actually dealt
 	 */
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category=Damage)
-	int DealDamage(int Damage,TSubclassOf<ASpecialEffect>SpecialEffect = nullptr);
+	int DealDamage(int Damage,AActor*DamageDealer =nullptr, TSubclassOf<ASpecialEffect>SpecialEffect = nullptr);
 };

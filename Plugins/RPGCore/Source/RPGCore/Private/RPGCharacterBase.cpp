@@ -373,7 +373,7 @@ bool ARPGCharacterBase::UseAbility(int id)
 {
 	if(Abilities.IsValidIndex(id))
 	{
-		Abilities[id].AbilityClass.GetDefaultObject()->ApplyEffect(this,GetActorLocation());
+		Abilities[id].AbilityClass.GetDefaultObject()->ApplyEffect(this,GetActorLocation(),GetWorld());
 	}
 	return false;
 }
@@ -386,8 +386,7 @@ bool ARPGCharacterBase::UseAbilityByName(FString Name)
 		{
 			if(Abilities[i].DevName == Name)
 			{
-				Abilities[i].AbilityClass.GetDefaultObject()->ApplyEffect(this,GetActorLocation());
-				return true;
+				return UseAbility(i);
 			}
 		}
 	}
@@ -447,11 +446,26 @@ FItemInfo ARPGCharacterBase::GetCurrentMiddleArmor(bool& has)
 	return FItemInfo();
 }
 
-int ARPGCharacterBase::DealDamage_Implementation(int Damage, TSubclassOf<ASpecialEffect> SpecialEffect)
+int ARPGCharacterBase::DealDamage_Implementation(int Damage,AActor*DamageDealer, TSubclassOf<ASpecialEffect> SpecialEffect)
 {
 	//TODO: Add damage reduction based on stats and whether player holds shield or not
 	Health-=Damage;
 	if(Health <= 0){Health = 0; Die();}
+	else if(SpecialEffect)
+	{
+		if(SpecialEffect.GetDefaultObject()->bDoesEffectLasts)
+		{
+			ASpecialEffect* SE = Cast<ASpecialEffect>(GetWorld()->SpawnActor(SpecialEffect));
+			if(SE)
+			{
+				SE->ApplyEffect(DamageDealer,GetActorLocation(),GetWorld(),this);//this will get destroyed ONLY after time passes
+			}
+		}
+		else
+		{
+			SpecialEffect.GetDefaultObject()->ApplyEffect(DamageDealer,GetActorLocation(),GetWorld(),this);//this will get destroyed after function executes
+		}
+	}
 	return Damage;
 }
 
@@ -603,7 +617,10 @@ void ARPGCharacterBase::Attack_Implementation()
 		{
 			if(Item.SpecialEffect != nullptr)
 			{
-				Item.SpecialEffect.GetDefaultObject()->ApplyEffect(this,GetActorLocation());
+				if(!Item.SpecialEffect.GetDefaultObject()->bLocal)
+				{
+					Item.SpecialEffect.GetDefaultObject()->ApplyEffect(this,GetActorLocation(),GetWorld(),nullptr);
+				}
 			}
 		}
 	}
@@ -614,7 +631,7 @@ void ARPGCharacterBase::Attack_Implementation()
 		{
 			if (AttackedActors[i] != this && (AttackedActors[i]->Implements<UInteraction>() || (Cast<IInteraction>(GetOwner()) != nullptr)))
 			{
-				IInteraction::Execute_DealDamage(AttackedActors[i], Item.Attack+AttackPower, Item.SpecialEffect);
+				IInteraction::Execute_DealDamage(AttackedActors[i], Item.Attack+AttackPower,this, Item.SpecialEffect);
 			}
 			
 			//TODO: Remove this old damage code(only after new one is tested well enough)

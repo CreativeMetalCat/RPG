@@ -185,7 +185,7 @@ protected:
 	
 
 
-	virtual int DealDamage_Implementation(int Damage, TSubclassOf<ASpecialEffect> SpecialEffect) override;
+	virtual int DealDamage_Implementation(int Damage,AActor*DamageDealer =nullptr, TSubclassOf<ASpecialEffect> SpecialEffect =nullptr) override;
 
 	/*This return COPY of quest info, changing it will NOT affect original info. See: @ChangeQuestInfo for that
 	 *
