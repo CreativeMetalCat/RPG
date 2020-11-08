@@ -45397,6 +45397,9 @@
                 <e p="Ability" t="Include">
                   <e p="AbilityInfo.cpp" t="Include" />
                 </e>
+                <e p="Animation" t="Include">
+                  <e p="AnimationWaitAction.cpp" t="Include" />
+                </e>
                 <e p="EnemyCharacterBase.cpp" t="Include" />
                 <e p="Interaction.cpp" t="Include" />
                 <e p="Item" t="Include">
@@ -45412,6 +45415,9 @@
               <e p="Public" t="Include">
                 <e p="Ability" t="Include">
                   <e p="AbilityInfo.h" t="Include" />
+                </e>
+                <e p="Animation" t="Include">
+                  <e p="AnimationWaitAction.h" t="Include" />
                 </e>
                 <e p="EnemyCharacterBase.h" t="Include" />
                 <e p="Interaction.h" t="Include" />

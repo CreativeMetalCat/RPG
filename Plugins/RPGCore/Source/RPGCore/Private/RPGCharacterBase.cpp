@@ -101,22 +101,64 @@ ARPGCharacterBase::ARPGCharacterBase()
 
 	// Enable replication on the Sprite component so animations show up when networked
 	GetSprite()->SetIsReplicated(true);
+
+	GetSprite()->OnFinishedPlaying.AddDynamic(this,&ARPGCharacterBase::OnFlipbookFinishedPlaying);
+	
 	bReplicates = true;
 }
 
 //////////////////////////////////////////////////////////////////////////
 // Animation
 
+void ARPGCharacterBase::OnFlipbookFinishedPlaying()
+{
+	if(bAttacking){bAttacking = false;}
+	if(bPlayingAnimMontage){bPlayingAnimMontage = false;}
+	GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Green,"Anim finished");
+}
+
+bool ARPGCharacterBase::PlayFlipbookAnimation(UPaperFlipbook*Animation,float &length)
+{
+	length = -1;
+	if(Animation != nullptr)
+	{
+		GetSprite()->SetFlipbook(Animation);
+		GetSprite()->SetLooping(false);
+		bPlayingAnimMontage = true;
+		length = GetSprite()->GetFlipbookLength();
+		return true;
+	}
+	return false;
+}
+
+
 void ARPGCharacterBase::UpdateAnimation()
 {
 	const FVector PlayerVelocity = GetVelocity();
 	const float PlayerSpeedSqr = PlayerVelocity.SizeSquared();
 
-	// Are we moving or standing still?
-	UPaperFlipbook* DesiredAnimation = (PlayerSpeedSqr > 0.0f) ? RunningAnimation : IdleAnimation;
-	if( GetSprite()->GetFlipbook() != DesiredAnimation 	)
+	if(bAttacking && AttackAnimation != nullptr)
+	{	
+		if(GetSprite()->GetFlipbook() != AttackAnimation)
+		{
+			GetSprite()->SetFlipbook(AttackAnimation);
+			GetSprite()->SetLooping(false);
+		}
+	}
+	else if(!bPlayingAnimMontage)
 	{
-		GetSprite()->SetFlipbook(DesiredAnimation);
+		// Are we moving or standing still?
+		UPaperFlipbook* DesiredAnimation = (PlayerSpeedSqr > 0.0f) ? RunningAnimation : IdleAnimation;
+		if( GetSprite()->GetFlipbook() != DesiredAnimation 	)
+		{
+			GetSprite()->SetFlipbook(DesiredAnimation);
+
+			if(!GetSprite()->IsLooping())
+			{
+				GetSprite()->SetLooping(true);
+				GetSprite()->Play();
+			}
+		}
 	}
 }
 
@@ -592,6 +634,11 @@ void ARPGCharacterBase::UpdateCharacter()
 
 void ARPGCharacterBase::Attack_Implementation()
 {
+
+	if(AttackAnimation)
+	{
+		bAttacking = true;
+	}
 	//4 direction hit system -> based on where player is looking
 	TArray<AActor*> AttackedActors;
 	switch (CurrentDirection)

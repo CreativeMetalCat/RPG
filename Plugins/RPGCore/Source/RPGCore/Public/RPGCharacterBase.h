@@ -8,6 +8,7 @@
 #include "PaperCharacter.h"
 #include "RPGCore/Public/Ability/AbilityInfo.h"
 #include "Components/BoxComponent.h"
+#include "PaperFlipbook.h"
 #include "RPGCore/Public/Item/ItemInfo.h"
 #include "RPGCore/Public/Quest/QuestInfo.h"
 
@@ -16,6 +17,13 @@
 
 
 class UTextRenderComponent;
+
+UENUM(BlueprintType)
+enum class EAnimationPlayResult: uint8
+{
+	EAPR_Success UMETA(DisplayName = "Success"),
+	EAPR_Fail UMETA(DisplayName = "Fail")
+};
 
 UENUM(BlueprintType)
 enum class EDirection:uint8
@@ -75,9 +83,32 @@ protected:
 	UBoxComponent *RightCollision;
 
 	// The animation to play while idle (standing still)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animations)
-	class UPaperFlipbook* IdleAnimation;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Movement")
+	UPaperFlipbook* IdleAnimation;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Fight")
+	UPaperFlipbook *AttackAnimation;
 
+	/*Used for animation system(To not accidentally change animation)*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Fight")
+	bool bAttacking = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Death")
+	UPaperFlipbook *DeathAnimation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Montage")
+	bool bPlayingAnimMontage = false;
+
+	UFUNCTION(BlueprintCallable,Category = Animation)
+	virtual void OnFlipbookFinishedPlaying();
+
+	/*Returns true(and value of length) if started animation false otherwise
+	 * Param: Animation - Animation to play
+	 * Length - how long anim is
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Animations|Montage")
+	virtual bool PlayFlipbookAnimation(UPaperFlipbook*Animation,float &length);
+	
 	/** Called to choose the correct animation to play based on the character's movement state */
 	void UpdateAnimation();
 
