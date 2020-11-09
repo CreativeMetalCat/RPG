@@ -123,6 +123,7 @@
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Experimental/VirtualProductionUtilities" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Experimental/Volumetrics" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Experimental/WebSocketNetworking" />
+    <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/FMODStudio" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/FX/HoudiniNiagara" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/FX/Niagara" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/FX/NiagaraExtras" />

@@ -26,7 +26,8 @@ public class RPGCore : ModuleRules
 			new string[]
 			{
 				"Core",
-				"Paper2D" 
+				"Paper2D",
+				"AIModule"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
