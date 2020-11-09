@@ -271,7 +271,6 @@ bool ARPGCharacterBase::CompleteQuest_Implementation(const FString& devName,int 
 
 void ARPGCharacterBase::MakeProgress_Implementation(const FString& devName, int amount)
 {
-	
 	if(Quests.Num() > 0)
 	{
 		for(int i=0;i < Quests.Num(); i++)
@@ -286,11 +285,11 @@ void ARPGCharacterBase::MakeProgress_Implementation(const FString& devName, int 
 						CompleteQuest(Quests[i].DevName,i);
 					}
 					UpdateQuestDisplayInfo();
-					return;
+					break;
 				}
 				else
 				{
-					return;
+					break;
 				}
 			}
 		}
@@ -579,7 +578,7 @@ void ARPGCharacterBase::AddExp_Implementation(int amount)
 {
 	Experience += amount;
 	
-	if(Experience >= Level * NeededExperienceMultiplier)
+	if(Experience >= (Level + 1) * NeededExperienceMultiplier)
 	{
 		LevelUp();
 	}
