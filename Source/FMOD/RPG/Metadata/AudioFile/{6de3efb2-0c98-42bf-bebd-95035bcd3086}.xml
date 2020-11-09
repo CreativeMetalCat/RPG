@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{6de3efb2-0c98-42bf-bebd-95035bcd3086}">
+		<property name="assetPath">
+			<value>ambient/materials/footsteps_glass2.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>1.3061904761904761</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{f81f236e-cbfc-44c5-a606-03de8b5d8466}</destination>
+		</relationship>
+	</object>
+</objects>

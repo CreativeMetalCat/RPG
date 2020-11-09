@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{603675e8-cf63-46ca-8666-2fa68f54f749}">
+		<property name="assetPath">
+			<value>ambient/machines/train_idle.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>22.0499992</value>
+		</property>
+		<property name="channelCount">
+			<value>1</value>
+		</property>
+		<property name="length">
+			<value>2.6122902494331064</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{f81f236e-cbfc-44c5-a606-03de8b5d8466}</destination>
+		</relationship>
+	</object>
+</objects>

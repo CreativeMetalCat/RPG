@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="EncodableAsset" id="{6946b394-b37f-475d-9435-d06eace7bb67}">
+		<property name="assetPath">
+			<value>ambient/levels/coast/</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{f81f236e-cbfc-44c5-a606-03de8b5d8466}</destination>
+		</relationship>
+	</object>
+</objects>

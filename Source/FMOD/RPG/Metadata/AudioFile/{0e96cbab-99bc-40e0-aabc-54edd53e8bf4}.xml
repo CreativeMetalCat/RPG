@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{0e96cbab-99bc-40e0-aabc-54edd53e8bf4}">
+		<property name="assetPath">
+			<value>ambient/alarms/citadel_alert_loop2.wav</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>22.0499992</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>31.579773242630385</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{f81f236e-cbfc-44c5-a606-03de8b5d8466}</destination>
+		</relationship>
+	</object>
+</objects>
