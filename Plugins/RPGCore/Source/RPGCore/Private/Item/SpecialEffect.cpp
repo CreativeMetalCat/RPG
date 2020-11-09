@@ -8,6 +8,7 @@ void ASpecialEffect::ApplyEffect_Implementation(AActor* CreatorOfEffect, FVector
     Creator = CreatorOfEffect;
     EffectOrigin = Origin;
     Target = TargetActor;
+    
     if(bDoesEffectLasts)
     {
         if(WorldContext)

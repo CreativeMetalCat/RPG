@@ -192,10 +192,14 @@ protected:
 	UFUNCTION(BlueprintCallable)
     virtual bool UseAbilityByName(FString Name);
 
+	/*Adds new ability if it isn't in the array*/
 	UFUNCTION(BlueprintCallable)
+	virtual bool AddAbility(FAbilityInfo Ability);
+
+	UFUNCTION(BlueprintPure)
 	virtual FAbilityInfo GetAbilityInfo(int id,bool&has);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
     virtual FAbilityInfo GetAbilityInfoByName(FString name,bool&has);
 
 	/*This function exists only make code look prettier*/

@@ -415,7 +415,15 @@ bool ARPGCharacterBase::UseAbility(int id)
 {
 	if(Abilities.IsValidIndex(id))
 	{
-		Abilities[id].AbilityClass.GetDefaultObject()->ApplyEffect(this,GetActorLocation(),GetWorld());
+		if(Abilities[id].AbilityClass)
+		{
+			ASpecialEffect* SE = Cast<ASpecialEffect>(GetWorld()->SpawnActor(Abilities[id].AbilityClass));
+			if(SE)
+			{					
+				SE->ApplyEffect(this,GetActorLocation(),GetWorld(),nullptr);//MUST BE MANUALLY DESTROYED
+			}	
+			return true;
+		}	
 	}
 	return false;
 }
@@ -433,6 +441,19 @@ bool ARPGCharacterBase::UseAbilityByName(FString Name)
 		}
 	}
 	return false;
+}
+
+bool ARPGCharacterBase::AddAbility(FAbilityInfo Ability)
+{
+	if(Abilities.Num() > 0)
+	{
+		for (int i = 0; i < Abilities.Num(); i++)
+		{
+			if (Abilities[i].DevName == Ability.DevName) { return false; }
+		}
+	}
+	Abilities.Add(Ability);
+	return true;
 }
 
 FAbilityInfo ARPGCharacterBase::GetAbilityInfo(int id, bool& has)
@@ -666,7 +687,12 @@ void ARPGCharacterBase::Attack_Implementation()
 			{
 				if(!Item.SpecialEffect.GetDefaultObject()->bLocal)
 				{
-					Item.SpecialEffect.GetDefaultObject()->ApplyEffect(this,GetActorLocation(),GetWorld(),nullptr);
+					ASpecialEffect* SE = Cast<ASpecialEffect>(GetWorld()->SpawnActor(Item.SpecialEffect));
+					if(SE)
+					{					
+						SE->ApplyEffect(this,GetActorLocation(),GetWorld(),nullptr);//MUST BE MANUALLY DESTROYED
+					}			
+					//Item.SpecialEffect.GetDefaultObject()->ApplyEffect(this,GetActorLocation(),GetWorld(),nullptr);
 				}
 			}
 		}
