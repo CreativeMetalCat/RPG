@@ -6,6 +6,7 @@
 
 #include "AI/AIMovementType.h"
 #include "RPGCore/Public/RPGCharacterBase.h"
+#include "RPGCore/Public/AI/PatrolPointBase.h"
 #include "EnemyCharacterBase.generated.h"
 
 /**
@@ -30,6 +31,17 @@ public:
 	*/
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "AI|Movement|Random")
 	bool bGenerateRandomPointsFromDefaultLocation = true;
+	
+	/*Points used by ai for patrolling*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "AI|Movement|Patrolling")
+	TArray<APatrolPointBase*> PatrolPoints;
+	
+	/*
+	* If true - Patrol points will be selected randomly
+	* If false - Patrol points will be selected in order that they were added to the list
+	*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "AI|Movement|Patrolling")
+	bool bRandomPatrol = false;
 
 	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "AI|Movement")

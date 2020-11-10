@@ -6,6 +6,8 @@
 #include "AIController.h"
 #include "AIInterface.h"
 #include "AIMovementType.h"
+#include "PatrolPointBase.h"
+
 
 
 #include "EnemyAIBase.generated.h"
@@ -40,14 +42,40 @@ public:
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "Movement|Random")
 	FVector SpawnLocation;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "Movement|Patrolling")
+	TArray<APatrolPointBase*> PatrolPoints;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "Movement|Patrolling")
+	int CurrentPatrolPointId = -1;
+
+	/*
+	 * If true - Patrol points will be selected randomly
+	 * If false - Patrol points will be selected in order that they were added to the list
+	 */
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "Movement|Patrolling")
+	bool bRandomPatrol = false;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "Movement|Patrolling|Blackboard")
+	FName BlackboardPatrolPointTargetName = TEXT("PatrolPoint");
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "Movement|Patrolling|Blackboard")
+	FName BlackboardWaitingName = TEXT("Waiting");
+	
 	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = Movement)
 	EAIMovementType MovementType = EAIMovementType::EAIMT_Random;
 
-	UFUNCTION(BlueprintCallable,Category=RandomMovement)
+	UFUNCTION(BlueprintCallable,Category="Movement|Patrolling")
+	void SetNewPatrolPoint();
+
+	UFUNCTION(BlueprintCallable,Category="Movement|Patrolling")
+	void OnReachedPatrolPoint();
+
+	UFUNCTION(BlueprintCallable,Category="Movement|Random")
     void OnReachedGoalOfRandomMovement();
 
-	UFUNCTION(BlueprintCallable,Category=RandomMovement)
+	UFUNCTION(BlueprintCallable,Category="Movement|Random")
     void SetNextGoalForRandomMovement();
 
 	virtual void BeginPlay() override;

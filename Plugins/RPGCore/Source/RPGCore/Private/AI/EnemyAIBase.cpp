@@ -4,11 +4,63 @@
 #include "RPGCore/Public/AI/EnemyAIBase.h"
 
 #include "EnemyCharacterBase.h"
+#include "BehaviorTree/BlackboardComponent.h"
+
+void AEnemyAIBase::SetNewPatrolPoint()
+{
+   if(Blackboard)
+   {
+      if(PatrolPoints.Num() > 0)
+      {
+         if(bRandomPatrol)
+         {
+            CurrentPatrolPointId = FMath::RandRange(0,PatrolPoints.Num());
+
+            Blackboard->SetValueAsObject(BlackboardPatrolPointTargetName,PatrolPoints[CurrentPatrolPointId]);
+         }
+         else
+         {
+            CurrentPatrolPointId++;
+            if(CurrentPatrolPointId >= PatrolPoints.Num()){CurrentPatrolPointId = 0;}
+            Blackboard->SetValueAsObject(BlackboardPatrolPointTargetName,PatrolPoints[CurrentPatrolPointId]);
+         }
+      }
+      Blackboard->SetValueAsBool(BlackboardWaitingName,false);
+   }
+   else
+   {
+      GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
+                                       "AIController " + GetName() +
+                                       " has no Behaviour Tree setup. Patrol System needs behaviour tree to function");
+   }
+}
+
+void AEnemyAIBase::OnReachedPatrolPoint()
+{
+   if(PatrolPoints.IsValidIndex(CurrentPatrolPointId))
+   {
+      if(PatrolPoints[CurrentPatrolPointId]->WaitTime)
+      {
+         //to imitate ai thinking
+         GetWorldTimerManager().SetTimer(RandomMovementTimerHandle,this,&AEnemyAIBase::SetNewPatrolPoint,PatrolPoints[CurrentPatrolPointId]->WaitTime);
+         Blackboard->SetValueAsBool(BlackboardWaitingName,true);
+         return;//break execution flow
+      }
+   }
+   SetNewPatrolPoint();
+}
 
 void AEnemyAIBase::OnReachedGoalOfRandomMovement()
 {
-   //to imitate ai thinking
-   GetWorldTimerManager().SetTimer(RandomMovementTimerHandle,this,&AEnemyAIBase::SetNextGoalForRandomMovement,RandomMovementTime);
+   if(RandomMovementTime > 0)
+   {
+      //to imitate ai thinking
+      GetWorldTimerManager().SetTimer(RandomMovementTimerHandle,this,&AEnemyAIBase::SetNextGoalForRandomMovement,RandomMovementTime);
+   }
+   else
+   {
+      SetNextGoalForRandomMovement();
+   }
 }
 
 void AEnemyAIBase::SetNextGoalForRandomMovement()
@@ -31,10 +83,18 @@ void AEnemyAIBase::BeginPlay()
       
       if(AEnemyCharacterBase* Enemy = Cast<AEnemyCharacterBase>(GetPawn()))
       {
+         MovementType = Enemy->MovementType;
+         
+         /*Setup random movement*/
          MaxDistanceOfRandomMovement = Enemy->MaxDistanceOfRandomMovement;
          RandomMovementTime = Enemy->RandomMovementTime;
          bGenerateRandomPointsFromDefaultLocation = Enemy->bGenerateRandomPointsFromDefaultLocation;
-         MovementType = Enemy->MovementType;
+         
+         /*Setup patrol movement*/
+         PatrolPoints = Enemy->PatrolPoints;
+         bRandomPatrol = Enemy->bRandomPatrol;
+
+         GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,FString::FromInt(Enemy->PatrolPoints.Num()));
       }
       else
       {
@@ -42,15 +102,22 @@ void AEnemyAIBase::BeginPlay()
                                           "AIController " + GetName() + " is not used with correct class. Class: " +
                                           GetPawn()->GetClass()->GetName() + " Correct is child of: " +
                                           AEnemyCharacterBase::StaticClass()->GetName());
+         return;
       }
    
       if(MovementType == EAIMovementType::EAIMT_Random)
       {     
          SetNextGoalForRandomMovement();
       }
+      else if(MovementType == EAIMovementType::EAIMT_Points)
+      {
+         SetNewPatrolPoint();
+      }
    }
    else
    {
       GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,"AIController " + GetName() + " has null Pawn in control");
+      return;
    }
+
 }

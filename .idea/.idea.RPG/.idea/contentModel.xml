@@ -45523,6 +45523,7 @@
                   <e p="AIInterface.cpp" t="Include" />
                   <e p="AIMovementType.cpp" t="Include" />
                   <e p="EnemyAIBase.cpp" t="Include" />
+                  <e p="PatrolPointBase.cpp" t="Include" />
                 </e>
                 <e p="EnemyCharacterBase.cpp" t="Include" />
                 <e p="Interaction.cpp" t="Include" />
@@ -45544,6 +45545,7 @@
                   <e p="AIInterface.h" t="Include" />
                   <e p="AIMovementType.h" t="Include" />
                   <e p="EnemyAIBase.h" t="Include" />
+                  <e p="PatrolPointBase.h" t="Include" />
                 </e>
                 <e p="EnemyCharacterBase.h" t="Include" />
                 <e p="Interaction.h" t="Include" />
