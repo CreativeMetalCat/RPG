@@ -354,7 +354,24 @@ FItemInfo ARPGCharacterBase::GetCurrentMiddleArmor(bool& has)
 int ARPGCharacterBase::DealDamage_Implementation(int Damage,AActor*DamageDealer, TSubclassOf<ASpecialEffect> SpecialEffect)
 {
 	//TODO: Add damage reduction based on stats and whether player holds shield or not
-	Health-=Damage;
+	int TotalArmor = Defense;
+	bool hasArmorPiece = false;
+	FItemInfo item = GetCurrentBottomPartArmor(hasArmorPiece);
+	if(hasArmorPiece)
+	{
+		TotalArmor += item.Defence;
+	}
+	GetCurrentTopPartArmor(hasArmorPiece);
+	if(hasArmorPiece)
+	{
+		TotalArmor += item.Defence;
+	}
+	GetCurrentMiddleArmor(hasArmorPiece);
+	if(hasArmorPiece)
+	{
+		TotalArmor += item.Defence;
+	}
+	Health-=((Damage - TotalArmor) >=0 )?(Damage - TotalArmor): 0;
 	if(Health <= 0){Health = 0; Die();}
 	else if(SpecialEffect)
 	{
