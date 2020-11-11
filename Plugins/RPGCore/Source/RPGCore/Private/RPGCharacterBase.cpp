@@ -33,26 +33,7 @@ ARPGCharacterBase::ARPGCharacterBase()
 
 	GetSprite()->SetRelativeRotation(FRotator(-90,0,90));
 
-	// Create a camera boom attached to the root (capsule)
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 500.0f;
-	CameraBoom->SocketOffset = FVector(0.0f, 0.0f, 75.0f);
-	CameraBoom->SetUsingAbsoluteRotation(true);
-	CameraBoom->bDoCollisionTest = false;
-	CameraBoom->SetRelativeRotation(FRotator(180.0f, -90.0f, 180.0f));
 	
-
-	// Create an orthographic camera (no perspective) and attach it to the boom
-	SideViewCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("SideViewCamera"));
-	SideViewCameraComponent->ProjectionMode = ECameraProjectionMode::Orthographic;
-	SideViewCameraComponent->OrthoWidth = 2048.0f;
-	SideViewCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-
-	// Prevent all automatic rotation behavior on the camera, character, and camera component
-	CameraBoom->SetUsingAbsoluteRotation(true);
-	SideViewCameraComponent->bUsePawnControlRotation = false;
-	SideViewCameraComponent->bAutoActivate = true;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 
 	// Configure character movement
@@ -189,144 +170,6 @@ void ARPGCharacterBase::InteractAction_Implementation()
 	}
 }
 
-bool ARPGCharacterBase::AddQuest_Implementation(FQuestInfo quest)
-{
-	if(Quests.Num() > 0)
-	{
-		for(int i=0;i<Quests.Num();i++)
-		{
-			if(Quests[i].DevName == quest.DevName)
-			{
-				if(Quests[i].bShow)
-				{
-					return false;
-				}
-				else
-				{
-					Quests[i].bShow = true;
-					if(Quests[i].CurrentProgress >= Quests[i].NeededProgress)
-					{
-						CompleteQuest(Quests[i].DevName,i);
-					}
-					UpdateQuestDisplayInfo();
-					return true;
-				}
-			}			
-		}
-	}
-	
-	quest.bShow = true;
-	Quests.Add(quest);
-	UpdateQuestDisplayInfo();
-	return true;
-}
-
-
-bool ARPGCharacterBase::AddQuestToQuestArray(FQuestInfo quest)
-{
-	if(Quests.Num() > 0)
-	{
-		for(int i=0;i<Quests.Num();i++)
-		{
-			if(Quests[i].DevName == quest.DevName)
-			{
-				return false;
-			}			
-		}
-		Quests.Add(quest);
-		UpdateQuestDisplayInfo();
-		return true;
-	}
-	else
-	{
-		Quests.Add(quest);
-		UpdateQuestDisplayInfo();
-		return true;
-	}
-}
-
-void ARPGCharacterBase::MarkQuestAsRewarded_Implementation(const FString& devName)
-{
-	if(Quests.Num() > 0)
-	{
-		for(int i=0;i < Quests.Num(); i++)
-		{
-			if(Quests[i].DevName == devName)
-			{
-				Quests[i].bRewarded = true;
-				return;
-			}
-		}
-	}
-}
-
-bool ARPGCharacterBase::CompleteQuest_Implementation(const FString& devName,int questId)
-{
-	if(Quests[questId].bCompleted){return false;}
-	
-	Quests[questId].bCompleted = true;
-	OnQuestFinished.Broadcast(Quests[questId]);
-	return true;
-}
-
-void ARPGCharacterBase::MakeProgress_Implementation(const FString& devName, int amount)
-{
-	if(Quests.Num() > 0)
-	{
-		for(int i=0;i < Quests.Num(); i++)
-		{
-			if(Quests[i].DevName == devName)
-			{
-				if(Quests[i].bShow || Quests[i].bAllowProgressBeforeGiven)
-				{
-					Quests[i].CurrentProgress += amount;
-					if(Quests[i].bShow && Quests[i].CurrentProgress >= Quests[i].NeededProgress)
-					{
-						CompleteQuest(Quests[i].DevName,i);
-					}
-					UpdateQuestDisplayInfo();
-					break;
-				}
-				else
-				{
-					break;
-				}
-			}
-		}
-	}
-}
-
-void ARPGCharacterBase::ChangeQuestInfo_Implementation(FQuestInfo newQuestInfo)
-{
-	if(Quests.Num() > 0)
-	{
-		for(int i=0;i < Quests.Num(); i++)
-		{
-			if(Quests[i].DevName == newQuestInfo.DevName)
-			{
-				Quests[i] = newQuestInfo;
-				break;
-			}
-		}
-	}
-	UpdateQuestDisplayInfo();
-}
-
-void ARPGCharacterBase::UpdateQuestDisplayInfo_Implementation()
-{
-}
-
-void ARPGCharacterBase::LevelUp_Implementation()
-{
-	Level++;
-
-	Experience = (Experience-Level*NeededExperienceMultiplier <= 0)? 0: Experience-Level*NeededExperienceMultiplier;	
-	
-	SkillPoints += FMath::RandRange(0,5);
-	UpdatePlayerInfo();
-
-	if (Experience >= Level * NeededExperienceMultiplier) { LevelUp(); }
-}
 
 void ARPGCharacterBase::AddMoney_Implementation(int amount)
 {
@@ -531,34 +374,6 @@ int ARPGCharacterBase::DealDamage_Implementation(int Damage,AActor*DamageDealer,
 	return Damage;
 }
 
-FQuestInfo ARPGCharacterBase::GetQuestInfo(FString devName,bool&hasQuest)
-{
-	hasQuest = false;
-	if(Quests.Num() > 0)
-	{
-		for(int i=0;i<Quests.Num();i++)
-		{
-			if(Quests[i].DevName == devName)
-			{
-				hasQuest = Quests[i].bShow;
-				return Quests[i];
-			}			
-		}
-	}
-	return FQuestInfo();
-}
-
-bool ARPGCharacterBase::HasQuest(const FString& devName)
-{
-	if(Quests.Num() > 0)
-	{
-		for(int i=0;i<Quests.Num();i++)
-		{
-			if(Quests[i].DevName == devName){return Quests[i].bShow;}			
-		}		
-	}
-	return false;
-}
 
 void ARPGCharacterBase::BeginPlay()
 {
@@ -574,48 +389,8 @@ void ARPGCharacterBase::BeginPlay()
 	}
 }
 
-void ARPGCharacterBase::AddExp_Implementation(int amount)
-{
-	Experience += amount;
-	
-	if(Experience >= (Level + 1) * NeededExperienceMultiplier)
-	{
-		LevelUp();
-	}
-	UpdatePlayerInfo();
-}
 
-void ARPGCharacterBase::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
-{
-	// Note: the 'Jump' action and the 'MoveRight' axis are bound to actual keys/buttons/sticks in DefaultInput.ini (editable from Project Settings..Input)
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	
-	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ARPGCharacterBase::Attack);
 
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ARPGCharacterBase::InteractAction);
-	
-	PlayerInputComponent->BindAxis("MoveRight", this, &ARPGCharacterBase::MoveRight);
-	PlayerInputComponent->BindAxis("MoveUp", this, &ARPGCharacterBase::MoveUp);
-}
-
-void ARPGCharacterBase::MoveRight(float Value)
-{
-	/*UpdateChar();*/
-	if ( (Controller != nullptr) && (Value != 0.0f) )
-	{
-		AddMovementInput(FVector(1,0,0), Value);
-	}
-}
-
-void ARPGCharacterBase::MoveUp(float Value)
-{
-	if ( (Controller != NULL) && (Value != 0.0f) )
-	{
-		// add movement in that direction
-		AddMovementInput(FVector(0,1,0), Value);
-	}
-}
 
 void ARPGCharacterBase::UpdateCharacter()
 {

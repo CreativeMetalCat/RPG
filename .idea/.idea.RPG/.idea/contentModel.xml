@@ -45531,6 +45531,9 @@
                   <e p="ItemInfo.cpp" t="Include" />
                   <e p="SpecialEffect.cpp" t="Include" />
                 </e>
+                <e p="Player" t="Include">
+                  <e p="PlayerBase.cpp" t="Include" />
+                </e>
                 <e p="Quest" t="Include">
                   <e p="QuestInfo.cpp" t="Include" />
                 </e>
@@ -45552,6 +45555,9 @@
                 <e p="Item" t="Include">
                   <e p="ItemInfo.h" t="Include" />
                   <e p="SpecialEffect.h" t="Include" />
+                </e>
+                <e p="Player" t="Include">
+                  <e p="PlayerBase.h" t="Include" />
                 </e>
                 <e p="Quest" t="Include">
                   <e p="QuestInfo.h" t="Include" />

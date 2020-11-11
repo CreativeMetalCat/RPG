@@ -10,7 +10,7 @@
 #include "EnemyCharacterBase.generated.h"
 
 /**
- * 
+ * This is base class for every enemy existing in the world
  */
 UCLASS()
 class RPGCORE_API AEnemyCharacterBase : public ARPGCharacterBase

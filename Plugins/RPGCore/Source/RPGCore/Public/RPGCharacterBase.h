@@ -46,19 +46,14 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDied);
  * The capsule component (inherited from ACharacter) handles collision with the world
  * The CharacterMovementComponent (inherited from ACharacter) handles movement of the collision capsule
  * The Sprite component (inherited from APaperCharacter) handles the visuals
+ * config=Game
  */
-UCLASS(config=Game)
+UCLASS()
 class ARPGCharacterBase : public APaperCharacter, public IInteraction
 {
 	GENERATED_BODY()
 
-	/** Side view camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera, meta=(AllowPrivateAccess="true"))
-	class UCameraComponent* SideViewCameraComponent;
-
-	/** Camera boom positioning the camera beside the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
+	
 
 	UTextRenderComponent* TextComponent;
 	virtual void Tick(float DeltaSeconds) override;
@@ -81,7 +76,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Attack)
 	UBoxComponent *RightCollision;
-
+public:
 	// The animation to play while idle (standing still)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Movement")
 	UPaperFlipbook* IdleAnimation;
@@ -112,10 +107,7 @@ protected:
 	/** Called to choose the correct animation to play based on the character's movement state */
 	void UpdateAnimation();
 
-	/** Called for side to side input */
-	void MoveRight(float Value);
 
-	void MoveUp(float Value);
 
 	void UpdateCharacter();
 
@@ -125,47 +117,7 @@ protected:
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Interaction)
 	void InteractAction();
 
-	/*This function is NOT for gameplay purposes, but for development*/
-	UFUNCTION(BlueprintCallable,Category=Dev)
-	bool AddQuestToQuestArray(FQuestInfo quest);
-
-	/*Use this function if you want to give player a quest
-	 *Returns false if player already has this quest
-	 * 
-	 */
-	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Quest)
-	bool AddQuest(FQuestInfo quest);
-
-	/*
-	 *Returns false if quest was already completed
-	 *Do not use this function if you want to finish quest, use @MakeProgress instead
-	 */
-	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Quest)
-	bool CompleteQuest(const FString &devName,int questId);
-
-	/*Used by dialog system to mark quests as rewarded and avoid giving reward more than once
-	 * Do not use manually
-	 */
-	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Quest)
-	void MarkQuestAsRewarded(const FString &devName);
-
-	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Quest)
-	void MakeProgress(const FString &devName,int amount);
-
-	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Quest)
-	void ChangeQuestInfo(FQuestInfo newQuestInfo);
-
-	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Display)
-	void UpdateQuestDisplayInfo();
-
-	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Display)
-	void UpdatePlayerInfo();
-
-	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Exp)
-	void AddExp(int amount);
-
-	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Exp)
-	void LevelUp();
+	
 
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Money)
     void AddMoney(int amount);
@@ -217,27 +169,18 @@ protected:
 	/*This function exists only make code look prettier*/
 	UFUNCTION(BlueprintPure,Category=Items)
     FItemInfo GetCurrentMiddleArmor(bool &has);
+
+	
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Display)
+    void UpdatePlayerInfo();
 	
 
 
 	virtual int DealDamage_Implementation(int Damage,AActor*DamageDealer =nullptr, TSubclassOf<ASpecialEffect> SpecialEffect =nullptr) override;
 
-	/*This return COPY of quest info, changing it will NOT affect original info. See: @ChangeQuestInfo for that
-	 *
-	 */
-	UFUNCTION(BlueprintPure,Category=Quest)
-	FQuestInfo GetQuestInfo(FString devName,bool&hasQuest);
-
-	/*Returns true if player has this quest, EVEN if it's completed*/
-	UFUNCTION(BlueprintPure,Category=Quest)
-	bool HasQuest(const FString &devName);
+	
 
 	virtual void BeginPlay() override;
-
-
-	// APawn interface
-	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
-	// End of APawn interface
 
 public:
 	UPROPERTY(BlueprintAssignable)
@@ -280,8 +223,6 @@ public:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Sound,SaveGame)
 	USoundBase *AttackSound  = nullptr;
 
-	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Quest,SaveGame)
-	TArray<FQuestInfo> Quests;
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Abilities,SaveGame)
 	TArray<FAbilityInfo>Abilities;
@@ -320,8 +261,5 @@ public:
 	
 	ARPGCharacterBase();
 
-	/** Returns SideViewCameraComponent subobject **/
-	FORCEINLINE class UCameraComponent* GetSideViewCameraComponent() const { return SideViewCameraComponent; }
-	/** Returns CameraBoom subobject **/
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+
 };
