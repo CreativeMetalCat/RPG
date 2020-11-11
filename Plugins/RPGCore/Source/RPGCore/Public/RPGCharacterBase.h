@@ -125,12 +125,19 @@ public:
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Money)
     void AddMoney(int amount);
 
-	UFUNCTION(BlueprintCallable,Category= Items)
+	UFUNCTION(BlueprintPure,Category= Items)
 	virtual FItemInfo GetItemById(int32 id,bool&hasItem);
+
+	UFUNCTION(BlueprintPure,Category= Items)
+	virtual FItemInfo GetItemByName(FString devName,bool&hasItem);
 
 	/*Add new item to player's inventory. Never returns false(added for future)*/
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Items)
 	bool AddItem(FItemInfo item);
+
+	/*Remove item from player's inventory.Returns false if item is not found or requested amount is too big*/
+	UFUNCTION(BlueprintCallable,Category=Items)
+	bool RemoveItem(const FString &devName,int amount);
 
 	/*Set current weapon,armor to be one of the items from inventory. Use this to equip weapons etc.*/
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Items)

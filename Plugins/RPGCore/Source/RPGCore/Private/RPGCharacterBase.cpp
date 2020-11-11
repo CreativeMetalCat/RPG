@@ -195,6 +195,45 @@ FItemInfo ARPGCharacterBase::GetItemById(int32 id, bool& hasItem)
 	else { return FItemInfo(); }
 }
 
+FItemInfo ARPGCharacterBase::GetItemByName(FString devName,bool&hasItem)
+{
+	hasItem = false;
+	if(Items.Num() > 0)
+	{
+		for(int i=0;i<Items.Num();i++)
+		{
+			if(Items[i].DevName == devName){hasItem = true; return Items[i];}
+		}
+	}
+	return FItemInfo();
+}
+
+bool ARPGCharacterBase::RemoveItem(const FString &devName, int amount)
+{
+	bool hasItem;
+	GetItemByName(devName,hasItem);//more compact check
+	if(hasItem)
+	{
+		for (int i = 0; i < Items.Num(); i++)
+		{
+			if(Items[i].DevName == devName)
+			{
+				if(Items[i].CurrentAmount >= amount)
+				{
+					Items[i].CurrentAmount -= amount;
+					return true;//we successfully removed needed amount
+				}
+				else if(Items[i].CurrentAmount == amount)
+				{
+					Items.RemoveAt(i);
+					return true;//we successfully removed item
+				}
+			}
+		}
+	}
+	return false;
+}
+
 bool ARPGCharacterBase::AddItem_Implementation(FItemInfo item)
 {
 	if(Items.Num() > 0)
