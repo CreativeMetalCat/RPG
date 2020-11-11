@@ -115,29 +115,32 @@ bool ARPGCharacterBase::PlayFlipbookAnimation(UPaperFlipbook*Animation,float &le
 
 void ARPGCharacterBase::UpdateAnimation()
 {
-	const FVector PlayerVelocity = GetVelocity();
-	const float PlayerSpeedSqr = PlayerVelocity.SizeSquared();
-
-	if(bAttacking && AttackAnimation != nullptr)
-	{	
-		if(GetSprite()->GetFlipbook() != AttackAnimation)
-		{
-			GetSprite()->SetFlipbook(AttackAnimation);
-			GetSprite()->SetLooping(false);
-		}
-	}
-	else if(!bPlayingAnimMontage)
+	if(bUseAnimationSystem)
 	{
-		// Are we moving or standing still?
-		UPaperFlipbook* DesiredAnimation = (PlayerSpeedSqr > 0.0f) ? RunningAnimation : IdleAnimation;
-		if( GetSprite()->GetFlipbook() != DesiredAnimation 	)
-		{
-			GetSprite()->SetFlipbook(DesiredAnimation);
+		const FVector PlayerVelocity = GetVelocity();
+		const float PlayerSpeedSqr = PlayerVelocity.SizeSquared();
 
-			if(!GetSprite()->IsLooping())
+		if(bAttacking && AttackAnimation != nullptr)
+		{	
+			if(GetSprite()->GetFlipbook() != AttackAnimation)
 			{
-				GetSprite()->SetLooping(true);
-				GetSprite()->Play();
+				GetSprite()->SetFlipbook(AttackAnimation);
+				GetSprite()->SetLooping(false);
+			}
+		}
+		else if(!bPlayingAnimMontage)
+		{
+			// Are we moving or standing still?
+			UPaperFlipbook* DesiredAnimation = (PlayerSpeedSqr > 0.0f) ? RunningAnimation : IdleAnimation;
+			if( GetSprite()->GetFlipbook() != DesiredAnimation 	)
+			{
+				GetSprite()->SetFlipbook(DesiredAnimation);
+
+				if(!GetSprite()->IsLooping())
+				{
+					GetSprite()->SetLooping(true);
+					GetSprite()->Play();
+				}
 			}
 		}
 	}
@@ -242,15 +245,20 @@ bool ARPGCharacterBase::SetCurrentItemById_Implementation(int id, EItemType type
 
 void ARPGCharacterBase::Die_Implementation()
 {
-	if(GetController())
+	if(!bDead)
 	{
-		APlayerController *PC = Cast<APlayerController>(GetController());
-		if(PC)
+		bDead = true;
+		bUseAnimationSystem = false;
+		if(GetController())
 		{
-			DisableInput(PC);
+			APlayerController *PC = Cast<APlayerController>(GetController());
+			if(PC)
+			{
+				DisableInput(PC);
+			}
 		}
+		OnDied.Broadcast();
 	}
-	OnDied.Broadcast();
 }
 
 bool ARPGCharacterBase::UseAbility(int id)

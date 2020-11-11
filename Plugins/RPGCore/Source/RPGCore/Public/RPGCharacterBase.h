@@ -88,6 +88,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Fight")
 	bool bAttacking = false;
 
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Animations",SaveGame)
+	bool bUseAnimationSystem = true;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Death")
 	UPaperFlipbook *DeathAnimation;
 
@@ -215,6 +218,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Stats,SaveGame)
 	int Defense = 1;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Stats|Health",SaveGame)
+	bool bDead = false;
 
 	/*The health is amount of hits player can take(techincally some attacks deal more then one damage)*/
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Stats|Health",SaveGame)
