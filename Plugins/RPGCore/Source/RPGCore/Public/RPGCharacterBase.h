@@ -147,22 +147,29 @@ public:
 	void Die();
 
 	/*Returns false if ability can not be used*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable,Category=Abilities)
 	virtual bool UseAbility(int id);
 	
 	/*Returns false if ability can not be used*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable,Category=Abilities)
     virtual bool UseAbilityByName(FString Name);
 
 	/*Adds new ability if it isn't in the array*/
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable,Category=Abilities)
 	virtual bool AddAbility(FAbilityInfo Ability);
 
-	UFUNCTION(BlueprintPure)
-	virtual FAbilityInfo GetAbilityInfo(int id,bool&has);
+	UFUNCTION(BlueprintPure,Category=Abilities)
+	virtual FAbilityInfo GetAbilityInfo(int id,bool&has)const;
 
-	UFUNCTION(BlueprintPure)
-    virtual FAbilityInfo GetAbilityInfoByName(FString name,bool&has);
+	UFUNCTION(BlueprintPure,Category=Abilities)
+    virtual FAbilityInfo GetAbilityInfoByName(FString name,bool&has)const;
+
+	/*Returns -1 if no ability is found*/
+	UFUNCTION(BlueprintPure,Category=Abilities)
+	int GetAbilityId(FString name);
+
+	UFUNCTION(BlueprintCallable,Category="Abilities|Cooldown")
+	virtual void FinishCooldownOnAbility(FString devName);
 
 	/*This function exists only make code look prettier*/
 	UFUNCTION(BlueprintPure,Category=Items)

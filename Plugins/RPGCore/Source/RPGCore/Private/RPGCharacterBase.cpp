@@ -304,13 +304,24 @@ bool ARPGCharacterBase::UseAbility(int id)
 {
 	if(Abilities.IsValidIndex(id))
 	{
-		if(Abilities[id].AbilityClass)
+		if(Abilities[id].AbilityClass && !Abilities[id].bIsCoolingdown)
 		{
+			Abilities[id].bIsCoolingdown = true;
 			ASpecialEffect* SE = Cast<ASpecialEffect>(GetWorld()->SpawnActor(Abilities[id].AbilityClass));
 			if(SE)
 			{					
 				SE->ApplyEffect(this,GetActorLocation(),GetWorld(),nullptr);//MUST BE MANUALLY DESTROYED
-			}	
+			}
+			
+			GetWorldTimerManager().SetTimer(Abilities[id].CooldownTimerHandle,
+			                                FTimerDelegate::CreateUObject
+			                                (
+				                                this,
+				                                &ARPGCharacterBase::FinishCooldownOnAbility,
+				                                Abilities[id].DevName
+				                            ),
+				                            Abilities[id].CooldownTime,false);
+			
 			return true;
 		}	
 	}
@@ -345,7 +356,7 @@ bool ARPGCharacterBase::AddAbility(FAbilityInfo Ability)
 	return true;
 }
 
-FAbilityInfo ARPGCharacterBase::GetAbilityInfo(int id, bool& has)
+FAbilityInfo ARPGCharacterBase::GetAbilityInfo(int id, bool& has)const
 {
 	has = false;
 	if(Abilities.IsValidIndex(id))
@@ -356,7 +367,7 @@ FAbilityInfo ARPGCharacterBase::GetAbilityInfo(int id, bool& has)
 	return FAbilityInfo();
 }
 
-FAbilityInfo ARPGCharacterBase::GetAbilityInfoByName(FString name, bool& has)
+FAbilityInfo ARPGCharacterBase::GetAbilityInfoByName(FString name, bool& has)const
 {
 	has = false;
 	if (Abilities.Num() > 0)
@@ -368,6 +379,28 @@ FAbilityInfo ARPGCharacterBase::GetAbilityInfoByName(FString name, bool& has)
 	}
 	
 	return FAbilityInfo();
+}
+
+int ARPGCharacterBase::GetAbilityId(FString name)
+{
+	if (Abilities.Num() > 0)
+	{
+		for (int i = 0; i < Abilities.Num(); i++)
+		{
+			if(Abilities[i].DevName==name){return i;}
+		}
+	}
+	return -1;
+}
+
+void ARPGCharacterBase::FinishCooldownOnAbility(FString devName)
+{
+	int id = GetAbilityId(devName);
+	if(id !=-1)
+	{
+		Abilities[id].bIsCoolingdown = false;
+		Abilities[id].CooldownTimerHandle.Invalidate();
+	}
 }
 
 FItemInfo ARPGCharacterBase::GetCurrentWeapon(bool& has)

@@ -57,5 +57,13 @@ public:
 	*/
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Requirements)
 	TArray<FString> NeededAbilities;
-    
+
+	UPROPERTY(BlueprintReadOnly,BlueprintReadOnly,Category=Cooldown)
+	FTimerHandle CooldownTimerHandle;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category=Cooldown)
+	bool bIsCoolingdown = false;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category=Cooldown)
+	float CooldownTime = 1.f;
 };
