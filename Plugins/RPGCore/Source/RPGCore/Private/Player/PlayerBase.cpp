@@ -3,6 +3,8 @@
 
 #include "RPGCore/Public/Player/PlayerBase.h"
 
+#include "Player/PlayerLevelInfo.h"
+
 void APlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
    	
@@ -60,8 +62,27 @@ void APlayerBase::MoveUp(float Value)
 void APlayerBase::AddExp_Implementation(int amount)
 {
 	Experience += amount;
+	int neededExp = 0;
+	if(PlayerLevelInfoTable)
+	{
+		if(PlayerLevelInfoTable->GetRowNames().IsValidIndex(Level))
+		{
+			FPlayerLevelInfo info = *(PlayerLevelInfoTable->FindRow<FPlayerLevelInfo>(PlayerLevelInfoTable->GetRowNames()[Level],""));
+			neededExp = info.NeededExp;
+		}
+		else
+		{
+			//if row wasn't found do it this way
+			neededExp = (Level + 1) * NeededExperienceMultiplier;
+		}
+	}
+	else
+	{
+		//if row wasn't found do it this way
+		neededExp = (Level + 1) * NeededExperienceMultiplier;
+	}
 	
-	if(Experience >= (Level + 1) * NeededExperienceMultiplier)
+	if(Experience >= neededExp)
 	{
 		LevelUp();
 	}
@@ -231,8 +252,28 @@ void APlayerBase::LevelUp_Implementation()
 	Level++;
 
 	Experience = (Experience-Level*NeededExperienceMultiplier <= 0)? 0: Experience-Level*NeededExperienceMultiplier;	
+
+	if(PlayerLevelInfoTable)
+	{
+		if(PlayerLevelInfoTable->GetRowNames().IsValidIndex(Level))
+		{
+			FPlayerLevelInfo info = *(PlayerLevelInfoTable->FindRow<FPlayerLevelInfo>(PlayerLevelInfoTable->GetRowNames()[Level],""));
+			SkillPoints += info.SkillPoints;
+		}
+		else
+		{
+			//we reached last possible level or table is null so we just give random points
+			//TODO: Create better last level solution before release
+			SkillPoints += FMath::RandRange(0,5);
+		}
+	}
+	else
+	{
+		//we reached last possible level or table is null so we just give random points
+		//TODO: Create better last level solution before release
+		SkillPoints += FMath::RandRange(0,5);
+	}
 	
-	SkillPoints += FMath::RandRange(0,5);
 	UpdatePlayerInfo();
 
 	if (Experience >= Level * NeededExperienceMultiplier) { LevelUp(); }

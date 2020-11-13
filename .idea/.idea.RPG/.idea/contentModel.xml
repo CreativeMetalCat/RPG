@@ -45533,6 +45533,7 @@
                 </e>
                 <e p="Player" t="Include">
                   <e p="PlayerBase.cpp" t="Include" />
+                  <e p="PlayerLevelInfo.cpp" t="Include" />
                 </e>
                 <e p="Quest" t="Include">
                   <e p="QuestInfo.cpp" t="Include" />
@@ -45558,6 +45559,7 @@
                 </e>
                 <e p="Player" t="Include">
                   <e p="PlayerBase.h" t="Include" />
+                  <e p="PlayerLevelInfo.h" t="Include" />
                 </e>
                 <e p="Quest" t="Include">
                   <e p="QuestInfo.h" t="Include" />

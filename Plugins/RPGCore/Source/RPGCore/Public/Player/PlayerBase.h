@@ -29,6 +29,9 @@ public:
 	/*ALL quests that game has*/
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Quest,SaveGame)
 	TArray<FQuestInfo> Quests;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=LevelUpSystem,SaveGame)
+	UDataTable *PlayerLevelInfoTable;
 	
 	/*This return COPY of quest info, changing it will NOT affect original info. See: @ChangeQuestInfo for that
 	*
