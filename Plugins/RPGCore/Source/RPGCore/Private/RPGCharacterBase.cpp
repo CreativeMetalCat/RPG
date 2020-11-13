@@ -304,23 +304,35 @@ bool ARPGCharacterBase::UseAbility(int id)
 {
 	if(Abilities.IsValidIndex(id))
 	{
-		if(Abilities[id].AbilityClass && !Abilities[id].bIsCoolingdown)
+		if(Abilities[id].AbilityClass && !Abilities[id].bIsCoolingdown && CurrentMagicJuice >= Abilities[id].MannaUsage)
 		{
-			Abilities[id].bIsCoolingdown = true;
-			ASpecialEffect* SE = Cast<ASpecialEffect>(GetWorld()->SpawnActor(Abilities[id].AbilityClass));
-			if(SE)
+			
+			
+			if(ASpecialEffect* SE = Cast<ASpecialEffect>(GetWorld()->SpawnActor(Abilities[id].AbilityClass)))
 			{					
 				SE->ApplyEffect(this,GetActorLocation(),GetWorld(),nullptr);//MUST BE MANUALLY DESTROYED
 			}
+			if(Abilities[id].CooldownTime > 0)
+			{
+				//start cooldown timer
+				Abilities[id].bIsCoolingdown = true;
+				GetWorldTimerManager().SetTimer(Abilities[id].CooldownTimerHandle,
+                                                FTimerDelegate::CreateUObject
+                                                (
+                                                    this,
+                                                    &ARPGCharacterBase::FinishCooldownOnAbility,
+                                                    Abilities[id].DevName
+                                                ),
+                                                Abilities[id].CooldownTime,false);
+			}
 			
-			GetWorldTimerManager().SetTimer(Abilities[id].CooldownTimerHandle,
-			                                FTimerDelegate::CreateUObject
-			                                (
-				                                this,
-				                                &ARPGCharacterBase::FinishCooldownOnAbility,
-				                                Abilities[id].DevName
-				                            ),
-				                            Abilities[id].CooldownTime,false);
+			CurrentMagicJuice -= Abilities[id].MannaUsage;
+			if(!MagicJuiceRestorationTimerHandle.IsValid())
+			{
+				GetWorldTimerManager().SetTimer(MagicJuiceRestorationTimerHandle,this,&ARPGCharacterBase::RestoreMagicJuice,MagicJuiceRestorationTime,true);
+			}
+			
+			UpdatePlayerInfo();
 			
 			return true;
 		}	
@@ -401,6 +413,16 @@ void ARPGCharacterBase::FinishCooldownOnAbility(FString devName)
 		Abilities[id].bIsCoolingdown = false;
 		Abilities[id].CooldownTimerHandle.Invalidate();
 	}
+}
+
+void ARPGCharacterBase::RestoreMagicJuice()
+{
+	CurrentMagicJuice += MagicJuiceRestorationAmount;
+	if(CurrentMagicJuice >= MaxMagicJuice)
+	{
+		MagicJuiceRestorationTimerHandle.Invalidate();
+	}
+	UpdatePlayerInfo();
 }
 
 FItemInfo ARPGCharacterBase::GetCurrentWeapon(bool& has)

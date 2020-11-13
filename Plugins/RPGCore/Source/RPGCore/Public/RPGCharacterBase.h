@@ -170,6 +170,9 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category="Abilities|Cooldown")
 	virtual void FinishCooldownOnAbility(FString devName);
+	
+	UFUNCTION(BlueprintCallable,Category="Magic")
+	void RestoreMagicJuice();
 
 	/*This function exists only make code look prettier*/
 	UFUNCTION(BlueprintPure,Category=Items)
@@ -236,6 +239,24 @@ public:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Stats|Health",SaveGame)
 	bool bDead = false;
 
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Stats|Magic",SaveGame)
+	int CurrentMagicJuice = 1;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Stats|Magic",SaveGame)
+	int MaxMagicJuice = 10; 
+
+	UPROPERTY(BlueprintReadOnly,EditDefaultsOnly,Category= "Stats|Magic|Restoration",SaveGame)
+	FTimerHandle MagicJuiceRestorationTimerHandle;
+	
+	/*How much magic juice is restored each "magic juice restoration time"*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Stats|Magic|Restoration",SaveGame)
+	int MagicJuiceRestorationAmount = 1;
+
+	/*How fast magic juice is restored*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Stats|Magic|Restoration",SaveGame)
+	float MagicJuiceRestorationTime = 1.f;
+	
+	
 	/*The health is amount of hits player can take(techincally some attacks deal more then one damage)*/
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Stats|Health",SaveGame)
 	int Health = 5;
