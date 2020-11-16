@@ -69,6 +69,20 @@ public:
  UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Requirements)
  TArray<FString> NeededQuests;
 
+ /*When this quest is completed all quests that are stated there will be progressed by stated number
+  * This can be used for quests that are build of subquests
+  * Example: Quest: Fix windmill. Subquests:Find gear, find string, fix rotating mechanism. When any of those are completed Main quest gets progressed
+  */
+ UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Quests)
+ TMap<FString,int> QuestsToAffect;
+
+ UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Quests)
+ bool bCanAffectOtherQuests = true;
+
+ /*Used ONLY for ui, has no actual effect on gameplay*/
+ UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Dev|UI")
+ bool bSubQuest = false;
+
  /*When game starts player already has all quests, but game can only mark it as completed if was given to player.
   *if bShow is true than player was given this quest, if false - not*/
  UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Dev)

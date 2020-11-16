@@ -194,6 +194,24 @@ void APlayerBase::MarkQuestAsRewarded_Implementation(const FString& devName)
 bool APlayerBase::CompleteQuest_Implementation(const FString& devName,int questId)
 {
 	if(Quests[questId].bCompleted){return false;}
+
+	
+	if (Quests[questId].bCanAffectOtherQuests)
+	{
+		TArray<FString> AffectedQuests;
+		TArray<int> AffectedQuestsProgressAmount;
+
+		Quests[questId].QuestsToAffect.GenerateValueArray(AffectedQuestsProgressAmount);
+		Quests[questId].QuestsToAffect.GetKeys(AffectedQuests);
+
+		if (AffectedQuests.Num() > 0)
+		{
+			for (int i = 0; i < AffectedQuests.Num(); i++)
+			{
+				MakeProgress(AffectedQuests[i], AffectedQuestsProgressAmount[i]);
+			}
+		}
+	}
 	
 	Quests[questId].bCompleted = true;
 	OnQuestFinished.Broadcast(Quests[questId]);
