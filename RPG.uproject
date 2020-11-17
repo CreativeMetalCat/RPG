@@ -38,6 +38,16 @@
 		{
 			"Name": "FMODStudio",
 			"Enabled": true
+		},
+		{
+			"Name": "DiscordMessenger",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/2a1ca175da3e40e8bd54c7d00d135c1b"
+		},
+		{
+			"Name": "RegexInBP",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/16339a5a34cb452c9a277bc3044b4608"
 		}
 	]
 }
