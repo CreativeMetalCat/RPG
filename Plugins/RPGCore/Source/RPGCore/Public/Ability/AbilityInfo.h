@@ -58,6 +58,20 @@ public:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Requirements)
 	TArray<FString> NeededAbilities;
 
+
+	/*If true "ApplyEffect" of Special Effect will NOT be called
+	 * If false "ApplyEffect" of Special Effect WILL be called
+	 */
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="WeaponEnhancement")
+	bool IsOnlyWeaponEnhancement = false;
+
+	/*If true than target of ability will be also the one who spawned it
+	 * Avoid setting it to true if ability deals damage without any checks
+	 */
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Effect")
+	bool bApplyToSpawner = false;
+
+	
 	UPROPERTY(BlueprintReadOnly,BlueprintReadOnly,Category=Cooldown)
 	FTimerHandle CooldownTimerHandle;
 

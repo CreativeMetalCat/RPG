@@ -7,6 +7,17 @@
 #include "UObject/NoExportTypes.h"
 #include "SpecialEffect.generated.h"
 
+/*This enum exists only as code enhancement and only needed if effect is applied to weapon
+ * This will only be checked by abilities that apply something to weapons(but not everyone of them)
+ */
+UENUM(BlueprintType)
+enum class EEffectType:uint8
+{
+	EET_None UMETA(DisplayName = "None"),
+	EET_Fire UMETA(DisplayName = "Fire"),
+	EET_Electricity UMETA(DisplayName = "Electirycity")
+};
+
 /*Used by items that create special effects on use. For example: Magic wand that shoot lightning,or grenade that explodes*/
 UCLASS(Blueprintable,notplaceable, meta=(ChildCanTick, KismetHideOverrides = "ReceiveAnyDamage,ReceivePointDamage,ReceiveRadialDamage,ReceiveActorBeginOverlap,ReceiveActorEndOverlap,ReceiveHit,ReceiveDestroyed,ReceiveActorBeginCursorOver,ReceiveActorEndCursorOver,ReceiveActorOnClicked,ReceiveActorOnReleased,ReceiveActorOnInputTouchBegin,ReceiveActorOnInputTouchEnd,ReceiveActorOnInputTouchEnter,ReceiveActorOnInputTouchLeave"), HideCategories=(Collision,Rendering,"Utilities|Transformation"))
 class RPGCORE_API ASpecialEffect : public AActor
@@ -15,6 +26,15 @@ class RPGCORE_API ASpecialEffect : public AActor
 	protected:
 	FTimerHandle EffectLoopTimer;
 	public:
+
+	/*Name that players will see*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Display)
+	FText DisplayName;
+
+	/*What player has to do*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Display)
+	FText Description;
+	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Timer)
 	FTimerHandle EffectTimer;
 	
@@ -26,6 +46,22 @@ class RPGCORE_API ASpecialEffect : public AActor
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Info)
 	FVector EffectOrigin = FVector::ZeroVector;
+
+	/*This will only be checked by abilities that apply something to weapons(but not everyone of them)*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Info|Type")
+	EEffectType Type = EEffectType::EET_None;
+
+	/*This effect will be applied along side weapons already existing weapon effect
+	 * For example - fire(Some ability Enhances weapon to be on fire and each time weapon damages it's effect applies as well
+	 */
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="WeaponEnhancement")
+	TSubclassOf<ASpecialEffect> WeaponEnhancementEffect;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="WeaponEnhancement")
+	TArray<EEffectType> IncompatibleTypes;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="WeaponEnhancement")
+	bool bHasWeaponEnhancement = false;
 
 	/*
 	 * TargetActor - If your effect is supposed to be applied directly to some actor

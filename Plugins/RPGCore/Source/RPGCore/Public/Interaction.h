@@ -34,4 +34,8 @@ public:
 	 */
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category=Damage)
 	int DealDamage(int Damage,AActor*DamageDealer =nullptr, TSubclassOf<ASpecialEffect>SpecialEffect = nullptr);
+
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category=Effect)
+	void NotifyAboutEffectStart(ASpecialEffect*Effect);
+	
 };

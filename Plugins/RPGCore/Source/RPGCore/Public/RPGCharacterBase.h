@@ -218,6 +218,8 @@ public:
 
 	virtual void BeginPlay() override;
 
+	virtual void NotifyAboutEffectStart_Implementation(ASpecialEffect* Effect) override;
+
 public:
 	UPROPERTY(BlueprintAssignable)
 	FOnQuestFinished OnQuestFinished;
@@ -246,11 +248,15 @@ public:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Level,SaveGame)
 	int NeededExperienceMultiplier = 100;
 
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Effects,SaveGame)
+	TArray<ASpecialEffect*> CurrentlyAppliedEffects;
+
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Stats,SaveGame)
 	int AttackPower = 1;
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Stats,SaveGame)
 	int Defense = 1;
+	
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Stats|Health",SaveGame)
 	bool bDead = false;

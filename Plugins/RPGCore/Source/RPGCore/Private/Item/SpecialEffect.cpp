@@ -3,6 +3,8 @@
 
 #include "RPGCore/Public/Item/SpecialEffect.h"
 
+#include "Interaction.h"
+
 void ASpecialEffect::ApplyEffect_Implementation(AActor* CreatorOfEffect, FVector Origin,UWorld *WorldContext,AActor*TargetActor )
 {
     Creator = CreatorOfEffect;
@@ -11,6 +13,13 @@ void ASpecialEffect::ApplyEffect_Implementation(AActor* CreatorOfEffect, FVector
     
     if(bDoesEffectLasts)
     {
+        if(TargetActor)
+        {
+            if(Cast<IInteraction>(TargetActor) || TargetActor->Implements<UInteraction>())
+            {
+                IInteraction::Execute_NotifyAboutEffectStart(Target,this);
+            }
+        }
         if(WorldContext)
         {
            WorldContext->GetTimerManager().SetTimer(EffectTimer,this,&ASpecialEffect::OnEffectEnds,EffectLifeSpan);
