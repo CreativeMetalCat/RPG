@@ -453,6 +453,37 @@ FItemInfo ARPGCharacterBase::GetCurrentMiddleArmor(bool& has)
 	return FItemInfo();
 }
 
+void ARPGCharacterBase::Roll(EDirection Direction)
+{
+	if(bCanDodgeRoll)
+	{
+		FVector Velocity;
+		switch (Direction)
+		{
+		case EDirection::ED_Up:
+			Velocity = FVector(0,-1,0);
+			break;
+		case EDirection::ED_Down:
+			Velocity = FVector(0,1,0);
+			break;
+		case EDirection::ED_Left:
+			Velocity = FVector(-1,0,0);
+			break;
+		case EDirection::ED_Right:
+			Velocity = FVector(1,0,0);
+			break;
+		}
+		LaunchCharacter(Velocity*DodgeRollSpeed,false,false);
+		bCanDodgeRoll = false;
+		GetWorldTimerManager().SetTimer(DodgeRollCooldownTimerHandle,this,&ARPGCharacterBase::EndDodgeRollCooldown,DodgeRollCooldownTime);
+	}
+}
+
+void ARPGCharacterBase::EndDodgeRollCooldown()
+{
+	bCanDodgeRoll = true;
+}
+
 int ARPGCharacterBase::DealDamage_Implementation(int Damage,AActor*DamageDealer, TSubclassOf<ASpecialEffect> SpecialEffect)
 {
 	//TODO: Add damage reduction based on stats and whether player holds shield or not

@@ -97,6 +97,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Montage")
 	bool bPlayingAnimMontage = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DodgeRoll")
+	float DodgeRollSpeed = 100.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DodgeRoll|Cooldown")
+	float DodgeRollCooldownTime = 1.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DodgeRoll|Cooldown")
+	bool bCanDodgeRoll = true;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DodgeRoll|Cooldown")
+	FTimerHandle DodgeRollCooldownTimerHandle;
+	
 	UFUNCTION(BlueprintCallable,Category = Animation)
 	virtual void OnFlipbookFinishedPlaying();
 
@@ -190,15 +202,19 @@ public:
 	UFUNCTION(BlueprintPure,Category=Items)
     FItemInfo GetCurrentMiddleArmor(bool &has);
 
-	
+	/*Does roll in direction of Direction
+	 * This function is mostly for other functions to use
+	 */
+	UFUNCTION(BlueprintCallable,Category=DodgeRoll)
+	void Roll(EDirection Direction);
+
+	UFUNCTION(BlueprintCallable,Category="DodgeRoll|Cooldown")
+	void EndDodgeRollCooldown();
+
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Display)
     void UpdatePlayerInfo();
-	
-
 
 	virtual int DealDamage_Implementation(int Damage,AActor*DamageDealer =nullptr, TSubclassOf<ASpecialEffect> SpecialEffect =nullptr) override;
-
-	
 
 	virtual void BeginPlay() override;
 

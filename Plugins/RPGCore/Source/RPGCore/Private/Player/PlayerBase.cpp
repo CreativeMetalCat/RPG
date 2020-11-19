@@ -11,6 +11,8 @@ void APlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
     PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerBase::Attack);
 
     PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerBase::InteractAction);
+
+	PlayerInputComponent->BindAction("DodgeRoll", IE_Pressed, this, &APlayerBase::DodgeRoll);
 	
     PlayerInputComponent->BindAxis("MoveRight", this, &APlayerBase::MoveRight);
     PlayerInputComponent->BindAxis("MoveUp", this, &APlayerBase::MoveUp);
@@ -39,6 +41,11 @@ APlayerBase::APlayerBase()
 	CameraBoom->SetUsingAbsoluteRotation(true);
 	SideViewCameraComponent->bUsePawnControlRotation = false;
 	SideViewCameraComponent->bAutoActivate = true;
+}
+
+void APlayerBase::DodgeRoll()
+{
+	Roll(CurrentDirection);
 }
 
 void APlayerBase::MoveRight(float Value)

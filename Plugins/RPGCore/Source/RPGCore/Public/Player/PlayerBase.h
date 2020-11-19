@@ -84,6 +84,8 @@ public:
     void LevelUp();
 
 	APlayerBase();
+
+	void DodgeRoll();
 	
 	/** Called for side to side input */
 	void MoveRight(float Value);
