@@ -420,7 +420,7 @@ void ARPGCharacterBase::RestoreMagicJuice()
 	CurrentMagicJuice += MagicJuiceRestorationAmount;
 	if(CurrentMagicJuice >= MaxMagicJuice)
 	{
-		MagicJuiceRestorationTimerHandle.Invalidate();
+		GetWorldTimerManager().ClearTimer(MagicJuiceRestorationTimerHandle);
 	}
 	UpdatePlayerInfo();
 }
