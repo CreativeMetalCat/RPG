@@ -631,18 +631,24 @@ void ARPGCharacterBase::UpdateCharacter()
 	}
 }
 
+bool ARPGCharacterBase::CanAttack()
+{
+	return (!bPlayingAnimMontage && !bIsShieldPutUp && !bAttacking);
+}
+
 
 void ARPGCharacterBase::Attack_Implementation()
 {
-
-	if(AttackAnimation)
+	if(CanAttack())
 	{
-		bAttacking = true;
-	}
-	//4 direction hit system -> based on where player is looking
-	TArray<AActor*> AttackedActors;
-	switch (CurrentDirection)
-	{
+		if(AttackAnimation)
+		{
+			bAttacking = true;
+		}
+		//4 direction hit system -> based on where player is looking
+		TArray<AActor*> AttackedActors;
+		switch (CurrentDirection)
+		{
 		case EDirection::ED_Up:
 			UpperCollision->GetOverlappingActors(AttackedActors);
 			break;
@@ -655,66 +661,67 @@ void ARPGCharacterBase::Attack_Implementation()
 		case EDirection::ED_Left:
 			LeftCollision->GetOverlappingActors(AttackedActors);
 			break;
-	}
-	bool hasItem;
-	const FItemInfo Item = GetItemById(CurrentWeaponId,hasItem);
-	if(hasItem)
-	{
-		if(Item.Type == EItemType::EIT_Weapon)
+		}
+		bool hasItem;
+		const FItemInfo Item = GetItemById(CurrentWeaponId,hasItem);
+		if(hasItem)
 		{
-			if(Item.SpecialEffect != nullptr)
+			if(Item.Type == EItemType::EIT_Weapon)
 			{
-				if(!Item.SpecialEffect.GetDefaultObject()->bLocal)
+				if(Item.SpecialEffect != nullptr)
 				{
-					ASpecialEffect* SE = Cast<ASpecialEffect>(GetWorld()->SpawnActor(Item.SpecialEffect));
-					if(SE)
-					{					
-						SE->ApplyEffect(this,GetActorLocation(),GetWorld(),nullptr);//MUST BE MANUALLY DESTROYED
-					}			
-					//Item.SpecialEffect.GetDefaultObject()->ApplyEffect(this,GetActorLocation(),GetWorld(),nullptr);
+					if(!Item.SpecialEffect.GetDefaultObject()->bLocal)
+					{
+						ASpecialEffect* SE = Cast<ASpecialEffect>(GetWorld()->SpawnActor(Item.SpecialEffect));
+						if(SE)
+						{					
+							SE->ApplyEffect(this,GetActorLocation(),GetWorld(),nullptr);//MUST BE MANUALLY DESTROYED
+						}			
+						//Item.SpecialEffect.GetDefaultObject()->ApplyEffect(this,GetActorLocation(),GetWorld(),nullptr);
+					}
 				}
 			}
 		}
-	}
 
-	if(AttackedActors.Num() > 0)
-	{
-		for(int i=0;i<AttackedActors.Num();i++)
+		if(AttackedActors.Num() > 0)
 		{
-			if (AttackedActors[i] != this && (AttackedActors[i]->Implements<UInteraction>() || (Cast<IInteraction>(GetOwner()) != nullptr)))
+			for(int i=0;i<AttackedActors.Num();i++)
 			{
-				IInteraction::Execute_DealDamage(AttackedActors[i], Item.Attack+AttackPower,this, Item.SpecialEffect);
-				//next section is bad code. Do not do things this way
-				if(CurrentlyAppliedEffects.Num() > 0)
+				if (AttackedActors[i] != this && (AttackedActors[i]->Implements<UInteraction>() || (Cast<IInteraction>(GetOwner()) != nullptr)))
 				{
-					for (int ind = 0; ind < CurrentlyAppliedEffects.Num(); ind++)
+					IInteraction::Execute_DealDamage(AttackedActors[i], Item.Attack+AttackPower,this, Item.SpecialEffect);
+					//next section is bad code. Do not do things this way
+					if(CurrentlyAppliedEffects.Num() > 0)
 					{
-						//we don't need to check for it if doesn't apply any enhancement(or has none)
-						if(CurrentlyAppliedEffects[ind]->bHasWeaponEnhancement && CurrentlyAppliedEffects[ind]->WeaponEnhancementEffect != nullptr )
+						for (int ind = 0; ind < CurrentlyAppliedEffects.Num(); ind++)
 						{
-							//create this variables instead of constantly calling functions
-							auto Eff = CurrentlyAppliedEffects[ind];
-							const EEffectType WeaponEffectType = (Item.SpecialEffect != nullptr)
-								                                     ? Item.SpecialEffect.GetDefaultObject()->Type
-								                                     : EEffectType::EET_None;
-							bool success = true;
-							if(Eff->IncompatibleTypes.Num() > 0 && WeaponEffectType != EEffectType::EET_None)
+							//we don't need to check for it if doesn't apply any enhancement(or has none)
+							if(CurrentlyAppliedEffects[ind]->bHasWeaponEnhancement && CurrentlyAppliedEffects[ind]->WeaponEnhancementEffect != nullptr )
 							{
-								//loop thru all of the incompatible types to see if it can be used(to avoid applying fire effect to weapon that freezes enemies)
-								for(int a = 0;a < Eff->IncompatibleTypes.Num();a++)
+								//create this variables instead of constantly calling functions
+								auto Eff = CurrentlyAppliedEffects[ind];
+								const EEffectType WeaponEffectType = (Item.SpecialEffect != nullptr)
+                                                                         ? Item.SpecialEffect.GetDefaultObject()->Type
+                                                                         : EEffectType::EET_None;
+								bool success = true;
+								if(Eff->IncompatibleTypes.Num() > 0 && WeaponEffectType != EEffectType::EET_None)
 								{
-									if(WeaponEffectType == Eff->IncompatibleTypes[a] && WeaponEffectType != EEffectType::EET_None)
+									//loop thru all of the incompatible types to see if it can be used(to avoid applying fire effect to weapon that freezes enemies)
+									for(int a = 0;a < Eff->IncompatibleTypes.Num();a++)
 									{
-										//can not do anything
-										success = false;
-										break;//end loop of checking
+										if(WeaponEffectType == Eff->IncompatibleTypes[a] && WeaponEffectType != EEffectType::EET_None)
+										{
+											//can not do anything
+											success = false;
+											break;//end loop of checking
+										}
 									}
 								}
-							}
-							if(success)
-							{
-								//set damage to zero because we already applied damage
-								IInteraction::Execute_DealDamage(AttackedActors[i], 0,this, Eff->WeaponEnhancementEffect);
+								if(success)
+								{
+									//set damage to zero because we already applied damage
+									IInteraction::Execute_DealDamage(AttackedActors[i], 0,this, Eff->WeaponEnhancementEffect);
+								}
 							}
 						}
 					}

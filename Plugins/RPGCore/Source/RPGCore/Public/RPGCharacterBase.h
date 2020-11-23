@@ -137,6 +137,9 @@ public:
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Attack)
 	void Attack();
 
+	UFUNCTION(BlueprintPure)
+	virtual bool CanAttack();
+
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Interaction)
 	void InteractAction();
 	
