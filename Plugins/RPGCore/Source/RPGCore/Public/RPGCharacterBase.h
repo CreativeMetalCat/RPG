@@ -202,11 +202,21 @@ public:
 	UFUNCTION(BlueprintPure,Category=Items)
     FItemInfo GetCurrentMiddleArmor(bool &has);
 
+	/*This function exists only make code look prettier*/
+	UFUNCTION(BlueprintPure,Category=Items)
+    FItemInfo GetCurrentShield(bool &has);
+
 	/*Does roll in direction of Direction
 	 * This function is mostly for other functions to use
 	 */
 	UFUNCTION(BlueprintCallable,Category=DodgeRoll)
 	void Roll(EDirection Direction);
+
+	UFUNCTION(BlueprintCallable,Category="Items|Shield")
+	virtual bool PutUpShield();
+
+	UFUNCTION(BlueprintCallable,Category="Items|Shield")
+    virtual bool PutDownShield();
 
 	UFUNCTION(BlueprintCallable,Category="DodgeRoll|Cooldown")
 	void EndDodgeRollCooldown();
@@ -298,29 +308,42 @@ public:
 	 * To avoid issues with structs(the ones related to creating copies instead of working with originals) id will be used
 	 * To get item Use @GetItemById
 	 */
-	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Items_Weapon,SaveGame)
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Items|Weapon",SaveGame)
 	int32 CurrentWeaponId = -1;
 
 	/*
 	* To avoid issues with structs(the ones related to creating copies instead of working with originals) id will be used
 	* To get item Use @GetItemById
 	*/
-	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Items_Armor,SaveGame)
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Items|Armor",SaveGame)
 	int32 TopPartArmorItemId = -1;
 
 	/*
 	* To avoid issues with structs(the ones related to creating copies instead of working with originals) id will be used
 	* To get item Use @GetItemById
 	*/
-	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Items_Armor,SaveGame)
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Items|Armor",SaveGame)
 	int32 MiddlePartArmorItemId = -1;
 
 	/*
 	* To avoid issues with structs(the ones related to creating copies instead of working with originals) id will be used
 	* To get item Use @GetItemById
 	*/
-	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Items_Armor,SaveGame)
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Items|Armor",SaveGame)
 	int32 BottomPartArmorItemId = -1;
+	
+	/*
+	* To avoid issues with structs(the ones related to creating copies instead of working with originals) id will be used
+	* To get item Use @GetItemById
+	*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Items|Shield",SaveGame)
+	int32 ShieldItemId = -1;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Items|Shield",SaveGame)
+	bool bIsShieldPutUp = false;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Movement",SaveGame)
+	float DefaultMovementSpeed = 600.f;
 	
 	ARPGCharacterBase();
 

@@ -10064,6 +10064,25 @@
         </e>
       </e>
     </e>
+    <e p="C:\Program Files\Epic Games\UE_4.25\Engine\Plugins\Marketplace\DiscordMessenger" t="Include">
+      <e p="DiscordMessenger.uplugin" t="Include" />
+      <e p="Resources" t="Include">
+        <e p="Icon128.png" t="Include" />
+      </e>
+      <e p="Source" t="Include">
+        <e p="DiscordMessenger" t="Include">
+          <e p="DiscordMessenger.Build.cs" t="Include" />
+          <e p="Private" t="Include">
+            <e p="DiscordMessenger.cpp" t="Include" />
+            <e p="DiscordMessengerBPLibrary.cpp" t="Include" />
+          </e>
+          <e p="Public" t="Include">
+            <e p="DiscordMessenger.h" t="Include" />
+            <e p="DiscordMessengerBPLibrary.h" t="Include" />
+          </e>
+        </e>
+      </e>
+    </e>
     <e p="C:\Program Files\Epic Games\UE_4.25\Engine\Plugins\Marketplace\EasyMultiSave" t="Include">
       <e p="EasyMultiSave.uplugin" t="Include" />
       <e p="Resources" t="Include">
@@ -10500,6 +10519,25 @@
             <e p="RadialMenu.h" t="Include" />
           </e>
           <e p="RadialMenu.Build.cs" t="Include" />
+        </e>
+      </e>
+    </e>
+    <e p="C:\Program Files\Epic Games\UE_4.25\Engine\Plugins\Marketplace\RegexInBP" t="Include">
+      <e p="RegexInBP.uplugin" t="Include" />
+      <e p="Resources" t="Include">
+        <e p="Icon128.png" t="Include" />
+      </e>
+      <e p="Source" t="Include">
+        <e p="RegexInBP" t="Include">
+          <e p="Private" t="Include">
+            <e p="RegexBPLibrary.cpp" t="Include" />
+            <e p="RegexInBP.cpp" t="Include" />
+          </e>
+          <e p="Public" t="Include">
+            <e p="RegexBPLibrary.h" t="Include" />
+            <e p="RegexInBP.h" t="Include" />
+          </e>
+          <e p="RegexInBP.Build.cs" t="Include" />
         </e>
       </e>
     </e>
@@ -45477,6 +45515,25 @@
             </e>
           </e>
         </e>
+        <e p="DiscordMessenger" t="Include">
+          <e p="DiscordMessenger.uplugin" t="Include" />
+          <e p="Resources" t="Include">
+            <e p="Icon128.png" t="Include" />
+          </e>
+          <e p="Source" t="Include">
+            <e p="DiscordMessenger" t="Include">
+              <e p="DiscordMessenger.Build.cs" t="Include" />
+              <e p="Private" t="Include">
+                <e p="DiscordMessenger.cpp" t="Include" />
+                <e p="DiscordMessengerBPLibrary.cpp" t="Include" />
+              </e>
+              <e p="Public" t="Include">
+                <e p="DiscordMessenger.h" t="Include" />
+                <e p="DiscordMessengerBPLibrary.h" t="Include" />
+              </e>
+            </e>
+          </e>
+        </e>
         <e p="EasyMultiSave" t="Include">
           <e p="EasyMultiSave.uplugin" t="Include" />
           <e p="Resources" t="Include">
@@ -45505,6 +45562,25 @@
                 <e p="EMSPluginSettings.h" t="Include" />
                 <e p="EMSProfileSaveGame.h" t="Include" />
               </e>
+            </e>
+          </e>
+        </e>
+        <e p="RegexInBP" t="Include">
+          <e p="RegexInBP.uplugin" t="Include" />
+          <e p="Resources" t="Include">
+            <e p="Icon128.png" t="Include" />
+          </e>
+          <e p="Source" t="Include">
+            <e p="RegexInBP" t="Include">
+              <e p="Private" t="Include">
+                <e p="RegexBPLibrary.cpp" t="Include" />
+                <e p="RegexInBP.cpp" t="Include" />
+              </e>
+              <e p="Public" t="Include">
+                <e p="RegexBPLibrary.h" t="Include" />
+                <e p="RegexInBP.h" t="Include" />
+              </e>
+              <e p="RegexInBP.Build.cs" t="Include" />
             </e>
           </e>
         </e>

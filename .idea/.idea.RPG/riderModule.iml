@@ -150,6 +150,7 @@
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Marketplace/CustomConfig" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Marketplace/Debug" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Marketplace/DialoguePlugin" />
+    <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Marketplace/DiscordMessenger" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Marketplace/EasyMultiSave" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Marketplace/GOAP" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Marketplace/LDAssistant" />
@@ -159,6 +160,7 @@
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Marketplace/Prefabricator" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Marketplace/ProductivityToolsLite" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Marketplace/RadialMenu" />
+    <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Marketplace/RegexInBP" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Marketplace/ScreenFade" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Marketplace/ShaderReader" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.25/Engine/Plugins/Marketplace/SmoothSync" />

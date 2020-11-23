@@ -17,6 +17,10 @@ enum class EItemType :uint8
     EIT_ArmorTop UMETA(DisplayName = "ArmorTop"),
     EIT_ArmorMiddle UMETA(DisplayName = "ArmorMiddle"),
     EIT_ArmorBottom UMETA(DisplayName = "ArmorBottom"),
+    EIT_Shield UMETA(DisplayName = "Shield"),
+    EIT_Consumable UMETA(DisplayName = "Consumable"),
+    EIT_KeyItems UMETA(DisplayName = "KeyItems"),
+    EIT_Materials UMETA(DisplayName = "Materials"),
     EIT_Other UMETA(DisplayName = "Other",Description = "For items that can not be worn or used")
 };
 
@@ -48,7 +52,13 @@ public:
      */
     UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Stats)
     int Attack = 0;
+    
+    UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Stats|Breakablity")
+    bool bCanBeBroken = false;
 
+    UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Stats|Breakablity")
+    int Health = 1;
+    
     /**
     * All items share values like attack, defence etc. But game will only care about those values(abd display them) if they fit the type
     */
@@ -57,6 +67,10 @@ public:
 
     UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Stats)
     int Cost = 0;
+
+    /*How much character's speed will decrease when shield is drawn*/
+    UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Stats|Shield")
+    float MovementSpeedDecreaseMultiplier = 0.5;
 
     /*Used by items that create special effects on use. For example: Magic wand that shoot lightning,or grenade that explodes*/
     UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Stats)

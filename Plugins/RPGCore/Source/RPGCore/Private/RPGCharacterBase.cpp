@@ -453,6 +453,13 @@ FItemInfo ARPGCharacterBase::GetCurrentMiddleArmor(bool& has)
 	return FItemInfo();
 }
 
+FItemInfo ARPGCharacterBase::GetCurrentShield(bool& has)
+{
+	has = false;
+	if(Items.IsValidIndex(ShieldItemId)){has = true; return Items[ShieldItemId];}
+	return FItemInfo();
+}
+
 void ARPGCharacterBase::Roll(EDirection Direction)
 {
 	if(bCanDodgeRoll)
@@ -479,6 +486,38 @@ void ARPGCharacterBase::Roll(EDirection Direction)
 	}
 }
 
+bool ARPGCharacterBase::PutUpShield()
+{
+	if(ShieldItemId != -1)
+	{
+		bIsShieldPutUp = true;
+		if(UCharacterMovementComponent * MovementComponent = Cast<UCharacterMovementComponent>(GetMovementComponent()))
+		{
+			bool has;
+			MovementComponent->MaxWalkSpeed = DefaultMovementSpeed*GetItemById(ShieldItemId,has).MovementSpeedDecreaseMultiplier;
+			return true;
+		}
+		{
+			//kinda impossible
+		}		
+	}
+	return false;
+}
+
+bool ARPGCharacterBase::PutDownShield()
+{
+	if(ShieldItemId != -1)
+	{
+		bIsShieldPutUp = false;
+		if(UCharacterMovementComponent * MovementComponent = Cast<UCharacterMovementComponent>(GetMovementComponent()))
+		{
+			MovementComponent->MaxWalkSpeed = DefaultMovementSpeed;
+			return true;
+		}
+	}
+	return false;
+}
+
 void ARPGCharacterBase::EndDodgeRollCooldown()
 {
 	bCanDodgeRoll = true;
@@ -486,24 +525,29 @@ void ARPGCharacterBase::EndDodgeRollCooldown()
 
 int ARPGCharacterBase::DealDamage_Implementation(int Damage,AActor*DamageDealer, TSubclassOf<ASpecialEffect> SpecialEffect)
 {
-	//TODO: Add damage reduction based on stats and whether player holds shield or not
 	int TotalArmor = Defense;
 	bool hasArmorPiece = false;
 	FItemInfo item = GetCurrentBottomPartArmor(hasArmorPiece);
-	if(hasArmorPiece)
+	if (hasArmorPiece)
 	{
 		TotalArmor += item.Defence;
 	}
-	GetCurrentTopPartArmor(hasArmorPiece);
-	if(hasArmorPiece)
+	item = GetCurrentTopPartArmor(hasArmorPiece);
+	if (hasArmorPiece)
 	{
 		TotalArmor += item.Defence;
 	}
-	GetCurrentMiddleArmor(hasArmorPiece);
-	if(hasArmorPiece)
+	item = GetCurrentMiddleArmor(hasArmorPiece);
+	if (hasArmorPiece)
 	{
 		TotalArmor += item.Defence;
 	}
+	item = GetCurrentShield(hasArmorPiece);
+	if (hasArmorPiece)
+	{
+		TotalArmor += bIsShieldPutUp ? item.Defence : 0;
+	}
+	
 	Health-=((Damage - TotalArmor) >=0 )?(Damage - TotalArmor): 0;
 	if(Health <= 0){Health = 0; Die();}
 	else if(SpecialEffect)
@@ -667,16 +711,6 @@ void ARPGCharacterBase::Attack_Implementation()
 					}
 				}
 			}
-			
-			//TODO: Remove this old damage code(only after new one is tested well enough)
-			/*UGameplayStatics::ApplyDamage
-			(
-				AttackedActors[i],
-				10.f,
-				GetController(),
-				this,
-				hasItem?Item.DamageType:UDamageType::StaticClass()
-			);*/
 		}
 	}
 }
