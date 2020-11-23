@@ -112,6 +112,15 @@ bool ARPGCharacterBase::PlayFlipbookAnimation(UPaperFlipbook*Animation,float &le
 	return false;
 }
 
+void ARPGCharacterBase::SetAnimation(UPaperFlipbook* animation, bool Loop)
+{
+	if(GetSprite()->GetFlipbook() != animation)
+	{
+		GetSprite()->SetFlipbook(animation);
+		GetSprite()->SetLooping(Loop);
+	}
+}
+
 
 void ARPGCharacterBase::UpdateAnimation()
 {
@@ -122,11 +131,11 @@ void ARPGCharacterBase::UpdateAnimation()
 
 		if(bAttacking && AttackAnimation != nullptr)
 		{	
-			if(GetSprite()->GetFlipbook() != AttackAnimation)
-			{
-				GetSprite()->SetFlipbook(AttackAnimation);
-				GetSprite()->SetLooping(false);
-			}
+			SetAnimation(AttackAnimation,false);
+		}
+		else if(bIsShieldPutUp && ShieldDrawnAnimation != nullptr)
+		{
+			SetAnimation(ShieldDrawnAnimation,true);
 		}
 		else if(!bPlayingAnimMontage)
 		{

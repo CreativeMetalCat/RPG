@@ -84,6 +84,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Fight")
 	UPaperFlipbook *AttackAnimation;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Shield")
+	UPaperFlipbook *ShieldDrawnAnimation;
+
 	/*Used for animation system(To not accidentally change animation)*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Fight")
 	bool bAttacking = false;
@@ -118,6 +121,11 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Animations|Montage")
 	virtual bool PlayFlipbookAnimation(UPaperFlipbook*Animation,float &length);
+
+	/*used to make code simplier
+	 * If you want animation to actually play with bUseAnimationSystem being true use PlayFlipbookAnimation
+	 */
+    void SetAnimation(UPaperFlipbook*animation,bool Loop);
 	
 	/** Called to choose the correct animation to play based on the character's movement state */
 	void UpdateAnimation();
@@ -131,7 +139,6 @@ public:
 
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Interaction)
 	void InteractAction();
-
 	
 
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Money)
