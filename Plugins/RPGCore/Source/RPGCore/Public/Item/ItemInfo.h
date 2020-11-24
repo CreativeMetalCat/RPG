@@ -53,12 +53,6 @@ public:
     UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Stats)
     int Attack = 0;
     
-    UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Stats|Breakablity")
-    bool bCanBeBroken = false;
-
-    UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Stats|Breakablity")
-    int Health = 1;
-    
     /**
     * All items share values like attack, defence etc. But game will only care about those values(abd display them) if they fit the type
     */
@@ -69,7 +63,7 @@ public:
     int Cost = 0;
 
     /*How much character's speed will decrease when shield is drawn*/
-    UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Stats|Shield")
+    UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Shield")
     float MovementSpeedDecreaseMultiplier = 0.5;
 
     /*Used by items that create special effects on use. For example: Magic wand that shoot lightning,or grenade that explodes*/

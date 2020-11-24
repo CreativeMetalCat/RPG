@@ -52,9 +52,9 @@
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/SpecialEffect.h" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Item/SpecialEffect.cpp" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Ability/AbilityInfo.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/ItemInfo.h" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/RPGCharacterBase.h" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/RPGCharacterBase.cpp" />
+        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/ItemInfo.h" />
       </list>
     </option>
   </component>
