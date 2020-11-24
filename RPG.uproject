@@ -48,6 +48,11 @@
 			"Name": "RegexInBP",
 			"Enabled": true,
 			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/16339a5a34cb452c9a277bc3044b4608"
+		},
+		{
+			"Name": "LDAssistant",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/51c5a9a0d5f84beba23aab69bed8d28c"
 		}
 	]
 }
