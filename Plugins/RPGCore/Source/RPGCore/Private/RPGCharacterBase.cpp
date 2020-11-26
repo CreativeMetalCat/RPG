@@ -597,6 +597,15 @@ void ARPGCharacterBase::NotifyAboutEffectStart_Implementation(ASpecialEffect* Ef
 	CurrentlyAppliedEffects.Add(Effect);//we add effect to remember about it
 }
 
+void ARPGCharacterBase::CleanAppliedEffects()
+{
+	//Using foreach because using usual for will result in wrong indexation after removal
+	for (ASpecialEffect* effect : CurrentlyAppliedEffects)
+	{
+		if(effect == nullptr){CurrentlyAppliedEffects.Remove(effect);}
+	}
+}
+
 void ARPGCharacterBase::UpdateCharacter()
 {
 	// Update animation to match the motion
@@ -681,46 +690,50 @@ void ARPGCharacterBase::Attack_Implementation()
 					}
 				}
 			}
-		}
+		
 
-		if(AttackedActors.Num() > 0)
-		{
-			for(int i=0;i<AttackedActors.Num();i++)
+			if(AttackedActors.Num() > 0)
 			{
-				if (AttackedActors[i] != this && (AttackedActors[i]->Implements<UInteraction>() || (Cast<IInteraction>(GetOwner()) != nullptr)))
+				for(int i=0;i<AttackedActors.Num();i++)
 				{
-					IInteraction::Execute_DealDamage(AttackedActors[i], Item.Attack+AttackPower,this, Item.SpecialEffect);
-					//next section is bad code. Do not do things this way
-					if(CurrentlyAppliedEffects.Num() > 0)
+					if (AttackedActors[i] != this && (AttackedActors[i]->Implements<UInteraction>() || (Cast<IInteraction>(GetOwner()) != nullptr)))
 					{
-						for (int ind = 0; ind < CurrentlyAppliedEffects.Num(); ind++)
+						IInteraction::Execute_DealDamage(AttackedActors[i], Item.Attack+AttackPower,this, Item.SpecialEffect);
+						//next section is bad code. Do not do things this way
+						if(CurrentlyAppliedEffects.Num() > 0)
 						{
-							//we don't need to check for it if doesn't apply any enhancement(or has none)
-							if(CurrentlyAppliedEffects[ind]->bHasWeaponEnhancement && CurrentlyAppliedEffects[ind]->WeaponEnhancementEffect != nullptr )
+							for (int ind = 0; ind < CurrentlyAppliedEffects.Num(); ind++)
 							{
-								//create this variables instead of constantly calling functions
-								auto Eff = CurrentlyAppliedEffects[ind];
-								const EEffectType WeaponEffectType = (Item.SpecialEffect != nullptr)
-                                                                         ? Item.SpecialEffect.GetDefaultObject()->Type
-                                                                         : EEffectType::EET_None;
-								bool success = true;
-								if(Eff->IncompatibleTypes.Num() > 0 && WeaponEffectType != EEffectType::EET_None)
+								if(CurrentlyAppliedEffects[ind])//check if it's valid
 								{
-									//loop thru all of the incompatible types to see if it can be used(to avoid applying fire effect to weapon that freezes enemies)
-									for(int a = 0;a < Eff->IncompatibleTypes.Num();a++)
+									//we don't need to check for it if doesn't apply any enhancement(or has none)
+									if(CurrentlyAppliedEffects[ind]->bHasWeaponEnhancement && CurrentlyAppliedEffects[ind]->WeaponEnhancementEffect != nullptr )
 									{
-										if(WeaponEffectType == Eff->IncompatibleTypes[a] && WeaponEffectType != EEffectType::EET_None)
+										//create this variables instead of constantly calling functions
+										auto Eff = CurrentlyAppliedEffects[ind];
+										const EEffectType WeaponEffectType = (Item.SpecialEffect != nullptr)
+                                                                                 ? Item.SpecialEffect.GetDefaultObject()->Type
+                                                                                 : EEffectType::EET_None;
+										bool success = true;
+										if(Eff->IncompatibleTypes.Num() > 0 && WeaponEffectType != EEffectType::EET_None)
 										{
-											//can not do anything
-											success = false;
-											break;//end loop of checking
+											//loop thru all of the incompatible types to see if it can be used(to avoid applying fire effect to weapon that freezes enemies)
+											for(int a = 0;a < Eff->IncompatibleTypes.Num();a++)
+											{
+												if(WeaponEffectType == Eff->IncompatibleTypes[a] && WeaponEffectType != EEffectType::EET_None)
+												{
+													//can not do anything
+													success = false;
+													break;//end loop of checking
+												}
+											}
+										}
+										if(success)
+										{
+											//set damage to zero because we already applied damage
+											IInteraction::Execute_DealDamage(AttackedActors[i], 0,this, Eff->WeaponEnhancementEffect);
 										}
 									}
-								}
-								if(success)
-								{
-									//set damage to zero because we already applied damage
-									IInteraction::Execute_DealDamage(AttackedActors[i], 0,this, Eff->WeaponEnhancementEffect);
 								}
 							}
 						}

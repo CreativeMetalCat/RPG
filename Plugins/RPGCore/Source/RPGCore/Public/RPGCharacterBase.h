@@ -240,6 +240,9 @@ public:
 
 	virtual void NotifyAboutEffectStart_Implementation(ASpecialEffect* Effect) override;
 
+	//Removes null effects
+	void CleanAppliedEffects();
+
 public:
 	UPROPERTY(BlueprintAssignable)
 	FOnQuestFinished OnQuestFinished;
