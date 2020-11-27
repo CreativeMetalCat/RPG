@@ -304,7 +304,11 @@ public:
 	
 	/*The health is amount of hits player can take(techincally some attacks deal more then one damage)*/
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Stats|Health",SaveGame)
-	int Health = 5;
+	int Health = 100;
+	
+	/*The max health is max amount of health player can have(changed with level up)*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Stats|Health",SaveGame)
+	int MaxHealth = 100;
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Sound,SaveGame)
 	USoundBase *AttackSound  = nullptr;
