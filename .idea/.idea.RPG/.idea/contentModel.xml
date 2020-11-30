@@ -9852,11 +9852,13 @@
               <e p="CVarChangeListenerManager.cpp" t="Include" />
             </e>
             <e p="InputMapping" t="Include">
+              <e p="AutoSettingsInputSubsystem.cpp" t="Include" />
               <e p="GlobalKeyIconTagManager.cpp" t="Include" />
               <e p="InputMappingGroup.cpp" t="Include" />
               <e p="InputMappingLayout.cpp" t="Include" />
               <e p="InputMappingManager.cpp" t="Include" />
               <e p="InputMappingPreset.cpp" t="Include" />
+              <e p="InputMappingUtils.cpp" t="Include" />
               <e p="PlayerInputMappings.cpp" t="Include" />
               <e p="UI" t="Include">
                 <e p="ActionLabel.cpp" t="Include" />
@@ -9918,11 +9920,13 @@
               <e p="CVarChangeListenerManager.h" t="Include" />
             </e>
             <e p="InputMapping" t="Include">
+              <e p="AutoSettingsInputSubsystem.h" t="Include" />
               <e p="GlobalKeyIconTagManager.h" t="Include" />
               <e p="InputMappingGroup.h" t="Include" />
               <e p="InputMappingLayout.h" t="Include" />
               <e p="InputMappingManager.h" t="Include" />
               <e p="InputMappingPreset.h" t="Include" />
+              <e p="InputMappingUtils.h" t="Include" />
               <e p="PlayerInputMappings.h" t="Include" />
               <e p="UI" t="Include">
                 <e p="ActionLabel.h" t="Include" />
@@ -10212,6 +10216,37 @@
             <e p="LE_EditorStyle.h" t="Include" />
             <e p="LightExplorer.h" t="Include" />
             <e p="LightExplorer_Shared.h" t="Include" />
+          </e>
+        </e>
+      </e>
+    </e>
+    <e p="C:\Program Files\Epic Games\UE_4.25\Engine\Plugins\Marketplace\NinjaCharacter" t="Include">
+      <e p="NinjaCharacter.uplugin" t="Include" />
+      <e p="Resources" t="Include">
+        <e p="Icon128.png" t="Include" />
+      </e>
+      <e p="Source" t="Include">
+        <e p="NinjaCharacter" t="Include">
+          <e p="NinjaCharacter.Build.cs" t="Include" />
+          <e p="Private" t="Include">
+            <e p="NinjaCharacter.cpp" t="Include" />
+            <e p="NinjaCharacterMovementComponent.cpp" t="Include" />
+            <e p="NinjaCharacterPlugin.cpp" t="Include" />
+            <e p="NinjaPhysicsVolume.cpp" t="Include" />
+            <e p="NinjaPhysicsVolumeSpline.cpp" t="Include" />
+            <e p="NinjaPlayerCameraManager.cpp" t="Include" />
+            <e p="NinjaProjectileMovementComponent.cpp" t="Include" />
+          </e>
+          <e p="Public" t="Include">
+            <e p="NinjaCharacter.h" t="Include" />
+            <e p="NinjaCharacterMovementComponent.h" t="Include" />
+            <e p="NinjaCharacterPlugin.h" t="Include" />
+            <e p="NinjaMath.h" t="Include" />
+            <e p="NinjaPhysicsVolume.h" t="Include" />
+            <e p="NinjaPhysicsVolumeSpline.h" t="Include" />
+            <e p="NinjaPlayerCameraManager.h" t="Include" />
+            <e p="NinjaProjectileMovementComponent.h" t="Include" />
+            <e p="NinjaTypes.h" t="Include" />
           </e>
         </e>
       </e>
@@ -45565,6 +45600,29 @@
             </e>
           </e>
         </e>
+        <e p="LDAssistant" t="Include">
+          <e p="LDAssistant.uplugin" t="Include" />
+          <e p="Resources" t="Include">
+            <e p="Icon128.png" t="Include" />
+          </e>
+          <e p="Source" t="Include">
+            <e p="LDAssistant" t="Include">
+              <e p="LDAssistant.Build.cs" t="Include" />
+              <e p="Private" t="Include">
+                <e p="LDAssistant.cpp" t="Include" />
+                <e p="LDAssistantCommands.cpp" t="Include" />
+                <e p="LDAssistantStyle.cpp" t="Include" />
+                <e p="OpenNewWindow.cpp" t="Include" />
+              </e>
+              <e p="Public" t="Include">
+                <e p="LDAssistant.h" t="Include" />
+                <e p="LDAssistantCommands.h" t="Include" />
+                <e p="LDAssistantStyle.h" t="Include" />
+                <e p="OpenNewWindow.h" t="Include" />
+              </e>
+            </e>
+          </e>
+        </e>
         <e p="RegexInBP" t="Include">
           <e p="RegexInBP.uplugin" t="Include" />
           <e p="Resources" t="Include">
@@ -45585,6 +45643,9 @@
           </e>
         </e>
         <e p="RPGCore" t="Include">
+          <e p="Config" t="Include">
+            <e p="FilterPlugin.ini" t="Include" />
+          </e>
           <e p="Resources" t="Include">
             <e p="Icon128.png" t="Include" />
           </e>
@@ -45605,6 +45666,7 @@
                 <e p="Interaction.cpp" t="Include" />
                 <e p="Item" t="Include">
                   <e p="ItemInfo.cpp" t="Include" />
+                  <e p="PickupableItemBase.cpp" t="Include" />
                   <e p="SpecialEffect.cpp" t="Include" />
                 </e>
                 <e p="Player" t="Include">
@@ -45631,6 +45693,7 @@
                 <e p="Interaction.h" t="Include" />
                 <e p="Item" t="Include">
                   <e p="ItemInfo.h" t="Include" />
+                  <e p="PickupableItemBase.h" t="Include" />
                   <e p="SpecialEffect.h" t="Include" />
                 </e>
                 <e p="Player" t="Include">

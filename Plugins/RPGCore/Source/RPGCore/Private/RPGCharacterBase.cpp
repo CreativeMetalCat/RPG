@@ -728,7 +728,7 @@ void ARPGCharacterBase::Attack_Implementation()
 				{
 					if (AttackedActors[i] != this && (AttackedActors[i]->Implements<UInteraction>() || (Cast<IInteraction>(GetOwner()) != nullptr)))
 					{
-						IInteraction::Execute_DealDamage(AttackedActors[i], Item.Attack+AttackPower,this, Item.SpecialEffect);
+						IInteraction::Execute_DealDamage(AttackedActors[i], Item.Attack*AttackPower,this, Item.SpecialEffect);
 						//next section is bad code. Do not do things this way
 						if(CurrentlyAppliedEffects.Num() > 0)
 						{
