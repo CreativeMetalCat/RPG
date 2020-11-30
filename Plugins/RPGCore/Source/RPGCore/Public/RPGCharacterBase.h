@@ -168,6 +168,13 @@ public:
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Death)
 	void Die();
 
+	/* Adds Health
+	 * returns Amount health that was over the limit
+	 */
+	UFUNCTION(BlueprintCallable,Category="Stats|Health")
+	int AddHealth(int AddHealth);
+	
+
 	/*Returns false if ability can not be used*/
 	UFUNCTION(BlueprintCallable,Category=Abilities)
 	virtual bool UseAbility(int id);
@@ -195,6 +202,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable,Category="Magic")
 	void RestoreMagicJuice();
+	
+	UFUNCTION(BlueprintCallable,Category="Magic")
+	int AddMagicJuice(int Amount);
 
 	/*This function exists only make code look prettier*/
 	UFUNCTION(BlueprintPure,Category=Items)

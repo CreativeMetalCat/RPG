@@ -309,6 +309,21 @@ void ARPGCharacterBase::Die_Implementation()
 	}
 }
 
+int ARPGCharacterBase::AddHealth(int AddHealth)
+{
+	if (Health + AddHealth >= MaxHealth)
+	{
+		const int Res = (Health + AddHealth)-MaxHealth;
+		Health = MaxHealth;
+		return Res;
+	}
+	else
+	{
+		Health += AddHealth;
+		return 0;
+	}
+}
+
 bool ARPGCharacterBase::UseAbility(int id)
 {
 	if(Abilities.IsValidIndex(id))
@@ -432,6 +447,21 @@ void ARPGCharacterBase::RestoreMagicJuice()
 		GetWorldTimerManager().ClearTimer(MagicJuiceRestorationTimerHandle);
 	}
 	UpdatePlayerInfo();
+}
+
+int ARPGCharacterBase::AddMagicJuice(int Amount)
+{
+	if(CurrentMagicJuice + Amount > MaxMagicJuice)
+	{
+		const int Res = CurrentMagicJuice + Amount - MaxMagicJuice;
+		CurrentMagicJuice = MaxMagicJuice;
+		return Res;
+	}
+	else
+	{
+		CurrentMagicJuice += Amount;
+		return 0;
+	}
 }
 
 FItemInfo ARPGCharacterBase::GetCurrentWeapon(bool& has)
