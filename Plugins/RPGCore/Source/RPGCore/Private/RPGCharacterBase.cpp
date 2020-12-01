@@ -245,17 +245,23 @@ bool ARPGCharacterBase::RemoveItem(const FString &devName, int amount)
 
 bool ARPGCharacterBase::AddItem_Implementation(FItemInfo item)
 {
-	if(Items.Num() > 0)
+	int Count = item.CurrentAmount;
+	
+	if (Items.Num() > 0)
 	{
-		for(int i =0 ;i<Items.Num();i++)
+		for (int i = 0; i < Items.Num(); i++)
 		{
-			if(Items[i].DevName == item.DevName && Items[i].MaxStackAmount > Items[i].CurrentAmount)
+			if ((Items[i].DevName == item.DevName && Items[i].MaxStackAmount > Items[i].CurrentAmount) && Count > 0)
 			{
 				Items[i].CurrentAmount++;
+				Count--;
 			}
 		}
 	}
-	Items.Add(item);
+	if(Count > 0)
+	{
+		Items.Add(item);
+	}
 	
 	return true;
 }
