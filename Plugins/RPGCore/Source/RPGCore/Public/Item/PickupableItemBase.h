@@ -42,10 +42,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item",meta = (ExposeOnSpawn="true"))
 	FDataTableRowHandle ItemInfo;
 	
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item",meta = (ExposeOnSpawn="true"))
 	int Amount = 1;
 	
 

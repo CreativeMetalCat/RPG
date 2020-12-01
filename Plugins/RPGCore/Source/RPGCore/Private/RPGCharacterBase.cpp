@@ -227,7 +227,7 @@ bool ARPGCharacterBase::RemoveItem(const FString &devName, int amount)
 		{
 			if(Items[i].DevName == devName)
 			{
-				if(Items[i].CurrentAmount >= amount)
+				if(Items[i].CurrentAmount > amount)
 				{
 					Items[i].CurrentAmount -= amount;
 					return true;//we successfully removed needed amount
