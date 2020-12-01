@@ -253,8 +253,11 @@ bool ARPGCharacterBase::AddItem_Implementation(FItemInfo item)
 		{
 			if ((Items[i].DevName == item.DevName && Items[i].MaxStackAmount > Items[i].CurrentAmount) && Count > 0)
 			{
-				Items[i].CurrentAmount++;
-				Count--;
+				while( Items[i].MaxStackAmount > Items[i].CurrentAmount && Count > 0)
+				{
+					Items[i].CurrentAmount++;
+					Count--;
+				}
 			}
 		}
 	}
