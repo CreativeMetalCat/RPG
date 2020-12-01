@@ -28,7 +28,21 @@ APickupableItemBase::APickupableItemBase()
 void APickupableItemBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	if(ItemInfo.DataTable && !ItemInfo.IsNull())
+	{
+		const FItemInfo Item = *ItemInfo.GetRow<FItemInfo>("");
+		if(Item.bUseSprite)
+		{
+			Sprite->SetSprite(Item.WorldDisplaySprite);
+			Flipbook->SetVisibility(false);
+		}
+		else
+		{
+			Flipbook->SetFlipbook(Item.WorldDisplayPaperFlipbook);
+			Flipbook->SetLooping(true);
+			Sprite->SetVisibility(false);
+		}
+	}
 }
 
 // Called every frame

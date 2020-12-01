@@ -21,6 +21,8 @@ enum class EItemType :uint8
     EIT_Consumable UMETA(DisplayName = "Consumable"),
     EIT_KeyItems UMETA(DisplayName = "KeyItems"),
     EIT_Materials UMETA(DisplayName = "Materials"),
+    //Used for loot that drops from enemies
+    EIT_Money UMETA(DisplayName = "Money"),
     EIT_Other UMETA(DisplayName = "Other",Description = "For items that can not be worn or used")
 };
 
@@ -47,6 +49,27 @@ public:
     UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Display)
     FText Description;
 
+   /* Image used to represent this item in ui(icon)
+   * Only `Image` property of this property is important
+   */
+   UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Image")
+   FSlateBrush UIDisplayImage;
+
+   /* Image used to represent this item in world
+   * Used only if bUseSprite is true
+   */
+   UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Image")
+   UPaperSprite* WorldDisplaySprite;
+
+   /* Image used to represent this item in world
+   * Used only if bUseSprite is false
+   */
+   UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Image")
+   UPaperFlipbook* WorldDisplayPaperFlipbook;
+
+   UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Image")
+   bool bUseSprite = true;
+ 
     /**
      * All items share values like attack, defence etc. But game will only care about those values(abd display them) if they fit the type
      */
