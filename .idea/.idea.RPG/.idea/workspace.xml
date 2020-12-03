@@ -49,7 +49,6 @@
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Player/PlayerBase.h" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Player/PlayerBase.cpp" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Interaction.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/SpecialEffect.h" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Item/SpecialEffect.cpp" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Ability/AbilityInfo.h" />
         <option value="$PROJECT_DIR$/Plugins/DialoguePlugin/Source/DialoguePluginEditor/Private/DialoguePluginEditorSettingsDetails.cpp" />
@@ -58,6 +57,7 @@
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Item/PickupableItemBase.cpp" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/PickupableItemBase.h" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/RPGCharacterBase.h" />
+        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/SpecialEffect.h" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/RPGCharacterBase.cpp" />
       </list>
     </option>

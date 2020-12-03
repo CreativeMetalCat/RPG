@@ -356,7 +356,8 @@ bool ARPGCharacterBase::UseAbility(int id)
 			
 			
 			if(ASpecialEffect* SE = Cast<ASpecialEffect>(GetWorld()->SpawnActor(Abilities[id].AbilityClass)))
-			{					
+			{
+				SE->Damage *= AttackPower;//damage of the ability will increase with player's growing
 				SE->ApplyEffect(this,GetActorLocation(),GetWorld(),Abilities[id].bApplyToSpawner?this:nullptr);//MUST BE MANUALLY DESTROYED
 			}
 			if(Abilities[id].CooldownTime > 0)
@@ -562,9 +563,6 @@ bool ARPGCharacterBase::PutUpShield()
 			bool has;
 			MovementComponent->MaxWalkSpeed = DefaultMovementSpeed*GetItemById(ShieldItemId,has).MovementSpeedDecreaseMultiplier;
 			return true;
-		}
-		{
-			//kinda impossible
 		}		
 	}
 	return false;

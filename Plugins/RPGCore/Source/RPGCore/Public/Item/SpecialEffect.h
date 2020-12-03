@@ -51,6 +51,13 @@ class RPGCORE_API ASpecialEffect : public AActor
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Info|Type")
 	EEffectType Type = EEffectType::EET_None;
 
+	/* How much damage this ability should deal
+	 * IMPORTANT: It's important to know that this damage is not obligatory to use(for example abilities that heal don't even deal damage
+	 * Main reason to use it when you need damage to be affected by character's attack points by 
+	 */
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Damage)
+	float Damage = 0.f;
+
 	/*This effect will be applied along side weapons already existing weapon effect
 	 * For example - fire(Some ability Enhances weapon to be on fire and each time weapon damages it's effect applies as well
 	 */
