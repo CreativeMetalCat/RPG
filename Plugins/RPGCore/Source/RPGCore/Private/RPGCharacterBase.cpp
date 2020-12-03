@@ -94,8 +94,18 @@ ARPGCharacterBase::ARPGCharacterBase()
 void ARPGCharacterBase::OnFlipbookFinishedPlaying()
 {
 	if(bAttacking){bAttacking = false;}
+	if (bPlayingDodgeRollAnimation)
+	{
+		bPlayingDodgeRollAnimation = false;
+		OnFinishedDodgeRoll();
+	}
 	if(bPlayingAnimMontage){bPlayingAnimMontage = false;}
-	GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Green,"Anim finished");
+	GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Green,"Anim finished: "+GetSprite()->GetFlipbook()->GetName());
+}
+
+void ARPGCharacterBase::OnFinishedDodgeRoll_Implementation()
+{
+	//do stuff when finished, like calling an ability or something
 }
 
 bool ARPGCharacterBase::PlayFlipbookAnimation(UPaperFlipbook*Animation,float &length)
@@ -132,6 +142,10 @@ void ARPGCharacterBase::UpdateAnimation()
 		if(bAttacking && AttackAnimation != nullptr)
 		{	
 			SetAnimation(AttackAnimation,false);
+		}
+		else if(bPlayingDodgeRollAnimation && DodgeRollAnimation != nullptr)
+		{
+			SetAnimation(DodgeRollAnimation,false);
 		}
 		else if(bIsShieldPutUp && ShieldDrawnAnimation != nullptr)
 		{
@@ -527,6 +541,10 @@ void ARPGCharacterBase::Roll(EDirection Direction)
 		case EDirection::ED_Right:
 			Velocity = FVector(1,0,0);
 			break;
+		}
+		if(DodgeRollAnimation)
+		{
+			bPlayingDodgeRollAnimation = true;
 		}
 		LaunchCharacter(Velocity*DodgeRollSpeed,false,false);
 		bCanDodgeRoll = false;

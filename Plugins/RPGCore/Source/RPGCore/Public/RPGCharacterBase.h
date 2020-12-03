@@ -100,6 +100,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Montage")
 	bool bPlayingAnimMontage = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Dodge")
+	UPaperFlipbook* DodgeRollAnimation;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Dodge")
+	bool bPlayingDodgeRollAnimation= false;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "DodgeRoll")
 	float DodgeRollSpeed = 100.f;
 
@@ -114,6 +120,10 @@ public:
 	
 	UFUNCTION(BlueprintCallable,Category = Animation)
 	virtual void OnFlipbookFinishedPlaying();
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category = "Animations|Dodge")
+	void OnFinishedDodgeRoll();
+	
 
 	/*Returns true(and value of length) if started animation false otherwise
 	 * Param: Animation - Animation to play
