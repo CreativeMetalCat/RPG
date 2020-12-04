@@ -58,9 +58,31 @@ class ARPGCharacterBase : public APaperCharacter, public IInteraction
 	UTextRenderComponent* TextComponent;
 	virtual void Tick(float DeltaSeconds) override;
 protected:
-	// The animation to play while running around
+	/* The animation to play while running around
+	 *This one is for facing up
+	 * */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animations)
-	class UPaperFlipbook* RunningAnimation;
+	class UPaperFlipbook* RunningAnimationUp;
+
+	/* The animation to play while running around
+	*This one is for facing down
+	* */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animations)
+	class UPaperFlipbook* RunningAnimationDown;
+
+	/* The animation to play while running around
+	*This one is for facing left
+	* */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animations)
+	class UPaperFlipbook* RunningAnimationLeft;
+
+	/* The animation to play while running around
+	*This one is for facing right
+	* */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animations)
+	class UPaperFlipbook* RunningAnimationRight;
+
+	UPaperFlipbook* GetRunningAnimation();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Interaction)
 	UBoxComponent *InteractionCollision;
@@ -78,14 +100,104 @@ protected:
 	UBoxComponent *RightCollision;
 public:
 	// The animation to play while idle (standing still)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Movement")
-	UPaperFlipbook* IdleAnimation;
+	// This one is for facing up
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Movement|Idle")
+	UPaperFlipbook* IdleAnimationUp;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Fight")
-	UPaperFlipbook *AttackAnimation;
+	// The animation to play while idle (standing still)
+	// This one is for facing down
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Movement|Idle")
+	UPaperFlipbook* IdleAnimationDown;
 
+	// The animation to play while idle (standing still)
+	// This one is for facing right
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Movement|Idle")
+	UPaperFlipbook* IdleAnimationRight;
+	
+	// The animation to play while idle (standing still)
+	// This one is for facing left
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Movement|Idle")
+	UPaperFlipbook* IdleAnimationLeft;
+
+	UPaperFlipbook* GetIdleAnimation();
+
+	/* Animation to play when character attacks
+	 * This one is for facing up
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Fight")
+	UPaperFlipbook *AttackAnimationUp;
+
+	/* Animation to play when character attacks
+	* This one is for facing down
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Fight")
+	UPaperFlipbook *AttackAnimationDown;
+
+	/* Animation to play when character attacks
+	* This one is for facing right
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Fight")
+	UPaperFlipbook *AttackAnimationRight;
+
+	/* Animation to play when character attacks
+	* This one is for facing left
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Fight")
+	UPaperFlipbook *AttackAnimationLeft;
+
+	UPaperFlipbook *GetAttackAnimation();
+
+	/* Animation to play when character holds shield
+	* This one is for facing up
+	*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Shield")
-	UPaperFlipbook *ShieldDrawnAnimation;
+	UPaperFlipbook *ShieldDrawnAnimationUp;
+
+	/* Animation to play when character holds shield
+	* This one is for facing down
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Shield")
+	UPaperFlipbook *ShieldDrawnAnimationDown;
+
+	/* Animation to play when character holds shield
+	* This one is for facing right
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Shield")
+	UPaperFlipbook *ShieldDrawnAnimationRight;
+
+	/* Animation to play when character holds shield
+	* This one is for facing left
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Shield")
+	UPaperFlipbook *ShieldDrawnAnimationLeft;
+
+	UPaperFlipbook*GetShieldDrawnAnimation();
+
+	/* Animation to play when character rolls
+	* This one is for facing left
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Dodge")
+	UPaperFlipbook* DodgeRollAnimationUp;
+
+	/* Animation to play when character rolls
+	* This one is for facing down
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Dodge")
+	UPaperFlipbook* DodgeRollAnimationDown;
+
+	/* Animation to play when character rolls
+	* This one is for facing right
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Dodge")
+	UPaperFlipbook* DodgeRollAnimationRight;
+
+	/* Animation to play when character rolls
+	* This one is for facing left
+	*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Dodge")
+	UPaperFlipbook* DodgeRollAnimationLeft;
+
+	UPaperFlipbook* GetDodgeRollAnimation();
 
 	/*Used for animation system(To not accidentally change animation)*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Fight")
@@ -100,8 +212,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Montage")
 	bool bPlayingAnimMontage = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Dodge")
-	UPaperFlipbook* DodgeRollAnimation;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Dodge")
 	bool bPlayingDodgeRollAnimation= false;

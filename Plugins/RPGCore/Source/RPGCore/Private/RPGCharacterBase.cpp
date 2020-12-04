@@ -91,6 +91,126 @@ ARPGCharacterBase::ARPGCharacterBase()
 //////////////////////////////////////////////////////////////////////////
 // Animation
 
+UPaperFlipbook* ARPGCharacterBase::GetIdleAnimation()
+{
+	switch (CurrentDirection)
+	{
+	case EDirection::ED_Up:
+		return IdleAnimationUp;
+		break;
+
+	case EDirection::ED_Down:
+		return IdleAnimationDown;
+		break;
+
+	case EDirection::ED_Right:
+		return IdleAnimationRight;
+		break;
+
+	case EDirection::ED_Left:
+		return IdleAnimationLeft;
+		break;
+	default:
+		return IdleAnimationUp;
+	}
+}
+
+UPaperFlipbook* ARPGCharacterBase::GetRunningAnimation()
+{
+	switch (CurrentDirection)
+	{
+	case EDirection::ED_Up:
+		return RunningAnimationUp;
+		break;
+
+	case EDirection::ED_Down:
+		return RunningAnimationDown;
+		break;
+
+	case EDirection::ED_Right:
+		return RunningAnimationRight;
+		break;
+
+	case EDirection::ED_Left:
+		return RunningAnimationLeft;
+		break;
+	default:
+		return RunningAnimationUp;
+	}
+}
+
+UPaperFlipbook* ARPGCharacterBase::GetAttackAnimation()
+{	
+	switch (CurrentDirection)
+	{
+	case EDirection::ED_Up:
+		return AttackAnimationUp;
+		break;
+
+	case EDirection::ED_Down:
+		return AttackAnimationDown;
+		break;
+
+	case EDirection::ED_Right:
+		return AttackAnimationRight;
+		break;
+
+	case EDirection::ED_Left:
+		return AttackAnimationLeft;
+		break;
+	default:
+		return AttackAnimationUp;
+	}
+}
+
+UPaperFlipbook* ARPGCharacterBase::GetShieldDrawnAnimation()
+{
+	switch (CurrentDirection)
+	{
+	case EDirection::ED_Up:
+		return ShieldDrawnAnimationUp;
+		break;
+
+	case EDirection::ED_Down:
+		return ShieldDrawnAnimationDown;
+		break;
+
+	case EDirection::ED_Right:
+		return ShieldDrawnAnimationRight;
+		break;
+
+	case EDirection::ED_Left:
+		return ShieldDrawnAnimationLeft;
+		break;
+		default:
+			return ShieldDrawnAnimationUp;
+	}
+}
+
+UPaperFlipbook* ARPGCharacterBase::GetDodgeRollAnimation()
+{
+	switch (CurrentDirection)
+	{
+	case EDirection::ED_Up:
+		return DodgeRollAnimationUp;
+		break;
+
+	case EDirection::ED_Down:
+		return DodgeRollAnimationDown;
+		break;
+
+	case EDirection::ED_Right:
+		return DodgeRollAnimationRight;
+		break;
+
+	case EDirection::ED_Left:
+		return DodgeRollAnimationLeft;
+		break;
+		default:
+			return DodgeRollAnimationUp;
+	}
+}
+
 void ARPGCharacterBase::OnFlipbookFinishedPlaying()
 {
 	if(bAttacking){bAttacking = false;}
@@ -139,22 +259,22 @@ void ARPGCharacterBase::UpdateAnimation()
 		const FVector PlayerVelocity = GetVelocity();
 		const float PlayerSpeedSqr = PlayerVelocity.SizeSquared();
 
-		if(bAttacking && AttackAnimation != nullptr)
+		if(bAttacking && GetAttackAnimation() != nullptr)
 		{	
-			SetAnimation(AttackAnimation,false);
+			SetAnimation(GetAttackAnimation(),false);
 		}
-		else if(bPlayingDodgeRollAnimation && DodgeRollAnimation != nullptr)
+		else if(bPlayingDodgeRollAnimation && GetDodgeRollAnimation() != nullptr)
 		{
-			SetAnimation(DodgeRollAnimation,false);
+			SetAnimation(GetDodgeRollAnimation(),false);
 		}
-		else if(bIsShieldPutUp && ShieldDrawnAnimation != nullptr)
+		else if(bIsShieldPutUp && GetShieldDrawnAnimation() != nullptr)
 		{
-			SetAnimation(ShieldDrawnAnimation,true);
+			SetAnimation(GetShieldDrawnAnimation(),true);
 		}
 		else if(!bPlayingAnimMontage)
 		{
 			// Are we moving or standing still?
-			UPaperFlipbook* DesiredAnimation = (PlayerSpeedSqr > 0.0f) ? RunningAnimation : IdleAnimation;
+			UPaperFlipbook* DesiredAnimation = (PlayerSpeedSqr > 0.0f) ? GetRunningAnimation() : GetIdleAnimation();
 			if( GetSprite()->GetFlipbook() != DesiredAnimation 	)
 			{
 				GetSprite()->SetFlipbook(DesiredAnimation);
@@ -175,6 +295,8 @@ void ARPGCharacterBase::Tick(float DeltaSeconds)
 	
 	UpdateCharacter();	
 }
+
+
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -543,7 +665,7 @@ void ARPGCharacterBase::Roll(EDirection Direction)
 			Velocity = FVector(1,0,0);
 			break;
 		}
-		if(DodgeRollAnimation)
+		if(GetDodgeRollAnimation())
 		{
 			bPlayingDodgeRollAnimation = true;
 		}
@@ -663,8 +785,7 @@ void ARPGCharacterBase::CleanAppliedEffects()
 
 void ARPGCharacterBase::UpdateCharacter()
 {
-	// Update animation to match the motion
-	UpdateAnimation();
+	
 
 	// Now setup the rotation of the controller based on the direction we are travelling
 	const FVector PlayerVelocity = GetVelocity();
@@ -676,11 +797,11 @@ void ARPGCharacterBase::UpdateCharacter()
 	// Set the rotation so that the character faces his direction of travel.
 	if (Controller != nullptr)
 	{
-		if(HorizontalDirection < 0.f)
+		if(HorizontalDirection > 0.f)
 		{
 			CurrentDirection = EDirection::ED_Left;
 		}
-		if(HorizontalDirection> 0.f)
+		if(HorizontalDirection < 0.f)
 		{
 			CurrentDirection = EDirection::ED_Right;
 		}
@@ -693,6 +814,9 @@ void ARPGCharacterBase::UpdateCharacter()
 			CurrentDirection = EDirection::ED_Down;
 		}
 	}
+
+	// Update animation to match the motion
+	UpdateAnimation();
 }
 
 bool ARPGCharacterBase::CanAttack()
@@ -705,7 +829,7 @@ void ARPGCharacterBase::Attack_Implementation()
 {
 	if(CanAttack())
 	{
-		if(AttackAnimation)
+		if(GetAttackAnimation())
 		{
 			bAttacking = true;
 		}
