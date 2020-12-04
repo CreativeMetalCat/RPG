@@ -336,6 +336,18 @@ public:
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Abilities,SaveGame)
 	TArray<FAbilityInfo>Abilities;
+	
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Abilities,SaveGame)
+	int Slot1AbilityId = -1;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Abilities,SaveGame)
+	int Slot2AbilityId = -1;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Abilities,SaveGame)
+	int Slot3AbilityId = -1;
+	
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Abilities,SaveGame)
+    int Slot4AbilityId = -1;
 
 	/*Every item player has*/
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Items,SaveGame)
