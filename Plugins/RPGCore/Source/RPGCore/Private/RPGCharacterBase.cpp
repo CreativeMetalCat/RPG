@@ -790,26 +790,26 @@ void ARPGCharacterBase::UpdateCharacter()
 	// Now setup the rotation of the controller based on the direction we are travelling
 	const FVector PlayerVelocity = GetVelocity();
 	
-	float HorizontalDirection = PlayerVelocity.X;
+	float HorizontalDirection =  FMath::RoundToInt(PlayerVelocity.X/DefaultMovementSpeed);
 	
-	float VerticalDirection = PlayerVelocity.Y;
+	float VerticalDirection = FMath::RoundToInt(PlayerVelocity.Y/DefaultMovementSpeed);
 	
 	// Set the rotation so that the character faces his direction of travel.
 	if (Controller != nullptr)
 	{
-		if(HorizontalDirection > 0.f)
+		if(HorizontalDirection > 0.f  && VerticalDirection == 0.f)
 		{
 			CurrentDirection = EDirection::ED_Left;
 		}
-		if(HorizontalDirection < 0.f)
+		if(HorizontalDirection < 0.f && VerticalDirection == 0.f)
 		{
 			CurrentDirection = EDirection::ED_Right;
 		}
-		if(VerticalDirection < 0.f)
+		if(VerticalDirection < 0.f && HorizontalDirection == 0.f)
 		{
 			CurrentDirection = EDirection::ED_Up;
 		}
-		if(VerticalDirection > 0.f)
+		if(VerticalDirection > 0.f && HorizontalDirection == 0.f)
 		{
 			CurrentDirection = EDirection::ED_Down;
 		}
