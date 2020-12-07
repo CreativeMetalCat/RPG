@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 
+
+#include "AI/AIInterface.h"
 #include "AI/AIMovementType.h"
+#include "Components/SphereComponent.h"
 #include "RPGCore/Public/RPGCharacterBase.h"
 #include "RPGCore/Public/AI/PatrolPointBase.h"
 #include "EnemyCharacterBase.generated.h"
@@ -13,10 +16,16 @@
  * This is base class for every enemy existing in the world
  */
 UCLASS()
-class RPGCORE_API AEnemyCharacterBase : public ARPGCharacterBase
+class RPGCORE_API AEnemyCharacterBase : public ARPGCharacterBase, public IAIInterface
 {
 	GENERATED_BODY()
 public:
+
+	AEnemyCharacterBase();
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI|Sense")
+	USphereComponent*SenseSphereComponent;
+	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "AI|Movement|Random")
 	float MaxDistanceOfRandomMovement = 300.f;
 
@@ -46,4 +55,20 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "AI|Movement")
 	EAIMovementType MovementType = EAIMovementType::EAIMT_Random;
+
+	UFUNCTION(BlueprintCallable,Category = "AI|Update")
+	void UpdateAI();
+
+	virtual void BeginPlay() override;
+
+	virtual ARPGCharacterBase* GetCurrentTarget_Implementation() override{return CurrentTarget;}
+	
+	public:
+	FTimerHandle AIUpdateHandle;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "AI|Update")
+	float AIUpdateRate = 1.f;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "AI|Target")
+	ARPGCharacterBase* CurrentTarget = nullptr;
 };

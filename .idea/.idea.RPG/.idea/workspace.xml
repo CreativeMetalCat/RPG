@@ -25,7 +25,6 @@
         <option value="$PROJECT_DIR$/Source/RPG/Abilities/AbilityInfo.h" />
         <option value="$PROJECT_DIR$/Source/RPG/Items/ItemSpecialEffect.cpp" />
         <option value="$PROJECT_DIR$/Source/RPG/Items/ItemSpecialEffect.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/EnemyCharacterBase.cpp" />
         <option value="$PROJECT_DIR$/Source/RPG/Quest/Quest.h" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Quest/QuestInfo.cpp" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Item/ItemInfo.cpp" />
@@ -35,14 +34,10 @@
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Animation/AnimationWaitAction.cpp" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/RPGCore.Build.cs" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/AI/AIInterface.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AI/AIInterface.h" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AI/AIMovementType.h" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/AI/AIMovementType.cpp" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/AI/PatrolPointBase.cpp" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AI/PatrolPointBase.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AI/EnemyAIBase.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/AI/EnemyAIBase.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/EnemyCharacterBase.h" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Player/PlayerLevelInfo.cpp" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Player/PlayerLevelInfo.h" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Quest/QuestInfo.h" />
@@ -59,6 +54,11 @@
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/SpecialEffect.h" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/RPGCharacterBase.h" />
         <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/RPGCharacterBase.cpp" />
+        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/EnemyCharacterBase.h" />
+        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AI/AIInterface.h" />
+        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/EnemyCharacterBase.cpp" />
+        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AI/EnemyAIBase.h" />
+        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/AI/EnemyAIBase.cpp" />
       </list>
     </option>
   </component>

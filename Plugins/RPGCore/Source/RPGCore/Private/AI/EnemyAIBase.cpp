@@ -5,6 +5,12 @@
 
 #include "EnemyCharacterBase.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Engine/TargetPoint.h"
+
+AEnemyAIBase::AEnemyAIBase()
+{
+   
+}
 
 void AEnemyAIBase::SetNewPatrolPoint()
 {
@@ -69,7 +75,13 @@ void AEnemyAIBase::SetNextGoalForRandomMovement()
    {
       FVector2D Rand = FMath::RandPointInCircle(MaxDistanceOfRandomMovement);
       RandomMovementGoal = (bGenerateRandomPointsFromDefaultLocation ? SpawnLocation :GetPawn()->GetActorLocation()) + FVector(Rand.X,Rand.Y,0);
-      MoveToLocation(RandomMovementGoal);
+     // MoveToLocation(RandomMovementGoal);/*Old solution*/
+      RandomMovementGoalLocationActor->SetActorLocation(RandomMovementGoal);
+      if(!bRandomGoalActorIsSet && Blackboard)
+      {
+         Blackboard->SetValueAsObject(BlackboardPatrolPointTargetName,RandomMovementGoalLocationActor);
+         bRandomGoalActorIsSet = true;
+      }
       GetWorldTimerManager().SetTimer(RandomMovementTimerHandle,this,&AEnemyAIBase::OnReachedGoalOfRandomMovement,RandomMovementTime);
    } 
 }
@@ -106,7 +118,8 @@ void AEnemyAIBase::BeginPlay()
       }
    
       if(MovementType == EAIMovementType::EAIMT_Random)
-      {     
+      {
+         RandomMovementGoalLocationActor = GetWorld()->SpawnActor(ATargetPoint::StaticClass());
          SetNextGoalForRandomMovement();
       }
       else if(MovementType == EAIMovementType::EAIMT_Points)
@@ -120,4 +133,19 @@ void AEnemyAIBase::BeginPlay()
       return;
    }
 
+}
+
+void AEnemyAIBase::SetNewTarget_Implementation(AActor* Target)
+{
+   if(Blackboard)
+   {
+      if(Target != nullptr)
+      {
+         Blackboard->SetValueAsObject(BlackboardTargetName,Target);
+      }
+      else
+      {
+         Blackboard->ClearValue(BlackboardTargetName);
+      }
+   }
 }

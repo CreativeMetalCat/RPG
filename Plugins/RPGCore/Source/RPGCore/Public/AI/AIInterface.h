@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "RPGCharacterBase.h"
 #include "UObject/Interface.h"
 #include "AIInterface.generated.h"
 
@@ -24,4 +26,11 @@ class RPGCORE_API IAIInterface
 public:
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=RandomMovement)
 	FVector GetCurrentRandomPointGoal();
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category="AI|Target")
+	ARPGCharacterBase* GetCurrentTarget();
+	
+	/*Passing nullptr MUST clear the value*/
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category="AI|Target")
+	void SetNewTarget(AActor*Target);
 };

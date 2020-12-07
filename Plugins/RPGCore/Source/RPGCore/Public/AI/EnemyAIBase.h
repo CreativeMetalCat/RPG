@@ -22,6 +22,8 @@ class RPGCORE_API AEnemyAIBase : public AAIController, public IAIInterface
 protected:
 	FTimerHandle RandomMovementTimerHandle;
 public:
+	AEnemyAIBase();
+	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "Movement|Random")
 	float MaxDistanceOfRandomMovement = 300.f;
 
@@ -43,6 +45,15 @@ public:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "Movement|Random")
 	FVector SpawnLocation;
 
+	/*This actor will be used as "representation" of current Random Movement goal location
+	 * It exists to make random movement work with Behaviour Tree
+	 */
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "Movement|Random")
+	AActor* RandomMovementGoalLocationActor = nullptr;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "Movement|Random")
+	bool bRandomGoalActorIsSet = false;
+	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "Movement|Patrolling")
 	TArray<APatrolPointBase*> PatrolPoints;
 
@@ -61,6 +72,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "Movement|Patrolling|Blackboard")
 	FName BlackboardWaitingName = TEXT("Waiting");
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "Movement|Target|Blackboard")
+	FName BlackboardTargetName = TEXT("Target");
 	
 	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = Movement)
@@ -79,6 +93,9 @@ public:
     void SetNextGoalForRandomMovement();
 
 	virtual void BeginPlay() override;
+
+	
+	virtual void SetNewTarget_Implementation(AActor* Target) override;
 
 	virtual FVector GetCurrentRandomPointGoal_Implementation() override { return RandomMovementGoal; }
 };
