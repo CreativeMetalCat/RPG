@@ -126,6 +126,7 @@ void AEnemyAIBase::BeginPlay()
       {
          SetNewPatrolPoint();
       }
+
    }
    else
    {
@@ -149,3 +150,4 @@ void AEnemyAIBase::SetNewTarget_Implementation(AActor* Target)
       }
    }
 }
+

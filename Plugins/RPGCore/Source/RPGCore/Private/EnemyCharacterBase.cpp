@@ -12,7 +12,16 @@ AEnemyCharacterBase::AEnemyCharacterBase()
 {
     SenseSphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SenseSphere"));
     SenseSphereComponent->SetupAttachment(RootComponent);//Attach to RootComponent
-    SenseSphereComponent->InitSphereRadius(2000.f);//Basic radius for the sphere. Can be changed in Blueprints 
+    SenseSphereComponent->InitSphereRadius(2000.f);//Basic radius for the sphere. Can be changed in Blueprints
+
+
+    UpperCollision->OnComponentBeginOverlap.AddDynamic(this,& AEnemyCharacterBase::OnAttackCollisionOverlapBegin);
+
+    LowerCollision->OnComponentBeginOverlap.AddDynamic(this,& AEnemyCharacterBase::OnAttackCollisionOverlapBegin);
+
+    LeftCollision->OnComponentBeginOverlap.AddDynamic(this,& AEnemyCharacterBase::OnAttackCollisionOverlapBegin);
+
+    RightCollision->OnComponentBeginOverlap.AddDynamic(this,& AEnemyCharacterBase::OnAttackCollisionOverlapBegin);
 }
 
 void AEnemyCharacterBase::UpdateAI()
@@ -59,4 +68,34 @@ void AEnemyCharacterBase::BeginPlay()
     Super::BeginPlay();
 
     GetWorldTimerManager().SetTimer(AIUpdateHandle,this,&AEnemyCharacterBase::UpdateAI,AIUpdateRate,true);
+}
+
+void AEnemyCharacterBase::OnAttackCollisionOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+    if(OverlappedComp == UpperCollision)
+    {
+        GEngine->AddOnScreenDebugMessage(-1,1.f,FColor::Red,"Attackinng UP");
+        CurrentDirection = EDirection::ED_Up;
+        Attack();
+    }
+    else if(OverlappedComp == LowerCollision)
+    {
+        GEngine->AddOnScreenDebugMessage(-1,1.f,FColor::Red,"Attackinng DOWN");
+        CurrentDirection = EDirection::ED_Down;
+        Attack();
+    }
+    else if(OverlappedComp == LeftCollision)
+    {
+        GEngine->AddOnScreenDebugMessage(-1,1.f,FColor::Red,"Attackinng LEFT");
+        CurrentDirection = EDirection::ED_Left;
+        Attack();
+    }
+    else if(OverlappedComp == RightCollision)
+    {
+        GEngine->AddOnScreenDebugMessage(-1,1.f,FColor::Red,"Attackinng RIGHT");
+        CurrentDirection = EDirection::ED_Right;
+        Attack();
+    }
+    GEngine->AddOnScreenDebugMessage(-1,1.f,FColor::Red,"Collision");
 }

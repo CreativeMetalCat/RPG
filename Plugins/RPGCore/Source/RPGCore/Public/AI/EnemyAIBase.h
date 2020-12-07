@@ -98,4 +98,6 @@ public:
 	virtual void SetNewTarget_Implementation(AActor* Target) override;
 
 	virtual FVector GetCurrentRandomPointGoal_Implementation() override { return RandomMovementGoal; }
+
+
 };

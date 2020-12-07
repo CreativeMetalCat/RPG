@@ -87,15 +87,19 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Interaction)
 	UBoxComponent *InteractionCollision;
 
+	/*Collision boxes used for attacking*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Attack)
 	UBoxComponent *UpperCollision;
 
+	/*Collision boxes used for attacking*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Attack)
 	UBoxComponent *LowerCollision;
-
+	
+	/*Collision boxes used for attacking*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Attack)
 	UBoxComponent *LeftCollision;
 
+	/*Collision boxes used for attacking*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Attack)
 	UBoxComponent *RightCollision;
 public:
