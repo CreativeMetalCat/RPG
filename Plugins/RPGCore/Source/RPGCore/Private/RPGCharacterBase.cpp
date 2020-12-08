@@ -469,6 +469,15 @@ int ARPGCharacterBase::AddHealth(int AddHealth)
 	}
 }
 
+int ARPGCharacterBase::GetAbilitySlotForAbility(int Id)const
+{
+	if(Id==Slot1AbilityId){return 0;}
+	if(Id==Slot2AbilityId){return 1;}
+	if(Id==Slot3AbilityId){return 2;}
+	if(Id==Slot4AbilityId){return 3;}
+	return -1;
+}
+
 bool ARPGCharacterBase::UseAbility(int id)
 {
 	if(Abilities.IsValidIndex(id))
@@ -479,8 +488,9 @@ bool ARPGCharacterBase::UseAbility(int id)
 			
 			if(ASpecialEffect* SE = Cast<ASpecialEffect>(GetWorld()->SpawnActor(Abilities[id].AbilityClass)))
 			{
+				SE->AbilityId = id;//for abilities that need to wait for player to release the button
 				SE->Damage *= AttackPower;//damage of the ability will increase with player's growing
-				SE->ApplyEffect(this,GetActorLocation(),GetWorld(),Abilities[id].bApplyToSpawner?this:nullptr);//MUST BE MANUALLY DESTROYED
+				SE->ApplyEffect(this,GetActorLocation(),GetWorld(),Abilities[id].bApplyToSpawner?this:nullptr);//MUST BE MANUALLY DESTROYED			
 			}
 			if(Abilities[id].CooldownTime > 0)
 			{
@@ -659,10 +669,10 @@ void ARPGCharacterBase::Roll(EDirection Direction)
 			Velocity = FVector(0,1,0);
 			break;
 		case EDirection::ED_Left:
-			Velocity = FVector(-1,0,0);
+			Velocity = FVector(1,0,0);
 			break;
 		case EDirection::ED_Right:
-			Velocity = FVector(1,0,0);
+			Velocity = FVector(-1,0,0);
 			break;
 		}
 		if(GetDodgeRollAnimation())

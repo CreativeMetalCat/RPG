@@ -14,8 +14,42 @@ void APlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	PlayerInputComponent->BindAction("DodgeRoll", IE_Pressed, this, &APlayerBase::DodgeRoll);
 	
+#pragma region AbilitiesInputFunctions
+	PlayerInputComponent->BindAction("UseAbility1", IE_Pressed, this, &APlayerBase::UseAbility1);
+	PlayerInputComponent->BindAction("UseAbility2", IE_Pressed, this, &APlayerBase::UseAbility2);
+	PlayerInputComponent->BindAction("UseAbility3", IE_Pressed, this, &APlayerBase::UseAbility3);
+	PlayerInputComponent->BindAction("UseAbility4", IE_Pressed, this, &APlayerBase::UseAbility4);
+
+	PlayerInputComponent->BindAction("UseAbility1", IE_Released, this, &APlayerBase::ReleaseAbilitySlot1Button);
+	PlayerInputComponent->BindAction("UseAbility2", IE_Released, this, &APlayerBase::ReleaseAbilitySlot2Button);
+	PlayerInputComponent->BindAction("UseAbility3", IE_Released, this, &APlayerBase::ReleaseAbilitySlot3Button);
+	PlayerInputComponent->BindAction("UseAbility4", IE_Released, this, &APlayerBase::ReleaseAbilitySlot4Button);
+#pragma endregion
+	
     PlayerInputComponent->BindAxis("MoveRight", this, &APlayerBase::MoveRight);
     PlayerInputComponent->BindAxis("MoveUp", this, &APlayerBase::MoveUp);
+}
+
+void APlayerBase::BindEventOnAbilityButtonReleased_Implementation(ASpecialEffect* Effect)
+{
+	switch (GetAbilitySlotForAbility(Effect->AbilityId))
+	{
+	case 0:
+		OnAbilitySlot1ButtonReleased.AddDynamic(Effect,&ASpecialEffect::OnAbilityButtonReleased);
+		break;
+	case 1:
+		OnAbilitySlot2ButtonReleased.AddDynamic(Effect,&ASpecialEffect::OnAbilityButtonReleased);
+		break;
+	case 2:
+		OnAbilitySlot3ButtonReleased.AddDynamic(Effect,&ASpecialEffect::OnAbilityButtonReleased);
+		break;
+	case 3:
+		OnAbilitySlot4ButtonReleased.AddDynamic(Effect,&ASpecialEffect::OnAbilityButtonReleased);
+		break;
+	default:
+		//ability is out of range. so there is nothing we can do
+		break;
+	}
 }
 
 
@@ -46,6 +80,26 @@ APlayerBase::APlayerBase()
 void APlayerBase::DodgeRoll()
 {
 	Roll(CurrentDirection);
+}
+
+void APlayerBase::UseAbilityInSlot(int slotId)
+{
+	switch (slotId)
+	{
+	case 1:
+		UseAbility(Slot1AbilityId);
+		break;
+	case 2:
+		UseAbility(Slot2AbilityId);
+		break;
+	case 3:
+		UseAbility(Slot3AbilityId);
+		break;
+	case 4:
+		UseAbility(Slot4AbilityId);
+		break;
+	default: break;
+	}
 }
 
 void APlayerBase::MoveRight(float Value)

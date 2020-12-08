@@ -298,7 +298,9 @@ public:
 	UFUNCTION(BlueprintCallable,Category="Stats|Health")
 	int AddHealth(int AddHealth);
 	
-
+	UFUNCTION(BlueprintPure,Category=Abilities)
+	int GetAbilitySlotForAbility(int Id)const;
+	
 	/*Returns false if ability can not be used*/
 	UFUNCTION(BlueprintCallable,Category=Abilities)
 	virtual bool UseAbility(int id);

@@ -12,55 +12,15 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/Source/RPG/TP_ThirdPerson/TP_ThirdPersonCharacter.cpp" />
-        <option value="$PROJECT_DIR$/Source/RPG/Enemy/EnemyBase.h" />
-        <option value="$PROJECT_DIR$/Source/RPG/Enemy/EnemyBase.cpp" />
-        <option value="$PROJECT_DIR$/Source/RPG/InteractionInterface.h" />
-        <option value="$PROJECT_DIR$/Source/RPG/Weapon/WeaponInfo.h" />
-        <option value="$PROJECT_DIR$/Source/RPG/Items/ItemInfo.h" />
-        <option value="$PROJECT_DIR$/Source/RPG/RPGCharacter.h" />
-        <option value="$PROJECT_DIR$/Source/RPG/RPGCharacter.cpp" />
-        <option value="$PROJECT_DIR$/Source/RPG/Abilities/AbilityInfo.h" />
-        <option value="$PROJECT_DIR$/Source/RPG/Items/ItemSpecialEffect.cpp" />
-        <option value="$PROJECT_DIR$/Source/RPG/Items/ItemSpecialEffect.h" />
-        <option value="$PROJECT_DIR$/Source/RPG/Quest/Quest.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Quest/QuestInfo.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Item/ItemInfo.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Ability/AbilityInfo.cpp" />
-        <option value="$PROJECT_DIR$/Source/RPG/RPGGameMode.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Animation/AnimationWaitAction.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Animation/AnimationWaitAction.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/RPGCore.Build.cs" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/AI/AIInterface.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AI/AIMovementType.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/AI/AIMovementType.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/AI/PatrolPointBase.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AI/PatrolPointBase.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Player/PlayerLevelInfo.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Player/PlayerLevelInfo.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Quest/QuestInfo.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Player/PlayerBase.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Player/PlayerBase.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Interaction.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Item/SpecialEffect.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Ability/AbilityInfo.h" />
-        <option value="$PROJECT_DIR$/Plugins/DialoguePlugin/Source/DialoguePluginEditor/Private/DialoguePluginEditorSettingsDetails.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/DialoguePlugin/Source/DialoguePlugin/Public/Dialogue.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/ItemInfo.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Item/PickupableItemBase.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/PickupableItemBase.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/SpecialEffect.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/RPGCharacterBase.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AI/AIInterface.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/RPGCharacterBase.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/AI/EnemyAIBase.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AI/EnemyAIBase.h" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/EnemyCharacterBase.cpp" />
-        <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/EnemyCharacterBase.h" />
-      </list>
-    </option>
+    <changedPaths>
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Item/SpecialEffect.cpp" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/SpecialEffect.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Interaction.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Player/PlayerBase.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/RPGCharacterBase.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/RPGCharacterBase.cpp" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Player/PlayerBase.cpp" />
+    </changedPaths>
   </component>
   <component name="ProjectId" id="1jSDjgaV6fdvnuJSqu7NpLdyr2x" />
   <component name="ProjectViewState">
@@ -491,6 +451,10 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="637" y="242" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1607399287955">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="637" y="242" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1607399287955" />
     <state width="671" height="556" key="DebuggerActiveHint" timestamp="1605764194559">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -563,10 +527,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="514" y="42" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1605061256831" />
-    <state x="539" y="5" width="840" height="1034" key="search.everywhere.popup" timestamp="1606727641843">
+    <state x="539" y="5" width="840" height="1034" key="search.everywhere.popup" timestamp="1607341580010">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="539" y="5" width="840" height="1034" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1606727641843" />
+    <state x="539" y="5" width="840" height="1034" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1607341580010" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

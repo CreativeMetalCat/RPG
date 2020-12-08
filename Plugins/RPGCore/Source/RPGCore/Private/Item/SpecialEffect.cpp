@@ -41,3 +41,8 @@ void ASpecialEffect::OnLoop_Implementation()
 {
     
 }
+
+void ASpecialEffect::OnAbilityButtonReleased_Implementation()
+{
+    
+}

@@ -15,7 +15,7 @@ enum class EEffectType:uint8
 {
 	EET_None UMETA(DisplayName = "None"),
 	EET_Fire UMETA(DisplayName = "Fire"),
-	EET_Electricity UMETA(DisplayName = "Electirycity")
+	EET_Electricity UMETA(DisplayName = "Electricity")
 };
 
 /*Used by items that create special effects on use. For example: Magic wand that shoot lightning,or grenade that explodes*/
@@ -46,6 +46,12 @@ class RPGCORE_API ASpecialEffect : public AActor
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Info)
 	FVector EffectOrigin = FVector::ZeroVector;
+
+	/*Id of ability that uses this effect
+	 * DO NOT CHANGE THIS VALUE. IT IS CHANGED BY PLAYER CODE
+	 */	
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Info|Ability")
+	int AbilityId = -1;
 
 	/*This will only be checked by abilities that apply something to weapons(but not everyone of them)*/
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Info|Type")
@@ -106,5 +112,11 @@ class RPGCORE_API ASpecialEffect : public AActor
 	 */
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Info)
 	bool bLocal = false;
+
+	/*This function is called when button corresponing to slot for this ability is releasedS
+	 * Requires to be binded via IInteraction::BindEventOnAbilityButtonReleased(ASpecialEffect*Effect) first
+	 */
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Player)
+	void OnAbilityButtonReleased();
 
 };

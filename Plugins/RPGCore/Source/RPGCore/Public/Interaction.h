@@ -37,5 +37,8 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category=Effect)
 	void NotifyAboutEffectStart(ASpecialEffect*Effect);
-	
+
+	/*Button is selected based on info in effect itself (AbilityId)*/
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category=Effect)
+	void BindEventOnAbilityButtonReleased(ASpecialEffect*Effect);
 };
