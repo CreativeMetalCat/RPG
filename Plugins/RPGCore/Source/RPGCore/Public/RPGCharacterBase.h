@@ -212,10 +212,15 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Death")
 	UPaperFlipbook *DeathAnimation;
-
+	
+#pragma region AnimMontage
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Montage")
 	bool bPlayingAnimMontage = false;
 
+	/*This means that no other animation can play until this one is done*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Montage")
+	bool bPlayingTopPriorityAnimMontage = false;
+#pragma endregion
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Dodge")
 	bool bPlayingDodgeRollAnimation= false;
@@ -241,10 +246,11 @@ public:
 
 	/*Returns true(and value of length) if started animation false otherwise
 	 * Param: Animation - Animation to play
+	 * bTopPriority - can this animation be overriden(by attack, dodgeroll etc.) anim 
 	 * Length - how long anim is
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Animations|Montage")
-	virtual bool PlayFlipbookAnimation(UPaperFlipbook*Animation,float &length);
+	virtual bool PlayFlipbookAnimation(UPaperFlipbook*Animation,bool bTopPriority,float &length);
 
 	/*used to make code simplier
 	 * If you want animation to actually play with bUseAnimationSystem being true use PlayFlipbookAnimation

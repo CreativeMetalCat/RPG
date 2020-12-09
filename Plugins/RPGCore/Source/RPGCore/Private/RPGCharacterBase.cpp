@@ -90,7 +90,7 @@ ARPGCharacterBase::ARPGCharacterBase()
 
 //////////////////////////////////////////////////////////////////////////
 // Animation
-
+#pragma region DirectionalAnimFuncs
 UPaperFlipbook* ARPGCharacterBase::GetIdleAnimation()
 {
 	switch (CurrentDirection)
@@ -210,6 +210,7 @@ UPaperFlipbook* ARPGCharacterBase::GetDodgeRollAnimation()
 			return DodgeRollAnimationUp;
 	}
 }
+#pragma endregion
 
 void ARPGCharacterBase::OnFlipbookFinishedPlaying()
 {
@@ -219,7 +220,7 @@ void ARPGCharacterBase::OnFlipbookFinishedPlaying()
 		bPlayingDodgeRollAnimation = false;
 		OnFinishedDodgeRoll();
 	}
-	if(bPlayingAnimMontage){bPlayingAnimMontage = false;}
+	if(bPlayingAnimMontage){bPlayingAnimMontage = false; bPlayingTopPriorityAnimMontage = false;}
 	GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Green,"Anim finished: "+GetSprite()->GetFlipbook()->GetName());
 }
 
@@ -228,7 +229,7 @@ void ARPGCharacterBase::OnFinishedDodgeRoll_Implementation()
 	//do stuff when finished, like calling an ability or something
 }
 
-bool ARPGCharacterBase::PlayFlipbookAnimation(UPaperFlipbook*Animation,float &length)
+bool ARPGCharacterBase::PlayFlipbookAnimation(UPaperFlipbook*Animation,bool bTopPriority,float &length)
 {
 	length = -1;
 	if(Animation != nullptr)
@@ -236,6 +237,7 @@ bool ARPGCharacterBase::PlayFlipbookAnimation(UPaperFlipbook*Animation,float &le
 		GetSprite()->SetFlipbook(Animation);
 		GetSprite()->SetLooping(false);
 		bPlayingAnimMontage = true;
+		bPlayingTopPriorityAnimMontage = bTopPriority;
 		length = GetSprite()->GetFlipbookLength();
 		return true;
 	}
@@ -258,31 +260,33 @@ void ARPGCharacterBase::UpdateAnimation()
 	{
 		const FVector PlayerVelocity = GetVelocity();
 		const float PlayerSpeedSqr = PlayerVelocity.SizeSquared();
-
-		if(bAttacking && GetAttackAnimation() != nullptr)
-		{	
-			SetAnimation(GetAttackAnimation(),false);
-		}
-		else if(bPlayingDodgeRollAnimation && GetDodgeRollAnimation() != nullptr)
+		if(!bPlayingTopPriorityAnimMontage)
 		{
-			SetAnimation(GetDodgeRollAnimation(),false);
-		}
-		else if(bIsShieldPutUp && GetShieldDrawnAnimation() != nullptr)
-		{
-			SetAnimation(GetShieldDrawnAnimation(),true);
-		}
-		else if(!bPlayingAnimMontage)
-		{
-			// Are we moving or standing still?
-			UPaperFlipbook* DesiredAnimation = (PlayerSpeedSqr > 0.0f) ? GetRunningAnimation() : GetIdleAnimation();
-			if( GetSprite()->GetFlipbook() != DesiredAnimation 	)
+			if(bAttacking && GetAttackAnimation() != nullptr)
+			{	
+				SetAnimation(GetAttackAnimation(),false);
+			}
+			else if(bPlayingDodgeRollAnimation && GetDodgeRollAnimation() != nullptr)
 			{
-				GetSprite()->SetFlipbook(DesiredAnimation);
-
-				if(!GetSprite()->IsLooping())
+				SetAnimation(GetDodgeRollAnimation(),false);
+			}
+			else if(bIsShieldPutUp && GetShieldDrawnAnimation() != nullptr)
+			{
+				SetAnimation(GetShieldDrawnAnimation(),true);
+			}
+			else if(!bPlayingAnimMontage)
+			{
+				// Are we moving or standing still?
+				UPaperFlipbook* DesiredAnimation = (PlayerSpeedSqr > 0.0f) ? GetRunningAnimation() : GetIdleAnimation();
+				if( GetSprite()->GetFlipbook() != DesiredAnimation 	)
 				{
-					GetSprite()->SetLooping(true);
-					GetSprite()->Play();
+					GetSprite()->SetFlipbook(DesiredAnimation);
+
+					if(!GetSprite()->IsLooping())
+					{
+						GetSprite()->SetLooping(true);
+						GetSprite()->Play();
+					}
 				}
 			}
 		}
