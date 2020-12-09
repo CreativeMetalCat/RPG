@@ -77,25 +77,25 @@ void AEnemyCharacterBase::OnAttackCollisionOverlapBegin(UPrimitiveComponent* Ove
     {
         GEngine->AddOnScreenDebugMessage(-1,1.f,FColor::Red,"Attackinng UP");
         CurrentDirection = EDirection::ED_Up;
-        Attack();
+        Attack(AttackPower);
     }
     else if(OverlappedComp == LowerCollision)
     {
         GEngine->AddOnScreenDebugMessage(-1,1.f,FColor::Red,"Attackinng DOWN");
         CurrentDirection = EDirection::ED_Down;
-        Attack();
+        Attack(AttackPower);
     }
     else if(OverlappedComp == LeftCollision)
     {
         GEngine->AddOnScreenDebugMessage(-1,1.f,FColor::Red,"Attackinng LEFT");
         CurrentDirection = EDirection::ED_Left;
-        Attack();
+        Attack(AttackPower);
     }
     else if(OverlappedComp == RightCollision)
     {
         GEngine->AddOnScreenDebugMessage(-1,1.f,FColor::Red,"Attackinng RIGHT");
         CurrentDirection = EDirection::ED_Right;
-        Attack();
+        Attack(AttackPower);
     }
     GEngine->AddOnScreenDebugMessage(-1,1.f,FColor::Red,"Collision");
 }

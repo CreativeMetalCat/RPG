@@ -835,7 +835,7 @@ bool ARPGCharacterBase::CanAttack()
 }
 
 
-void ARPGCharacterBase::Attack_Implementation()
+void ARPGCharacterBase::Attack_Implementation(float damageMultiplier)
 {
 	if(CanAttack())
 	{
@@ -887,7 +887,7 @@ void ARPGCharacterBase::Attack_Implementation()
 				{
 					if (AttackedActors[i] != this && (AttackedActors[i]->Implements<UInteraction>() || (Cast<IInteraction>(GetOwner()) != nullptr)))
 					{
-						IInteraction::Execute_DealDamage(AttackedActors[i], Item.Attack*AttackPower,this, Item.SpecialEffect);
+						IInteraction::Execute_DealDamage(AttackedActors[i], Item.Attack*AttackPower*damageMultiplier,this, Item.SpecialEffect);
 						//next section is bad code. Do not do things this way
 						if(CurrentlyAppliedEffects.Num() > 0)
 						{

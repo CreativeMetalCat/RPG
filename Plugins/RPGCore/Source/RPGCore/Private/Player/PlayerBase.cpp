@@ -8,7 +8,7 @@
 void APlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
    	
-    PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerBase::Attack);
+    PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerBase::InputAttack);
 
     PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerBase::InteractAction);
 

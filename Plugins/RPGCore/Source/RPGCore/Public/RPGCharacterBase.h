@@ -258,8 +258,10 @@ public:
 
 	void UpdateCharacter();
 
+	void InputAttack(){Attack(1);}
+	
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Attack)
-	void Attack();
+	void Attack(float damageMultiplier);
 
 	UFUNCTION(BlueprintPure)
 	virtual bool CanAttack();
