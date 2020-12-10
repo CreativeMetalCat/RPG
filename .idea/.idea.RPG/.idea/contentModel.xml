@@ -10119,28 +10119,95 @@
       </e>
     </e>
     <e p="C:\Program Files\Epic Games\UE_4.25\Engine\Plugins\Marketplace\GOAP" t="Include">
-      <e p="GOAP.uplugin" t="Include" />
+      <e p="GOAPNPC.uplugin" t="Include" />
       <e p="Resources" t="Include">
         <e p="Icon128.png" t="Include" />
       </e>
       <e p="Source" t="Include">
-        <e p="GOAP" t="Include">
-          <e p="GOAP.Build.cs" t="Include" />
+        <e p="GOAPNPC" t="Include">
+          <e p="GOAPNPC.Build.cs" t="Include" />
           <e p="Private" t="Include">
-            <e p="GOAP.cpp" t="Include" />
             <e p="GOAPAction.cpp" t="Include" />
             <e p="GOAPController.cpp" t="Include" />
             <e p="GOAPNode.cpp" t="Include" />
+            <e p="GOAPNPC.cpp" t="Include" />
             <e p="GOAPPlanner.cpp" t="Include" />
             <e p="GOAPWorldState.cpp" t="Include" />
           </e>
           <e p="Public" t="Include">
-            <e p="GOAP.h" t="Include" />
             <e p="GOAPAction.h" t="Include" />
             <e p="GOAPController.h" t="Include" />
             <e p="GOAPNode.h" t="Include" />
+            <e p="GOAPNPC.h" t="Include" />
             <e p="GOAPPlanner.h" t="Include" />
             <e p="GOAPWorldState.h" t="Include" />
+          </e>
+        </e>
+      </e>
+    </e>
+    <e p="C:\Program Files\Epic Games\UE_4.25\Engine\Plugins\Marketplace\HorizonUIPlugin" t="Include">
+      <e p="HorizonUIPlugin.uplugin" t="Include" />
+      <e p="Resources" t="Include">
+        <e p="Icon128.png" t="Include" />
+      </e>
+      <e p="Source" t="Include">
+        <e p="HorizonUI" t="Include">
+          <e p="HorizonUI.Build.cs" t="Include" />
+          <e p="Private" t="Include">
+            <e p="FileSystem" t="Include">
+              <e p="HorizonFileSystem.cpp" t="Include" />
+            </e>
+            <e p="HorizonUIModule.cpp" t="Include" />
+            <e p="HorizonUIPrivate.h" t="Include" />
+            <e p="Test" t="Include">
+              <e p="ProductTests.cpp" t="Include" />
+              <e p="SmokeTests.cpp" t="Include" />
+            </e>
+            <e p="Widget" t="Include">
+              <e p="Blueprint" t="Include">
+                <e p="HorizonButtonUserWidget.cpp" t="Include" />
+                <e p="HorizonDesignableUserWidget.cpp" t="Include" />
+                <e p="HorizonRadioButtonUserWidget.cpp" t="Include" />
+                <e p="HorizonUserWidget.cpp" t="Include" />
+              </e>
+              <e p="Components" t="Include">
+                <e p="HorizonButton.cpp" t="Include" />
+                <e p="HorizonDialogueMsgTextBlock.cpp" t="Include" />
+                <e p="HorizonFlipbookWidget.cpp" t="Include" />
+                <e p="HorizonImage.cpp" t="Include" />
+                <e p="HorizonRadioButton.cpp" t="Include" />
+                <e p="HorizonTextBlock.cpp" t="Include" />
+                <e p="HorizonTileView.cpp" t="Include" />
+              </e>
+              <e p="HorizonDialogueStyleInfo.cpp" t="Include" />
+              <e p="HorizonWidgetFunctionLibrary.cpp" t="Include" />
+            </e>
+          </e>
+          <e p="Public" t="Include">
+            <e p="FileSystem" t="Include">
+              <e p="HorizonFileSystem.h" t="Include" />
+            </e>
+            <e p="HorizonUIModule.h" t="Include" />
+            <e p="HorizonUIPackage.h" t="Include" />
+            <e p="Widget" t="Include">
+              <e p="Blueprint" t="Include">
+                <e p="HorizonButtonUserWidget.h" t="Include" />
+                <e p="HorizonDesignableUserWidget.h" t="Include" />
+                <e p="HorizonRadioButtonUserWidget.h" t="Include" />
+                <e p="HorizonUserWidget.h" t="Include" />
+              </e>
+              <e p="Components" t="Include">
+                <e p="HorizonButton.h" t="Include" />
+                <e p="HorizonDialogueMsgTextBlock.h" t="Include" />
+                <e p="HorizonFlipbookWidget.h" t="Include" />
+                <e p="HorizonImage.h" t="Include" />
+                <e p="HorizonRadioButton.h" t="Include" />
+                <e p="HorizonTextBlock.h" t="Include" />
+                <e p="HorizonTileView.h" t="Include" />
+              </e>
+              <e p="HorizonDialogueStyleInfo.h" t="Include" />
+              <e p="HorizonWidgetFunctionLibrary.h" t="Include" />
+            </e>
           </e>
         </e>
       </e>
@@ -10269,6 +10336,74 @@
             <e p="ParticleModulePluginBase.h" t="Include" />
             <e p="ParticleText.h" t="Include" />
             <e p="ParticleTextParamComponent.h" t="Include" />
+          </e>
+        </e>
+      </e>
+    </e>
+    <e p="C:\Program Files\Epic Games\UE_4.25\Engine\Plugins\Marketplace\PowerIK" t="Include">
+      <e p="PowerIK.uplugin" t="Include" />
+      <e p="Resources" t="Include">
+        <e p="Icon128.png" t="Include" />
+      </e>
+      <e p="Source" t="Include">
+        <e p="PowerIKRuntime" t="Include">
+          <e p="PowerIKRuntime.Build.cs" t="Include" />
+          <e p="Private" t="Include">
+            <e p="AnimNode_PowerIK _Ground.cpp" t="Include" />
+            <e p="AnimNode_PowerIK _Walk.cpp" t="Include" />
+            <e p="AnimNode_PowerIK.cpp" t="Include" />
+            <e p="PowerIK_UnrealCore.cpp" t="Include" />
+            <e p="PowerIKRuntimeModule.cpp" t="Include" />
+            <e p="RigUnit_PowerIK.cpp" t="Include" />
+          </e>
+          <e p="Public" t="Include">
+            <e p="AnimNode_PowerIK.h" t="Include" />
+            <e p="AnimNode_PowerIK_Ground.h" t="Include" />
+            <e p="AnimNode_PowerIK_Walk.h" t="Include" />
+            <e p="PowerIK_UnrealCore.h" t="Include" />
+            <e p="PowerIKRuntimeModule.h" t="Include" />
+            <e p="RigUnit_PowerIK.h" t="Include" />
+          </e>
+        </e>
+        <e p="PowerIKSDK" t="Include">
+          <e p="PowerIKSDK.Build.cs" t="Include" />
+          <e p="Private" t="Include">
+            <e p="PowerIKSDKModule.cpp" t="Include" />
+          </e>
+          <e p="Public" t="Include">
+            <e p="PowerIKSDKModule.h" t="Include" />
+          </e>
+          <e p="sdk" t="Include">
+            <e p="include" t="Include">
+              <e p="PowerIK.h" t="Include" />
+              <e p="PowerIKGround.h" t="Include" />
+              <e p="PowerIKMath.h" t="Include" />
+              <e p="PowerIKSettings.h" t="Include" />
+            </e>
+            <e p="lib" t="Include">
+              <e p="Linux" t="Include">
+                <e p="libPOWERIK.a" t="Include" />
+              </e>
+              <e p="Win64" t="Include">
+                <e p="POWERIK.dll" t="Include" />
+                <e p="POWERIK.lib" t="Include" />
+              </e>
+            </e>
+          </e>
+        </e>
+        <e p="PowerIKTool" t="Include">
+          <e p="PowerIKTool.Build.cs" t="Include" />
+          <e p="Private" t="Include">
+            <e p="AnimGraphNode_PowerIK.cpp" t="Include" />
+            <e p="AnimGraphNode_PowerIK_Ground.cpp" t="Include" />
+            <e p="AnimGraphNode_PowerIK_Walk.cpp" t="Include" />
+            <e p="PowerIKToolModule.cpp" t="Include" />
+          </e>
+          <e p="Public" t="Include">
+            <e p="AnimGraphNode_PowerIK.h" t="Include" />
+            <e p="AnimGraphNode_PowerIK_Ground.h" t="Include" />
+            <e p="AnimGraphNode_PowerIK_Walk.h" t="Include" />
+            <e p="PowerIKToolModule.h" t="Include" />
           </e>
         </e>
       </e>
@@ -10573,29 +10708,6 @@
             <e p="RegexInBP.h" t="Include" />
           </e>
           <e p="RegexInBP.Build.cs" t="Include" />
-        </e>
-      </e>
-    </e>
-    <e p="C:\Program Files\Epic Games\UE_4.25\Engine\Plugins\Marketplace\ScreenFade" t="Include">
-      <e p="Resources" t="Include">
-        <e p="Icon128.png" t="Include" />
-      </e>
-      <e p="ScreenFade.uplugin" t="Include" />
-      <e p="Source" t="Include">
-        <e p="ScreenFade" t="Include">
-          <e p="Private" t="Include">
-            <e p="ScreenFade.cpp" t="Include" />
-            <e p="ScreenFadeLibrary.cpp" t="Include" />
-            <e p="ScreenFadePrivatePCH.h" t="Include" />
-            <e p="ScreenFadeViewport.cpp" t="Include" />
-          </e>
-          <e p="Public" t="Include">
-            <e p="ScreenFade.h" t="Include" />
-            <e p="ScreenFadeLibrary.h" t="Include" />
-            <e p="ScreenFadeTypes.h" t="Include" />
-            <e p="ScreenFadeViewport.h" t="Include" />
-          </e>
-          <e p="ScreenFade.Build.cs" t="Include" />
         </e>
       </e>
     </e>
@@ -45600,6 +45712,73 @@
             </e>
           </e>
         </e>
+        <e p="HorizonUIPlugin" t="Include">
+          <e p="HorizonUIPlugin.uplugin" t="Include" />
+          <e p="Resources" t="Include">
+            <e p="Icon128.png" t="Include" />
+          </e>
+          <e p="Source" t="Include">
+            <e p="HorizonUI" t="Include">
+              <e p="HorizonUI.Build.cs" t="Include" />
+              <e p="Private" t="Include">
+                <e p="FileSystem" t="Include">
+                  <e p="HorizonFileSystem.cpp" t="Include" />
+                </e>
+                <e p="HorizonUIModule.cpp" t="Include" />
+                <e p="HorizonUIPrivate.h" t="Include" />
+                <e p="Test" t="Include">
+                  <e p="ProductTests.cpp" t="Include" />
+                  <e p="SmokeTests.cpp" t="Include" />
+                </e>
+                <e p="Widget" t="Include">
+                  <e p="Blueprint" t="Include">
+                    <e p="HorizonButtonUserWidget.cpp" t="Include" />
+                    <e p="HorizonDesignableUserWidget.cpp" t="Include" />
+                    <e p="HorizonRadioButtonUserWidget.cpp" t="Include" />
+                    <e p="HorizonUserWidget.cpp" t="Include" />
+                  </e>
+                  <e p="Components" t="Include">
+                    <e p="HorizonButton.cpp" t="Include" />
+                    <e p="HorizonDialogueMsgTextBlock.cpp" t="Include" />
+                    <e p="HorizonFlipbookWidget.cpp" t="Include" />
+                    <e p="HorizonImage.cpp" t="Include" />
+                    <e p="HorizonRadioButton.cpp" t="Include" />
+                    <e p="HorizonTextBlock.cpp" t="Include" />
+                    <e p="HorizonTileView.cpp" t="Include" />
+                  </e>
+                  <e p="HorizonDialogueStyleInfo.cpp" t="Include" />
+                  <e p="HorizonWidgetFunctionLibrary.cpp" t="Include" />
+                </e>
+              </e>
+              <e p="Public" t="Include">
+                <e p="FileSystem" t="Include">
+                  <e p="HorizonFileSystem.h" t="Include" />
+                </e>
+                <e p="HorizonUIModule.h" t="Include" />
+                <e p="HorizonUIPackage.h" t="Include" />
+                <e p="Widget" t="Include">
+                  <e p="Blueprint" t="Include">
+                    <e p="HorizonButtonUserWidget.h" t="Include" />
+                    <e p="HorizonDesignableUserWidget.h" t="Include" />
+                    <e p="HorizonRadioButtonUserWidget.h" t="Include" />
+                    <e p="HorizonUserWidget.h" t="Include" />
+                  </e>
+                  <e p="Components" t="Include">
+                    <e p="HorizonButton.h" t="Include" />
+                    <e p="HorizonDialogueMsgTextBlock.h" t="Include" />
+                    <e p="HorizonFlipbookWidget.h" t="Include" />
+                    <e p="HorizonImage.h" t="Include" />
+                    <e p="HorizonRadioButton.h" t="Include" />
+                    <e p="HorizonTextBlock.h" t="Include" />
+                    <e p="HorizonTileView.h" t="Include" />
+                  </e>
+                  <e p="HorizonDialogueStyleInfo.h" t="Include" />
+                  <e p="HorizonWidgetFunctionLibrary.h" t="Include" />
+                </e>
+              </e>
+            </e>
+          </e>
+        </e>
         <e p="LDAssistant" t="Include">
           <e p="LDAssistant.uplugin" t="Include" />
           <e p="Resources" t="Include">
@@ -45662,6 +45841,7 @@
                   <e p="EnemyAIBase.cpp" t="Include" />
                   <e p="PatrolPointBase.cpp" t="Include" />
                 </e>
+                <e p="Direction.cpp" t="Include" />
                 <e p="EnemyCharacterBase.cpp" t="Include" />
                 <e p="Interaction.cpp" t="Include" />
                 <e p="Item" t="Include">
@@ -45689,6 +45869,7 @@
                   <e p="EnemyAIBase.h" t="Include" />
                   <e p="PatrolPointBase.h" t="Include" />
                 </e>
+                <e p="Direction.h" t="Include" />
                 <e p="EnemyCharacterBase.h" t="Include" />
                 <e p="Interaction.h" t="Include" />
                 <e p="Item" t="Include">

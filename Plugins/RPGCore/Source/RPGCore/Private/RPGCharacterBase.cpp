@@ -73,6 +73,22 @@ ARPGCharacterBase::ARPGCharacterBase()
 	InteractionCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("InteractionCollision"));
 	InteractionCollision->SetupAttachment(RootComponent);
 	InteractionCollision->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+
+	ArmorTopPartDisplayFlipbookComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("ArmorTopPartDisplayFlipbook"));
+	ArmorTopPartDisplayFlipbookComponent->SetupAttachment(RootComponent);
+	ArmorTopPartDisplayFlipbookComponent->SetRelativeScale3D(FVector(3.5f,1,3.5f));
+
+	ArmorMiddlePartDisplayFlipbookComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("ArmorMiddlePartDisplayFlipbook"));
+	ArmorMiddlePartDisplayFlipbookComponent->SetupAttachment(RootComponent);
+	ArmorMiddlePartDisplayFlipbookComponent->SetRelativeScale3D(FVector(3.5f,1,3.5f));
+
+	ArmorBottomPartDisplayFlipbookComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("ArmorBottomPartDisplayFlipbook"));
+	ArmorBottomPartDisplayFlipbookComponent->SetupAttachment(RootComponent);
+	ArmorBottomPartDisplayFlipbookComponent->SetRelativeScale3D(FVector(3.5f,1,3.5f));
+
+	ShieldDisplayFlipbookComponent = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("ShieldDisplayFlipbook"));
+	ShieldDisplayFlipbookComponent->SetupAttachment(RootComponent);
+	ShieldDisplayFlipbookComponent->SetRelativeScale3D(FVector(3.5f,1,3.5f));
 	
 
 	// Behave like a traditional 2D platformer character, with a flat bottom instead of a curved capsule bottom
@@ -265,28 +281,163 @@ void ARPGCharacterBase::UpdateAnimation()
 			if(bAttacking && GetAttackAnimation() != nullptr)
 			{	
 				SetAnimation(GetAttackAnimation(),false);
+				if(TopPartArmorItemId != -1)
+				{
+					if(ArmorTopPartDisplayFlipbookComponent->GetFlipbook() != ArmorTopPartInfo.GetAttackAnimation(CurrentDirection))
+					{
+						ArmorTopPartDisplayFlipbookComponent->SetFlipbook(ArmorTopPartInfo.GetAttackAnimation(CurrentDirection));
+					}
+					ArmorTopPartDisplayFlipbookComponent->SetLooping(false);
+				}
+				if(MiddlePartArmorItemId != -1)
+				{
+					if(ArmorMiddlePartDisplayFlipbookComponent->GetFlipbook() != ArmorMiddlePartInfo.GetAttackAnimation(CurrentDirection))
+					{
+						ArmorMiddlePartDisplayFlipbookComponent->SetFlipbook(ArmorMiddlePartInfo.GetAttackAnimation(CurrentDirection));
+					}
+					ArmorMiddlePartDisplayFlipbookComponent->SetLooping(false);
+				}
+				if(BottomPartArmorItemId != -1)
+				{
+					if(ArmorBottomPartDisplayFlipbookComponent->GetFlipbook() != ArmorBottomPartInfo.GetAttackAnimation(CurrentDirection))
+					{
+						ArmorBottomPartDisplayFlipbookComponent->SetFlipbook(ArmorBottomPartInfo.GetAttackAnimation(CurrentDirection));
+					}
+					ArmorBottomPartDisplayFlipbookComponent->SetLooping(false);
+				}
+				if(ShieldItemId != -1)
+				{
+					if(ShieldDisplayFlipbookComponent->GetFlipbook() != ShieldInfo.GetAttackAnimation(CurrentDirection))
+					{
+						ShieldDisplayFlipbookComponent->SetFlipbook(ShieldInfo.GetAttackAnimation(CurrentDirection));
+					}
+					ShieldDisplayFlipbookComponent->SetLooping(false);
+				}
 			}
 			else if(bPlayingDodgeRollAnimation && GetDodgeRollAnimation() != nullptr)
 			{
 				SetAnimation(GetDodgeRollAnimation(),false);
+				if(TopPartArmorItemId != -1)
+				{
+					if(ArmorTopPartDisplayFlipbookComponent->GetFlipbook() != ArmorTopPartInfo.GetDodgeRollAnimation(CurrentDirection))
+					{
+						ArmorTopPartDisplayFlipbookComponent->SetFlipbook(ArmorTopPartInfo.GetDodgeRollAnimation(CurrentDirection));
+					}
+					ArmorTopPartDisplayFlipbookComponent->SetLooping(false);
+				}
+				if(MiddlePartArmorItemId != -1)
+				{
+					if(ArmorMiddlePartDisplayFlipbookComponent->GetFlipbook() != ArmorMiddlePartInfo.GetDodgeRollAnimation(CurrentDirection))
+					{
+						ArmorMiddlePartDisplayFlipbookComponent->SetFlipbook(ArmorMiddlePartInfo.GetDodgeRollAnimation(CurrentDirection));
+					}
+					ArmorMiddlePartDisplayFlipbookComponent->SetLooping(false);
+				}
+				if(BottomPartArmorItemId != -1)
+				{
+					if(ArmorBottomPartDisplayFlipbookComponent->GetFlipbook() != ArmorBottomPartInfo.GetDodgeRollAnimation(CurrentDirection))
+					{
+						ArmorBottomPartDisplayFlipbookComponent->SetFlipbook(ArmorBottomPartInfo.GetDodgeRollAnimation(CurrentDirection));
+					}
+					ArmorBottomPartDisplayFlipbookComponent->SetLooping(false);
+				}
+				if(ShieldItemId != -1)
+				{
+					if(ShieldDisplayFlipbookComponent->GetFlipbook() != ShieldInfo.GetDodgeRollAnimation(CurrentDirection))
+					{
+						ShieldDisplayFlipbookComponent->SetFlipbook(ShieldInfo.GetDodgeRollAnimation(CurrentDirection));
+					}
+				}
+				ShieldDisplayFlipbookComponent->SetLooping(false);
 			}
 			else if(bIsShieldPutUp && GetShieldDrawnAnimation() != nullptr)
 			{
 				SetAnimation(GetShieldDrawnAnimation(),true);
+				if(TopPartArmorItemId != -1)
+				{
+					if(ArmorTopPartDisplayFlipbookComponent->GetFlipbook() != ArmorTopPartInfo.GetShieldDrawnAnimation(CurrentDirection))
+					{
+						ArmorTopPartDisplayFlipbookComponent->SetFlipbook(ArmorTopPartInfo.GetShieldDrawnAnimation(CurrentDirection));
+					}
+					ArmorTopPartDisplayFlipbookComponent->SetLooping(false);
+				}
+				if(MiddlePartArmorItemId != -1)
+				{
+					if(ArmorMiddlePartDisplayFlipbookComponent->GetFlipbook() != ArmorMiddlePartInfo.GetShieldDrawnAnimation(CurrentDirection))
+					{
+						ArmorMiddlePartDisplayFlipbookComponent->SetFlipbook(ArmorMiddlePartInfo.GetShieldDrawnAnimation(CurrentDirection));
+					}
+					ArmorMiddlePartDisplayFlipbookComponent->SetLooping(false);
+				}
+				if(BottomPartArmorItemId != -1)
+				{
+					if(ArmorBottomPartDisplayFlipbookComponent->GetFlipbook() != ArmorBottomPartInfo.GetShieldDrawnAnimation(CurrentDirection))
+					{
+						ArmorBottomPartDisplayFlipbookComponent->SetFlipbook(ArmorBottomPartInfo.GetShieldDrawnAnimation(CurrentDirection));
+					}
+					ArmorBottomPartDisplayFlipbookComponent->SetLooping(false);
+				}
+				if(ShieldItemId != -1)
+				{
+					if(ShieldDisplayFlipbookComponent->GetFlipbook() != ShieldInfo.GetShieldDrawnAnimation(CurrentDirection))
+					{
+						ShieldDisplayFlipbookComponent->SetFlipbook(ShieldInfo.GetShieldDrawnAnimation(CurrentDirection));
+					}
+					ShieldDisplayFlipbookComponent->SetLooping(false);
+				}
 			}
 			else if(!bPlayingAnimMontage)
 			{
 				// Are we moving or standing still?
 				UPaperFlipbook* DesiredAnimation = (PlayerSpeedSqr > 0.0f) ? GetRunningAnimation() : GetIdleAnimation();
-				if( GetSprite()->GetFlipbook() != DesiredAnimation 	)
+				SetAnimation(DesiredAnimation,true);
+				if(TopPartArmorItemId != -1)
 				{
-					GetSprite()->SetFlipbook(DesiredAnimation);
-
-					if(!GetSprite()->IsLooping())
+					if (ArmorTopPartDisplayFlipbookComponent->GetFlipbook() != ((PlayerSpeedSqr > 0.0f)
+						? ArmorTopPartInfo.GetRunningAnimation(CurrentDirection)
+						: ArmorTopPartInfo.GetIdleAnimation(CurrentDirection)))
 					{
-						GetSprite()->SetLooping(true);
-						GetSprite()->Play();
+						ArmorTopPartDisplayFlipbookComponent->SetFlipbook(((PlayerSpeedSqr > 0.0f)
+                        ? ArmorTopPartInfo.GetRunningAnimation(CurrentDirection)
+                        : ArmorTopPartInfo.GetIdleAnimation(CurrentDirection)));
 					}
+					ArmorTopPartDisplayFlipbookComponent->SetLooping(true);
+				}
+				if(MiddlePartArmorItemId != -1)
+				{
+					if (ArmorMiddlePartDisplayFlipbookComponent->GetFlipbook() != ((PlayerSpeedSqr > 0.0f)
+                        ? ArmorMiddlePartInfo.GetRunningAnimation(CurrentDirection)
+                        : ArmorMiddlePartInfo.GetIdleAnimation(CurrentDirection)))
+					{
+						ArmorMiddlePartDisplayFlipbookComponent->SetFlipbook(((PlayerSpeedSqr > 0.0f)
+                        ? ArmorMiddlePartInfo.GetRunningAnimation(CurrentDirection)
+                        : ArmorMiddlePartInfo.GetIdleAnimation(CurrentDirection)));
+					}
+					ArmorMiddlePartDisplayFlipbookComponent->SetLooping(true);
+				}
+				if(BottomPartArmorItemId != -1)
+				{
+					if (ArmorBottomPartDisplayFlipbookComponent->GetFlipbook() != ((PlayerSpeedSqr > 0.0f)
+                        ? ArmorBottomPartInfo.GetRunningAnimation(CurrentDirection)
+                        : ArmorBottomPartInfo.GetIdleAnimation(CurrentDirection)))
+					{
+						ArmorBottomPartDisplayFlipbookComponent->SetFlipbook(((PlayerSpeedSqr > 0.0f)
+                        ? ArmorBottomPartInfo.GetRunningAnimation(CurrentDirection)
+                        : ArmorBottomPartInfo.GetIdleAnimation(CurrentDirection)));
+					}
+					ArmorMiddlePartDisplayFlipbookComponent->SetLooping(true);
+				}
+				if(ShieldItemId != -1)
+				{
+					if (ShieldDisplayFlipbookComponent->GetFlipbook() != ((PlayerSpeedSqr > 0.0f)
+                        ? ShieldInfo.GetRunningAnimation(CurrentDirection)
+                        : ShieldInfo.GetIdleAnimation(CurrentDirection)))
+					{
+						ShieldDisplayFlipbookComponent->SetFlipbook(((PlayerSpeedSqr > 0.0f)
+                        ? ShieldInfo.GetRunningAnimation(CurrentDirection)
+                        : ShieldInfo.GetIdleAnimation(CurrentDirection)));
+					}
+					ShieldDisplayFlipbookComponent->SetLooping(true);
 				}
 			}
 		}
@@ -421,15 +572,22 @@ bool ARPGCharacterBase::SetCurrentItemById_Implementation(int id, EItemType type
 			{
 			case EItemType::EIT_ArmorTop:
 				TopPartArmorItemId = id;
+				ArmorTopPartInfo = item;
 				return true;
 			case EItemType::EIT_ArmorBottom:
 				BottomPartArmorItemId = id;
+				ArmorBottomPartInfo = item;
 				return true;
 			case EItemType::EIT_ArmorMiddle:
 				MiddlePartArmorItemId = id;
+				ArmorMiddlePartInfo = item;
 				return true;
 			case EItemType::EIT_Weapon:
 				CurrentWeaponId = id;
+				return true;
+			case EItemType::EIT_Shield:
+				ShieldItemId = id;
+				ShieldInfo = item;
 				return true;
 			default:
 				/*nothing else can be equipped*/

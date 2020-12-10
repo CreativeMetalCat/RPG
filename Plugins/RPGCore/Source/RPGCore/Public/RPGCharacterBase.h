@@ -11,7 +11,7 @@
 #include "PaperFlipbook.h"
 #include "RPGCore/Public/Item/ItemInfo.h"
 #include "RPGCore/Public/Quest/QuestInfo.h"
-
+#include "RPGCore/Public/Direction.h"
 
 #include "RPGCharacterBase.generated.h"
 
@@ -25,14 +25,7 @@ enum class EAnimationPlayResult: uint8
 	EAPR_Fail UMETA(DisplayName = "Fail")
 };
 
-UENUM(BlueprintType)
-enum class EDirection:uint8
-{
-	ED_Up UMETA(DisplayName = "Up"),
-	ED_Down UMETA(DisplayName = "Down"),
-	ED_Right UMETA(DisplayName = "Right"),
-	ED_Left UMETA(DisplayName = "Left")
-};
+
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnQuestFinished,FQuestInfo,Quest);
 
@@ -58,31 +51,26 @@ class ARPGCharacterBase : public APaperCharacter, public IInteraction
 	UTextRenderComponent* TextComponent;
 	virtual void Tick(float DeltaSeconds) override;
 protected:
-	/* The animation to play while running around
-	 *This one is for facing up
-	 * */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animations)
-	class UPaperFlipbook* RunningAnimationUp;
 
-	/* The animation to play while running around
-	*This one is for facing down
-	* */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animations)
-	class UPaperFlipbook* RunningAnimationDown;
+	/*Info for current item
+	 * Only used for animation
+	 */
+	FItemInfo ArmorTopPartInfo;
 
-	/* The animation to play while running around
-	*This one is for facing left
-	* */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animations)
-	class UPaperFlipbook* RunningAnimationLeft;
+	/*Info for current item
+	* Only used for animation
+	*/
+	FItemInfo ArmorMiddlePartInfo;
 
-	/* The animation to play while running around
-	*This one is for facing right
-	* */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Animations)
-	class UPaperFlipbook* RunningAnimationRight;
+	/*Info for current item
+	* Only used for animation
+	*/
+	FItemInfo ArmorBottomPartInfo;
 
-	UPaperFlipbook* GetRunningAnimation();
+	/*Info for current item
+	* Only used for animation
+	*/
+	FItemInfo ShieldInfo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Interaction)
 	UBoxComponent *InteractionCollision;
@@ -102,7 +90,46 @@ protected:
 	/*Collision boxes used for attacking*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Attack)
 	UBoxComponent *RightCollision;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animations|Items")
+	UPaperFlipbookComponent*ArmorTopPartDisplayFlipbookComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animations|Items")
+	UPaperFlipbookComponent*ArmorMiddlePartDisplayFlipbookComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animations|Items")
+	UPaperFlipbookComponent*ArmorBottomPartDisplayFlipbookComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animations|Items")
+	UPaperFlipbookComponent*ShieldDisplayFlipbookComponent;
 public:
+
+	/* The animation to play while running around
+	*This one is for facing up
+	* */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animations|Movement|Run")
+	class UPaperFlipbook* RunningAnimationUp;
+
+	/* The animation to play while running around
+	*This one is for facing down
+	* */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animations|Movement|Run")
+	class UPaperFlipbook* RunningAnimationDown;
+
+	/* The animation to play while running around
+	*This one is for facing left
+	* */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animations|Movement|Run")
+	class UPaperFlipbook* RunningAnimationLeft;
+
+	/* The animation to play while running around
+	*This one is for facing right
+	* */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animations|Movement|Run")
+	class UPaperFlipbook* RunningAnimationRight;
+
+	UPaperFlipbook* GetRunningAnimation();
+	
 	// The animation to play while idle (standing still)
 	// This one is for facing up
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Movement|Idle")

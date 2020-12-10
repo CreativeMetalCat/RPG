@@ -19,6 +19,9 @@
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Player/PlayerBase.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Player/PlayerBase.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/EnemyCharacterBase.cpp" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Direction.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/ItemInfo.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Item/ItemInfo.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/RPGCharacterBase.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/RPGCharacterBase.cpp" />
     </changedPaths>
