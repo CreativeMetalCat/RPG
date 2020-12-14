@@ -21,7 +21,20 @@ ArmorTopPartDisplayFlipbookComponent->SetFlipbook(ArmorTopPartInfo.GetAttackAnim
 }
 ArmorTopPartDisplayFlipbookComponent->SetLooping(false);
  */
-#define PlAY_ANIMATION_ON_ITEM(itemName,animName,loop) {if(itemName##DisplayFlipbookComponent->GetFlipbook()!= itemName##Info.GetAttackAnimation(CurrentDirection)){itemName##DisplayFlipbookComponent->SetFlipbook(itemName##Info.Get##animName##Animation(CurrentDirection));}itemName##DisplayFlipbookComponent->SetLooping(loop);}
+#define PlAY_ANIMATION_ON_ITEM(itemName,animName,loop) {\
+	if(itemName##DisplayFlipbookComponent->GetFlipbook()!= itemName##Info.Get##animName##Animation(CurrentDirection))\
+	{\
+	itemName##DisplayFlipbookComponent->SetFlipbook(itemName##Info.Get##animName##Animation(CurrentDirection));\
+	}\
+	itemName##DisplayFlipbookComponent->SetLooping(loop);}
+
+#define PlAY_ANIMATION_ON_ITEM_WITH_SELECTION(itemName,animName1,animName2,condition,loop) {\
+if(itemName##DisplayFlipbookComponent->GetFlipbook()!= (condition?itemName##Info.Get##animName1##Animation(CurrentDirection):itemName##Info.Get##animName2##Animation(CurrentDirection)))\
+{\
+itemName##DisplayFlipbookComponent->SetFlipbook(condition?itemName##Info.Get##animName1##Animation(CurrentDirection):itemName##Info.Get##animName2##Animation(CurrentDirection));\
+}\
+itemName##DisplayFlipbookComponent->SetLooping(loop);\
+}
 	
 DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
 
@@ -354,51 +367,19 @@ void ARPGCharacterBase::UpdateAnimation()
 				SetAnimation(DesiredAnimation,true);
 				if(TopPartArmorItemId != -1)
 				{
-					if (ArmorTopPartDisplayFlipbookComponent->GetFlipbook() != ((PlayerSpeedSqr > 0.0f)
-						? ArmorTopPartInfo.GetRunningAnimation(CurrentDirection)
-						: ArmorTopPartInfo.GetIdleAnimation(CurrentDirection)))
-					{
-						ArmorTopPartDisplayFlipbookComponent->SetFlipbook(((PlayerSpeedSqr > 0.0f)
-                        ? ArmorTopPartInfo.GetRunningAnimation(CurrentDirection)
-                        : ArmorTopPartInfo.GetIdleAnimation(CurrentDirection)));
-					}
-					ArmorTopPartDisplayFlipbookComponent->SetLooping(true);
+					PlAY_ANIMATION_ON_ITEM_WITH_SELECTION(ArmorTopPart,Running,Idle,(PlayerSpeedSqr > 0.0f),true);
 				}
 				if(MiddlePartArmorItemId != -1)
 				{
-					if (ArmorMiddlePartDisplayFlipbookComponent->GetFlipbook() != ((PlayerSpeedSqr > 0.0f)
-                        ? ArmorMiddlePartInfo.GetRunningAnimation(CurrentDirection)
-                        : ArmorMiddlePartInfo.GetIdleAnimation(CurrentDirection)))
-					{
-						ArmorMiddlePartDisplayFlipbookComponent->SetFlipbook(((PlayerSpeedSqr > 0.0f)
-                        ? ArmorMiddlePartInfo.GetRunningAnimation(CurrentDirection)
-                        : ArmorMiddlePartInfo.GetIdleAnimation(CurrentDirection)));
-					}
-					ArmorMiddlePartDisplayFlipbookComponent->SetLooping(true);
+					PlAY_ANIMATION_ON_ITEM_WITH_SELECTION(ArmorMiddlePart,Running,Idle,(PlayerSpeedSqr > 0.0f),true);
 				}
 				if(BottomPartArmorItemId != -1)
 				{
-					if (ArmorBottomPartDisplayFlipbookComponent->GetFlipbook() != ((PlayerSpeedSqr > 0.0f)
-                        ? ArmorBottomPartInfo.GetRunningAnimation(CurrentDirection)
-                        : ArmorBottomPartInfo.GetIdleAnimation(CurrentDirection)))
-					{
-						ArmorBottomPartDisplayFlipbookComponent->SetFlipbook(((PlayerSpeedSqr > 0.0f)
-                        ? ArmorBottomPartInfo.GetRunningAnimation(CurrentDirection)
-                        : ArmorBottomPartInfo.GetIdleAnimation(CurrentDirection)));
-					}
-					ArmorMiddlePartDisplayFlipbookComponent->SetLooping(true);
+					PlAY_ANIMATION_ON_ITEM_WITH_SELECTION(ArmorBottomPart,Running,Idle,(PlayerSpeedSqr > 0.0f),true);
 				}
 				if(ShieldItemId != -1)
 				{
-					if (ShieldDisplayFlipbookComponent->GetFlipbook() != ((PlayerSpeedSqr > 0.0f)
-                        ? ShieldInfo.GetRunningAnimation(CurrentDirection)
-                        : ShieldInfo.GetIdleAnimation(CurrentDirection)))
-					{
-						ShieldDisplayFlipbookComponent->SetFlipbook(((PlayerSpeedSqr > 0.0f)
-                        ? ShieldInfo.GetRunningAnimation(CurrentDirection)
-                        : ShieldInfo.GetIdleAnimation(CurrentDirection)));
-					}
-					ShieldDisplayFlipbookComponent->SetLooping(true);
+					PlAY_ANIMATION_ON_ITEM_WITH_SELECTION(Shield,Running,Idle,(PlayerSpeedSqr > 0.0f),true);
 				}
 			}
 		}
