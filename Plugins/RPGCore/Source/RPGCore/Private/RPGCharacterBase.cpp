@@ -14,7 +14,15 @@
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 
-
+/*
+* if(ArmorTopPartDisplayFlipbookComponent->GetFlipbook() != ArmorTopPartInfo.GetAttackAnimation(CurrentDirection))
+{
+ArmorTopPartDisplayFlipbookComponent->SetFlipbook(ArmorTopPartInfo.GetAttackAnimation(CurrentDirection));
+}
+ArmorTopPartDisplayFlipbookComponent->SetLooping(false);
+ */
+#define PlAY_ANIMATION_ON_ITEM(itemName,animName,loop) {if(itemName##DisplayFlipbookComponent->GetFlipbook()!= itemName##Info.GetAttackAnimation(CurrentDirection)){itemName##DisplayFlipbookComponent->SetFlipbook(itemName##Info.Get##animName##Animation(CurrentDirection));}itemName##DisplayFlipbookComponent->SetLooping(loop);}
+	
 DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
 
 //////////////////////////////////////////////////////////////////////////
@@ -22,6 +30,7 @@ DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
 
 ARPGCharacterBase::ARPGCharacterBase()
 {
+	
 	// Use only Yaw from the controller and ignore the rest of the rotation.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = true;
@@ -283,35 +292,19 @@ void ARPGCharacterBase::UpdateAnimation()
 				SetAnimation(GetAttackAnimation(),false);
 				if(TopPartArmorItemId != -1)
 				{
-					if(ArmorTopPartDisplayFlipbookComponent->GetFlipbook() != ArmorTopPartInfo.GetAttackAnimation(CurrentDirection))
-					{
-						ArmorTopPartDisplayFlipbookComponent->SetFlipbook(ArmorTopPartInfo.GetAttackAnimation(CurrentDirection));
-					}
-					ArmorTopPartDisplayFlipbookComponent->SetLooping(false);
+					PlAY_ANIMATION_ON_ITEM(ArmorTopPart,Attack,false);
 				}
 				if(MiddlePartArmorItemId != -1)
 				{
-					if(ArmorMiddlePartDisplayFlipbookComponent->GetFlipbook() != ArmorMiddlePartInfo.GetAttackAnimation(CurrentDirection))
-					{
-						ArmorMiddlePartDisplayFlipbookComponent->SetFlipbook(ArmorMiddlePartInfo.GetAttackAnimation(CurrentDirection));
-					}
-					ArmorMiddlePartDisplayFlipbookComponent->SetLooping(false);
+					PlAY_ANIMATION_ON_ITEM(ArmorMiddlePart,Attack,false);
 				}
 				if(BottomPartArmorItemId != -1)
 				{
-					if(ArmorBottomPartDisplayFlipbookComponent->GetFlipbook() != ArmorBottomPartInfo.GetAttackAnimation(CurrentDirection))
-					{
-						ArmorBottomPartDisplayFlipbookComponent->SetFlipbook(ArmorBottomPartInfo.GetAttackAnimation(CurrentDirection));
-					}
-					ArmorBottomPartDisplayFlipbookComponent->SetLooping(false);
+					PlAY_ANIMATION_ON_ITEM(ArmorBottomPart,Attack,false);
 				}
 				if(ShieldItemId != -1)
 				{
-					if(ShieldDisplayFlipbookComponent->GetFlipbook() != ShieldInfo.GetAttackAnimation(CurrentDirection))
-					{
-						ShieldDisplayFlipbookComponent->SetFlipbook(ShieldInfo.GetAttackAnimation(CurrentDirection));
-					}
-					ShieldDisplayFlipbookComponent->SetLooping(false);
+					PlAY_ANIMATION_ON_ITEM(Shield,Attack,false);
 				}
 			}
 			else if(bPlayingDodgeRollAnimation && GetDodgeRollAnimation() != nullptr)
@@ -319,71 +312,39 @@ void ARPGCharacterBase::UpdateAnimation()
 				SetAnimation(GetDodgeRollAnimation(),false);
 				if(TopPartArmorItemId != -1)
 				{
-					if(ArmorTopPartDisplayFlipbookComponent->GetFlipbook() != ArmorTopPartInfo.GetDodgeRollAnimation(CurrentDirection))
-					{
-						ArmorTopPartDisplayFlipbookComponent->SetFlipbook(ArmorTopPartInfo.GetDodgeRollAnimation(CurrentDirection));
-					}
-					ArmorTopPartDisplayFlipbookComponent->SetLooping(false);
+					PlAY_ANIMATION_ON_ITEM(ArmorTopPart,DodgeRoll,false);
 				}
 				if(MiddlePartArmorItemId != -1)
 				{
-					if(ArmorMiddlePartDisplayFlipbookComponent->GetFlipbook() != ArmorMiddlePartInfo.GetDodgeRollAnimation(CurrentDirection))
-					{
-						ArmorMiddlePartDisplayFlipbookComponent->SetFlipbook(ArmorMiddlePartInfo.GetDodgeRollAnimation(CurrentDirection));
-					}
-					ArmorMiddlePartDisplayFlipbookComponent->SetLooping(false);
+					PlAY_ANIMATION_ON_ITEM(ArmorMiddlePart,DodgeRoll,false);
 				}
 				if(BottomPartArmorItemId != -1)
 				{
-					if(ArmorBottomPartDisplayFlipbookComponent->GetFlipbook() != ArmorBottomPartInfo.GetDodgeRollAnimation(CurrentDirection))
-					{
-						ArmorBottomPartDisplayFlipbookComponent->SetFlipbook(ArmorBottomPartInfo.GetDodgeRollAnimation(CurrentDirection));
-					}
-					ArmorBottomPartDisplayFlipbookComponent->SetLooping(false);
+					PlAY_ANIMATION_ON_ITEM(ArmorBottomPart,DodgeRoll,false);
 				}
 				if(ShieldItemId != -1)
 				{
-					if(ShieldDisplayFlipbookComponent->GetFlipbook() != ShieldInfo.GetDodgeRollAnimation(CurrentDirection))
-					{
-						ShieldDisplayFlipbookComponent->SetFlipbook(ShieldInfo.GetDodgeRollAnimation(CurrentDirection));
-					}
+					PlAY_ANIMATION_ON_ITEM(Shield,DodgeRoll,false);
 				}
-				ShieldDisplayFlipbookComponent->SetLooping(false);
 			}
 			else if(bIsShieldPutUp && GetShieldDrawnAnimation() != nullptr)
 			{
 				SetAnimation(GetShieldDrawnAnimation(),true);
 				if(TopPartArmorItemId != -1)
 				{
-					if(ArmorTopPartDisplayFlipbookComponent->GetFlipbook() != ArmorTopPartInfo.GetShieldDrawnAnimation(CurrentDirection))
-					{
-						ArmorTopPartDisplayFlipbookComponent->SetFlipbook(ArmorTopPartInfo.GetShieldDrawnAnimation(CurrentDirection));
-					}
-					ArmorTopPartDisplayFlipbookComponent->SetLooping(false);
+					PlAY_ANIMATION_ON_ITEM(ArmorTopPart,ShieldDrawn,false);
 				}
 				if(MiddlePartArmorItemId != -1)
 				{
-					if(ArmorMiddlePartDisplayFlipbookComponent->GetFlipbook() != ArmorMiddlePartInfo.GetShieldDrawnAnimation(CurrentDirection))
-					{
-						ArmorMiddlePartDisplayFlipbookComponent->SetFlipbook(ArmorMiddlePartInfo.GetShieldDrawnAnimation(CurrentDirection));
-					}
-					ArmorMiddlePartDisplayFlipbookComponent->SetLooping(false);
+					PlAY_ANIMATION_ON_ITEM(ArmorMiddlePart,ShieldDrawn,false);
 				}
 				if(BottomPartArmorItemId != -1)
 				{
-					if(ArmorBottomPartDisplayFlipbookComponent->GetFlipbook() != ArmorBottomPartInfo.GetShieldDrawnAnimation(CurrentDirection))
-					{
-						ArmorBottomPartDisplayFlipbookComponent->SetFlipbook(ArmorBottomPartInfo.GetShieldDrawnAnimation(CurrentDirection));
-					}
-					ArmorBottomPartDisplayFlipbookComponent->SetLooping(false);
+					PlAY_ANIMATION_ON_ITEM(ArmorBottomPart,ShieldDrawn,false);
 				}
 				if(ShieldItemId != -1)
 				{
-					if(ShieldDisplayFlipbookComponent->GetFlipbook() != ShieldInfo.GetShieldDrawnAnimation(CurrentDirection))
-					{
-						ShieldDisplayFlipbookComponent->SetFlipbook(ShieldInfo.GetShieldDrawnAnimation(CurrentDirection));
-					}
-					ShieldDisplayFlipbookComponent->SetLooping(false);
+					PlAY_ANIMATION_ON_ITEM(Shield,ShieldDrawn,false);
 				}
 			}
 			else if(!bPlayingAnimMontage)
