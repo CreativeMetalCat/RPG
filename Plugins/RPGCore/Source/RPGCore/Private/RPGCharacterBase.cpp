@@ -500,6 +500,7 @@ bool ARPGCharacterBase::AddItem_Implementation(FItemInfo item)
 	}
 	if(Count > 0)
 	{
+		item.CurrentAmount = Count;
 		Items.Add(item);
 	}
 	
@@ -915,11 +916,11 @@ void ARPGCharacterBase::UpdateCharacter()
 	// Set the rotation so that the character faces his direction of travel.
 	if (Controller != nullptr)
 	{
-		if(HorizontalDirection > 0.f  && VerticalDirection == 0.f)
+		if(HorizontalDirection < 0.f  && VerticalDirection == 0.f)
 		{
 			CurrentDirection = EDirection::ED_Left;
 		}
-		if(HorizontalDirection < 0.f && VerticalDirection == 0.f)
+		if(HorizontalDirection > 0.f && VerticalDirection == 0.f)
 		{
 			CurrentDirection = EDirection::ED_Right;
 		}
