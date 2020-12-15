@@ -288,6 +288,7 @@ void ARPGCharacterBase::SetAnimation(UPaperFlipbook* animation, bool Loop)
 	{
 		GetSprite()->SetFlipbook(animation);
 		GetSprite()->SetLooping(Loop);
+		GetSprite()->Play();
 	}
 }
 
