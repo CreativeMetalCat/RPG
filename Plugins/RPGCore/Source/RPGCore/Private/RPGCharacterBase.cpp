@@ -26,15 +26,18 @@ ArmorTopPartDisplayFlipbookComponent->SetLooping(false);
 	{\
 	itemName##DisplayFlipbookComponent->SetFlipbook(itemName##Info.Get##animName##Animation(CurrentDirection));\
 	}\
-	itemName##DisplayFlipbookComponent->SetLooping(loop);}
+	itemName##DisplayFlipbookComponent->SetLooping(loop);\
+	itemName##DisplayFlipbookComponent->Play();\
+	}
 
 #define PlAY_ANIMATION_ON_ITEM_WITH_SELECTION(itemName,animName1,animName2,condition,loop) {\
-if(itemName##DisplayFlipbookComponent->GetFlipbook()!= (condition?itemName##Info.Get##animName1##Animation(CurrentDirection):itemName##Info.Get##animName2##Animation(CurrentDirection)))\
-{\
-itemName##DisplayFlipbookComponent->SetFlipbook(condition?itemName##Info.Get##animName1##Animation(CurrentDirection):itemName##Info.Get##animName2##Animation(CurrentDirection));\
-}\
-itemName##DisplayFlipbookComponent->SetLooping(loop);\
-}
+	if(itemName##DisplayFlipbookComponent->GetFlipbook()!= (condition?itemName##Info.Get##animName1##Animation(CurrentDirection):itemName##Info.Get##animName2##Animation(CurrentDirection)))\
+	{\
+		itemName##DisplayFlipbookComponent->SetFlipbook(condition?itemName##Info.Get##animName1##Animation(CurrentDirection):itemName##Info.Get##animName2##Animation(CurrentDirection));\
+	}\
+	itemName##DisplayFlipbookComponent->SetLooping(loop);\
+	itemName##DisplayFlipbookComponent->Play();\
+	}
 	
 DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
 
