@@ -21,8 +21,13 @@ class RPGCORE_API AEnemyAIBase : public AAIController, public IAIInterface
 	GENERATED_BODY()
 protected:
 	FTimerHandle RandomMovementTimerHandle;
+
+	FTimerHandle AIUpdateTimerHandle;
 public:
 	AEnemyAIBase();
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite,Category="Perception")
+	UAIPerceptionComponent* AIPerceptionComponent;
 	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "Movement|Random")
 	float MaxDistanceOfRandomMovement = 300.f;
@@ -80,6 +85,15 @@ public:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = Movement)
 	EAIMovementType MovementType = EAIMovementType::EAIMT_Random;
 
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = Enemies)
+	TArray<FName> EnemyTags;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Target")
+	AActor* CurrentTarget = nullptr;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Update")
+	float AIUpdateRate = 1.f;
+	
 	UFUNCTION(BlueprintCallable,Category="Movement|Patrolling")
 	void SetNewPatrolPoint();
 
@@ -92,6 +106,12 @@ public:
 	UFUNCTION(BlueprintCallable,Category="Movement|Random")
     void SetNextGoalForRandomMovement();
 
+	UFUNCTION(BlueprintCallable,Category="Update")
+	void Update();
+
+	UFUNCTION(BlueprintPure,Category="Enemies")
+	bool IsEnemy(AActor*Actor,bool doChildrenCount = false);
+	
 	virtual void BeginPlay() override;
 
 	

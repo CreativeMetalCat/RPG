@@ -67,11 +67,15 @@ void AEnemyCharacterBase::BeginPlay()
 {
     Super::BeginPlay();
 
-    GetWorldTimerManager().SetTimer(AIUpdateHandle,this,&AEnemyCharacterBase::UpdateAI,AIUpdateRate,true);
+}
+
+TArray<FName> AEnemyCharacterBase::GetEnemyTags_Implementation()
+{
+    return EnemyTags;
 }
 
 void AEnemyCharacterBase::OnAttackCollisionOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                                        UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
     if(OverlappedComp == UpperCollision)
     {

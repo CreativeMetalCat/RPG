@@ -6,9 +6,12 @@
 #include "EnemyCharacterBase.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Engine/TargetPoint.h"
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISense_Sight.h"
 
 AEnemyAIBase::AEnemyAIBase()
 {
+   AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception"));
    
 }
 
@@ -86,6 +89,58 @@ void AEnemyAIBase::SetNextGoalForRandomMovement()
    } 
 }
 
+void AEnemyAIBase::Update()
+{
+   if(GetPawn())
+   {
+      if(Cast<IAIInterface>(GetPawn()) || GetPawn()->Implements<UAIInterface>())
+      {
+         //Actors currently seen by ai
+         TArray<AActor*> SensedActors;
+         AIPerceptionComponent->GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(),SensedActors);
+
+         if (SensedActors.Find(CurrentTarget) != INDEX_NONE)
+         {
+            //do stuff if target is still visible/in range
+         }
+         else if (SensedActors.Num() > 0) //find target, but only if we sense anyone
+         {
+            for (int i = 0; i < SensedActors.Num(); i++)
+            {
+               if (IsEnemy(SensedActors[i]))
+               {
+                  SetNewTarget(SensedActors[i]);
+                  return;
+               }
+            }
+         }
+      }
+   }
+}
+
+bool AEnemyAIBase::IsEnemy(AActor* Actor, bool doChildrenCount)
+{
+   if(Actor)
+   {
+      for (int i = 0; i < EnemyTags.Num(); i++)
+      {
+         if(Actor->Tags.Find(EnemyTags[i]))
+         {
+            if(ARPGCharacterBase * character = Cast<ARPGCharacterBase>(Actor))
+            {
+               return !character->bDead;
+            }
+            else
+            {
+               return true;
+            }
+         }
+      }
+   }
+   return false;
+}
+
+
 void AEnemyAIBase::BeginPlay()
 {
    Super::BeginPlay();
@@ -105,6 +160,15 @@ void AEnemyAIBase::BeginPlay()
          /*Setup patrol movement*/
          PatrolPoints = Enemy->PatrolPoints;
          bRandomPatrol = Enemy->bRandomPatrol;
+
+         /*Setup ai hatred*/
+         if(Cast<IAIInterface>(GetPawn()) || GetPawn()->Implements<UAIInterface>())
+         {
+           EnemyTags =  IAIInterface::Execute_GetEnemyTags(GetPawn());
+         }
+
+         //setup AI update timer
+         GetWorldTimerManager().SetTimer(AIUpdateTimerHandle,this,&AEnemyAIBase::Update,AIUpdateRate,true);
 
          GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,FString::FromInt(Enemy->PatrolPoints.Num()));
       }
@@ -138,6 +202,7 @@ void AEnemyAIBase::BeginPlay()
 
 void AEnemyAIBase::SetNewTarget_Implementation(AActor* Target)
 {
+   CurrentTarget = Target;
    if(Blackboard)
    {
       if(Target != nullptr)

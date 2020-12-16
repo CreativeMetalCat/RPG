@@ -33,4 +33,10 @@ public:
 	/*Passing nullptr MUST clear the value*/
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category="AI|Target")
 	void SetNewTarget(AActor*Target);
+	
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category="AI|Target")
+	TArray<FName> GetEnemyTags();
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category="AI|Sense")
+	TArray<AActor*> GetCurrentlySensedActors();
 };
