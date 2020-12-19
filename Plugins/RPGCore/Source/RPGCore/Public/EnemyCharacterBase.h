@@ -56,9 +56,6 @@ public:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "AI|Movement")
 	EAIMovementType MovementType = EAIMovementType::EAIMT_Random;
 
-	UFUNCTION(BlueprintCallable,Category = "AI|Update")
-	void UpdateAI();
-
 	virtual void BeginPlay() override;
 
 	virtual ARPGCharacterBase* GetCurrentTarget_Implementation() override{return CurrentTarget;}

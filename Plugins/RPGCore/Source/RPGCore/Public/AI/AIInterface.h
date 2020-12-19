@@ -39,4 +39,7 @@ public:
 
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category="AI|Sense")
 	TArray<AActor*> GetCurrentlySensedActors();
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category="Saving")
+	FVector GetLastSeenLocation();
 };

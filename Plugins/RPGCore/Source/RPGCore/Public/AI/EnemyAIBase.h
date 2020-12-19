@@ -80,6 +80,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "Movement|Target|Blackboard")
 	FName BlackboardTargetName = TEXT("Target");
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "Movement|Target|Blackboard")
+	FName LastSeenLocationName = TEXT("LastSeenLocation");
 	
 	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = Movement)
@@ -90,6 +93,9 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Target")
 	AActor* CurrentTarget = nullptr;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Target")
+	FVector LastSeenLocation;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Update")
 	float AIUpdateRate = 1.f;
@@ -109,13 +115,21 @@ public:
 	UFUNCTION(BlueprintCallable,Category="Update")
 	void Update();
 
+	UFUNCTION(BlueprintCallable,Category = "Movement|Target|Blackboard")
+	void ResetLastSeenLocation();
+
 	UFUNCTION(BlueprintPure,Category="Enemies")
-	bool IsEnemy(AActor*Actor,bool doChildrenCount = false);
+	bool IsEnemy(AActor*Actor);
 	
 	virtual void BeginPlay() override;
 
 	
 	virtual void SetNewTarget_Implementation(AActor* Target) override;
+
+	virtual FVector GetLastSeenLocation_Implementation() override{return LastSeenLocation;}
+
+	//This function only exists to avoid errors related to interfaces
+	virtual void SetTarget(AActor*Target);
 
 	virtual FVector GetCurrentRandomPointGoal_Implementation() override { return RandomMovementGoal; }
 

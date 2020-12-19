@@ -99,9 +99,18 @@ void AEnemyAIBase::Update()
          TArray<AActor*> SensedActors;
          AIPerceptionComponent->GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(),SensedActors);
 
+         /*The idea of how it works
+          * IT checks if we still see player -> if we don't we start checking if anyone we see can be a target ->
+          * -> if we see someone who fits we set it as target -> finish execution
+          * -> if we don't or just don't see anyone -> clear target -> finish the execution
+          */
          if (SensedActors.Find(CurrentTarget) != INDEX_NONE)
          {
             //do stuff if target is still visible/in range
+
+            //record last seen location, but don't set it yet
+            LastSeenLocation = CurrentTarget->GetActorLocation();
+            return;
          }
          else if (SensedActors.Num() > 0) //find target, but only if we sense anyone
          {
@@ -109,22 +118,40 @@ void AEnemyAIBase::Update()
             {
                if (IsEnemy(SensedActors[i]))
                {
-                  SetNewTarget(SensedActors[i]);
+                  SetTarget(SensedActors[i]);
                   return;
                }
-            }
+            }        
          }
+         
+         if(Blackboard && CurrentTarget)//set only if we saw target recently
+         {
+            LastSeenLocation = CurrentTarget->GetActorLocation();
+            Blackboard->SetValueAsVector(LastSeenLocationName,LastSeenLocation);
+         }
+         
+         //Just Clear target if we didn't find anyone who fits
+         SetTarget(nullptr);
       }
    }
 }
 
-bool AEnemyAIBase::IsEnemy(AActor* Actor, bool doChildrenCount)
+void AEnemyAIBase::ResetLastSeenLocation()
+{
+   //Resetting is simple -> just clear value and that's it
+   if(Blackboard)
+   {
+      Blackboard->ClearValue(LastSeenLocationName);
+   }
+}
+
+bool AEnemyAIBase::IsEnemy(AActor* Actor)
 {
    if(Actor)
    {
       for (int i = 0; i < EnemyTags.Num(); i++)
       {
-         if(Actor->Tags.Find(EnemyTags[i]))
+         if(Actor->Tags.Find(EnemyTags[i]) != INDEX_NONE)
          {
             if(ARPGCharacterBase * character = Cast<ARPGCharacterBase>(Actor))
             {
@@ -201,6 +228,11 @@ void AEnemyAIBase::BeginPlay()
 }
 
 void AEnemyAIBase::SetNewTarget_Implementation(AActor* Target)
+{
+   SetTarget(Target);
+}
+
+void AEnemyAIBase::SetTarget(AActor* Target)
 {
    CurrentTarget = Target;
    if(Blackboard)
