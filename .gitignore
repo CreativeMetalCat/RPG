@@ -14,3 +14,5 @@ Saved
 *.xcodeproj
 *.xcworkspace
 Retro8BitSounds.png
+Build/WindowsNoEditor/FileOpenOrder/CookerOpenOrder.log
+Build/WindowsNoEditor/FileOpenOrder/EditorOpenOrder.log
