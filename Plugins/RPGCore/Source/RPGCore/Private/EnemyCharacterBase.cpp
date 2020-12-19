@@ -64,7 +64,6 @@ void AEnemyCharacterBase::BeginPlay()
 void AEnemyCharacterBase::CheckAttackCollision()
 {
     //because we can only attack one enemy at once, it will simply attack the first one in line
-    GEngine->AddOnScreenDebugMessage(-1,1.f,FColor::Magenta,CurrentTarget == nullptr? "Valid": "Invalid");
     if (CurrentTarget)
     {
         if (bAnythingOverlappingUpperCollision)
@@ -75,7 +74,6 @@ void AEnemyCharacterBase::CheckAttackCollision()
         if (bAnythingOverlappingRightCollision)
         {
             CHECK_AND_ATTACK(Right, Right);
-            GEngine->AddOnScreenDebugMessage(-1,1.f,FColor::Magenta,"Text");
             return;
         }
         if (bAnythingOverlappingLowerCollision)
@@ -103,16 +101,16 @@ void AEnemyCharacterBase::GetActorEyesViewPoint(FVector& Location, FRotator& Rot
     switch (CurrentDirection)
     {
     case EDirection::ED_Down:
-        Rotation = FRotator(0,0,90);
+        Rotation = FRotator(0,90,0);
         break;
     case EDirection::ED_Up:
-        Rotation = FRotator(0,0,270);
+        Rotation = FRotator(0,270,0);
         break;
     case EDirection::ED_Right:
         Rotation = FRotator(0,0,0);
         break;
     case EDirection::ED_Left:
-        Rotation = FRotator(0,0,180);
+        Rotation = FRotator(0,180,0);
         break;
     default:
         break;
