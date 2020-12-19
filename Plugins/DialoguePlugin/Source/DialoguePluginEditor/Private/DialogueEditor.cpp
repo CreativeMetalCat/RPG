@@ -124,15 +124,15 @@ TSharedRef<SDockTab> FDialogueEditor::SpawnTab_Details(const FSpawnTabArgs& Args
 void FDialogueEditor::PostUndo(bool bSuccess)
 {
 	//UE_LOG(LogTemp, Log, TEXT("post undo!"));
-		if (bSuccess)
-		{			
-			GetDialogueBeingEdited()->CurrentNodeId = -1;
+	if (bSuccess)
+	{
+		GetDialogueBeingEdited()->CurrentNodeId = -1;
 
-			DialogueViewportWidget->SpawnNodes();
-			DialogueViewportWidget->ForceRefresh();
-			
-			FSlateApplication::Get().DismissAllMenus();
-		}
+		DialogueViewportWidget->SpawnNodes();
+		DialogueViewportWidget->ForceRefresh();
+
+		FSlateApplication::Get().DismissAllMenus();
+	}
 }
 
 void FDialogueEditor::PostRedo(bool bSuccess)

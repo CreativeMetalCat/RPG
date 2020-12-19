@@ -82,6 +82,21 @@ UEMSInfoSaveGame* UEMSFunctionLibrary::GetNamedSlotInfo(UObject* WorldContextObj
 	return nullptr;
 }
 
+bool UEMSFunctionLibrary::DoesSaveSlotExist(UObject* WorldContextObject, const FString& SaveGameName)
+{
+	if (SaveGameName.IsEmpty())
+	{
+		return false;
+	}
+
+	if (UEMSObject* EMS = UEMSObject::Get(WorldContextObject))
+	{
+		return EMS->DoesSaveGameExist(SaveGameName);
+	}
+
+	return false;
+}
+
 /**
 Persistent Save Game
 **/

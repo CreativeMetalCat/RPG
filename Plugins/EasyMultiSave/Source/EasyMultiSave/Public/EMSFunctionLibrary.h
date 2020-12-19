@@ -58,6 +58,15 @@ public:
 	static void SetCurrentSaveUserName(UObject* WorldContextObject, const FString& UserName);
 
 	/**
+	* Check if a specific save slot exists. 
+
+	* @param SaveGameName - The save slot to look for.
+	* @return - If the slot is valid.
+	*/
+	UFUNCTION(BlueprintPure, Category = "Easy Multi Save | Slots", meta = (WorldContext = "WorldContextObject", DisplayName = "Does Save Slot Exist"))
+	static bool DoesSaveSlotExist(UObject* WorldContextObject, const FString& SaveGameName);
+
+	/**
 	* Loads the persistent save file.
 	* With this, you can easily cast to your own persistent file.
 	*

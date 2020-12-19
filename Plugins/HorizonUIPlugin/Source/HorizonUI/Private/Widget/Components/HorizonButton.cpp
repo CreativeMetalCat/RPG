@@ -10,6 +10,12 @@ void UHorizonButton::OnWidgetRebuilt()
 	Super::OnWidgetRebuilt();
 	if (!IsDesignTime())
 	{
+
+		OnPressed.RemoveDynamic(this, &ThisClass::OnPressedButton);
+		OnReleased.RemoveDynamic(this, &ThisClass::OnReleasedButton);
+		OnClicked.RemoveDynamic(this, &ThisClass::OnClickedButton);
+		OnHovered.RemoveDynamic(this, &ThisClass::OnHoveredButton);
+		OnUnhovered.RemoveDynamic(this, &ThisClass::OnUnhoveredButton);
 		OnPressed.AddDynamic(this, &ThisClass::OnPressedButton);
 		OnReleased.AddDynamic(this, &ThisClass::OnReleasedButton);
 		OnClicked.AddDynamic(this, &ThisClass::OnClickedButton);

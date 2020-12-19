@@ -21,6 +21,27 @@ class UMaterial;
 class UPaperSprite;
 class USoundBase;
 
+
+
+USTRUCT(BlueprintType)
+struct FHorizonDialogueSegmentInfoRubyTextStyle
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RubyText")
+	TArray<FString> Text;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RubyText")
+	TArray<FSlateColor> ColorAndOpacity;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RubyText")
+	TArray<FSlateFontInfo> Font;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RubyText")
+	TArray<FVector2D> ShadowOffset;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RubyText")
+	TArray<FSlateColor> ShadowColorAndOpacity;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RubyText")
+	TArray<FMargin> PaddingMargin;
+};
+
 USTRUCT(BlueprintType)
 struct FHorizonDialogueSegmentInfoStyle
 {
@@ -100,7 +121,10 @@ public: //for tag <pfb> or <PaperFlipBook>, ignore case
 public:
 	//image size for Texture2D, Material or PaperFlipbook
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Image")
-		TArray<FVector2D> ImageSize;
+	TArray<FVector2D> ImageSize;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "RubyText")
+	FHorizonDialogueSegmentInfoRubyTextStyle RubyTextStyleInfo;
 };
 
 
@@ -113,7 +137,7 @@ class HORIZONUI_API UHorizonDialogueStyleInfo: public UObject
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "StyleList")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "StyleList", meta = (TitleProperty = "StyleName"))
 	TArray<FHorizonDialogueSegmentInfoStyle> SegmentStyleList;
 
 

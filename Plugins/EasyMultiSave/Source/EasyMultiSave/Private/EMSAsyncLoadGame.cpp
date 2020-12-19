@@ -83,6 +83,12 @@ void UEMSAsyncLoadGame::LoadPlayer()
 	{
 		if (Data & ENUM_TO_FLAG(ELoadTypeFlags::LF_Player))
 		{
+			if (!EMS->HasValidPlayer())
+			{
+				EMS->GetTimerManager().SetTimerForNextTick(this, &UEMSAsyncLoadGame::LoadPlayer);
+				return;
+			}
+
 			if (EMS->TryLoadPlayerFile())
 			{
 				EMS->LoadPlayerActors(this);
@@ -99,6 +105,12 @@ void UEMSAsyncLoadGame::LoadLevel()
 	{
 		if (Data & ENUM_TO_FLAG(ELoadTypeFlags::LF_Level))
 		{
+			if (!EMS->HasValidGameMode())
+			{
+				EMS->GetTimerManager().SetTimerForNextTick(this, &UEMSAsyncLoadGame::LoadLevel);
+				return;
+			}
+
 			if (EMS->TryLoadLevelFile())
 			{
 				EMS->LoadLevelActors(this);

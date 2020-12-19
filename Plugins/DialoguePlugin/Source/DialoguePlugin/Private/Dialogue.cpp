@@ -136,3 +136,32 @@ UWorld* UDialogueEvents::GetWorld() const
 		return nullptr;
 	}
 }
+
+#if WITH_EDITOR
+/*
+* If we add a comment to a node, but bDrawBubbleComment is false, set it to true so it's instantly displayed.
+*/
+void UDialogue::PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+	if (PropertyChangedEvent.GetPropertyName().ToString().Equals(TEXT("BubbleComment"), ESearchCase::CaseSensitive))
+	{
+		if (CurrentNodeId < 0)
+		{
+			return;
+		}
+		int32 index;
+		FDialogueNode selectedNodeCopy = GetNodeById(CurrentNodeId, index);		
+		// if bDrawBubble is false, but BobbleComment contains text
+		if (!selectedNodeCopy.bDrawBubbleComment && !selectedNodeCopy.BubbleComment.EqualTo(FText::GetEmpty()))
+		{
+			Data[index].bDrawBubbleComment = true;
+		}
+		// if bDrawBubble is true, but BobbleComment is empty
+		if (selectedNodeCopy.bDrawBubbleComment && selectedNodeCopy.BubbleComment.EqualTo(FText::GetEmpty()))
+		{
+			Data[index].bDrawBubbleComment = false;
+		}
+	}
+}
+#endif

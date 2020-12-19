@@ -10,6 +10,12 @@
 #include "Widget/Components/HorizonTextBlock.h"
 #include "Widget/Components/HorizonButton.h"
 #include "Widget/Components/HorizonFlipbookWidget.h"
+#include "Decorator/HorizonDialogueMsgDecorator.h"
+
+//// UnrealEd
+//#if WITH_EDITOR
+//#include "FileHelpers.h"
+//#endif
 
 
 
@@ -97,6 +103,30 @@ namespace horizonui
 					segParam.DialogueSoundStartTime = it.DialogueSoundStartTime.Last();
 				}
 
+				if (it.RubyTextStyleInfo.Text.Num() > 0)
+				{
+					segParam.RubyTextInfo.Text = it.RubyTextStyleInfo.Text.Last();
+				}
+				if(it.RubyTextStyleInfo.ColorAndOpacity.Num() > 0)
+				{
+					segParam.RubyTextInfo.ColorAndOpacity = it.RubyTextStyleInfo.ColorAndOpacity.Last();
+				}
+				if (it.RubyTextStyleInfo.Font.Num() > 0)
+				{
+					segParam.RubyTextInfo.Font = it.RubyTextStyleInfo.Font.Last();
+				}
+				if (it.RubyTextStyleInfo.ShadowOffset.Num() > 0)
+				{
+					segParam.RubyTextInfo.ShadowOffset = it.RubyTextStyleInfo.ShadowOffset.Last();
+				}
+				if (it.RubyTextStyleInfo.ShadowColorAndOpacity.Num() > 0)
+				{
+					segParam.RubyTextInfo.ShadowColorAndOpacity = it.RubyTextStyleInfo.ShadowColorAndOpacity.Last();
+				}
+				if (it.RubyTextStyleInfo.PaddingMargin.Num() > 0)
+				{
+					segParam.RubyTextInfo.PaddingMargin = it.RubyTextStyleInfo.PaddingMargin.Last();
+				}
 				break;
 			}
 		}
@@ -181,11 +211,43 @@ UHorizonDialogueMsgTextBlock::UHorizonDialogueMsgTextBlock()
 
 	}
 
-
 }
 
 
 
+
+void UHorizonDialogueMsgTextBlock::PostLoad()
+{
+	Super::PostLoad();
+	if (EHorizonDialogueTextOverflowWarpMethod_DEPRECATED::Invalidated != TextOverFlowWarpMethod_DEPRECATED)
+	{
+		TextOverFlowWrapMethod = (EHorizonDialogueTextOverflowWrapMethod)TextOverFlowWarpMethod_DEPRECATED;
+		TextOverFlowWarpMethod_DEPRECATED = EHorizonDialogueTextOverflowWarpMethod_DEPRECATED::Invalidated;
+#if WITH_EDITOR
+
+#if (ENGINE_MAJOR_VERSION <= 4) && (ENGINE_MINOR_VERSION <= 25)
+#else
+		UPackage* pPackage = GetPackage();
+		if (pPackage)
+		{
+			pPackage->SetDirtyFlag(true);
+			FString msg = FString::Printf(TEXT("Please Resave %s for TextOverFlowWarpMethod_DEPRECATED, or It will not work in future release"), *pPackage->GetPathName());
+			UE_HORIZONUI_WARNING("%s", *msg);
+			ensureMsgf(false, TEXT("%s"), *msg);
+			FMessageLog("HorizonUI").Warning(FText::FromString(msg));
+			//FMessageLog("HorizonUI").Notify(FText::FromString(msg));
+		}
+#endif	
+
+		//TArray<UPackage*> savePackage;
+		//savePackage.Add(GetPackage());
+		////savePackage.Add(pCDO->GetPackage());
+		//const FEditorFileUtils::EPromptReturnCode saveResult =
+		//	FEditorFileUtils::PromptForCheckoutAndSave(savePackage, true, true, nullptr, false, false);
+		//FEditorFileUtils::SaveDirtyPackages(false, false, true, false, true, true);
+#endif
+	}
+}
 
 #if 1  //============================Begin Widget override=============================
 
@@ -219,11 +281,13 @@ void UHorizonDialogueMsgTextBlock::ReleaseSlateResources(bool bReleaseChildren)
 
 TSharedRef<SWidget> UHorizonDialogueMsgTextBlock::RebuildWidget() 
 {
+
 	return Super::RebuildWidget();
 }
 void UHorizonDialogueMsgTextBlock::OnWidgetRebuilt()
 {
 	Super::OnWidgetRebuilt();
+	
 	if (!bCreationFromPalette) {
 
 		bNeedRebuildDialogueMsgText = true;
@@ -231,6 +295,8 @@ void UHorizonDialogueMsgTextBlock::OnWidgetRebuilt()
 	else {
 		bCreationFromPalette = false;
 	}
+
+
 	//GetWorld()->ForceGarbageCollection(true);
 }
 void UHorizonDialogueMsgTextBlock::OnBindingChanged(const FName& Property)
@@ -359,7 +425,7 @@ void UHorizonDialogueMsgTextBlock::Tick(float DeltaTime) {
 	if (bNeedRebuildDialogueMsgText)
 	{
 		auto geometry = GetCachedGeometry();
-		if (geometry.Size.X > 0)
+		if (geometry.Size.X > 0 || bForceRebuildDialogueMsgText)
 		{
 			bNeedRebuildDialogueMsgText = false;
 			RebuildDialogueMsgTextBlock();
@@ -411,7 +477,13 @@ void UHorizonDialogueMsgTextBlock::Tick(float DeltaTime) {
 							}
 						}
 						//advanced blockIndex
-						if (blockInfo.CurrentCharIndex >= blockInfo.MsgText.Len()) {
+						if (blockInfo.CurrentCharIndex >= blockInfo.MsgText.Len()) 
+						{
+							if(blockInfo.RubyTextWeakPtr.IsValid())
+							{
+								blockInfo.RubyTextWeakPtr->SetText(FText::FromString(blockInfo.RubyText));
+								blockInfo.RubyTextWeakPtr->SetVisibility(ESlateVisibility::HitTestInvisible);
+							}
 							++lineInfo.CurrentDialogueBlockIndex;
 						}
 
@@ -449,13 +521,16 @@ void UHorizonDialogueMsgTextBlock::Tick(float DeltaTime) {
 					auto currentPosition = canvasPanelSlot->GetPosition();
 					if (CurrentPageIndex > 0)
 					{
-						currentPosition.Y = lineInfo.Position.Y - CurrentPageHeightOffset;
+						float paddingMarginTop = DialogueSegmentInfoList[blockInfo.SegmentReferenceIndex].PaddingMargin.Top;
+						currentPosition.Y = lineInfo.Position.Y - CurrentPageHeightOffset + paddingMarginTop;
 					}
+#if !UE_BUILD_SHIPPING
 					//Debug auto page position
-					//if (currentPageInfo.StartLineIndex == CurrentDialogueLineIndex)
-					//{
-					//	UE_LOG(LogTemp, Log, TEXT("page %d, line: %d, %f"), CurrentPageIndex, CurrentDialogueLineIndex, currentPosition.Y);
-					//}
+					if (currentPageInfo.StartLineIndex == CurrentDialogueLineIndex)
+					{
+						UE_HORIZONUI_VERBOSE("page %d, line: %d, %f", CurrentPageIndex, CurrentDialogueLineIndex, currentPosition.Y);
+					}
+#endif
 					canvasPanelSlot->SetPosition(currentPosition);
 					if (blockInfo.WidgetBackgroundWeakPtr.IsValid())
 					{
@@ -465,6 +540,12 @@ void UHorizonDialogueMsgTextBlock::Tick(float DeltaTime) {
 						{
 							buttonCanvasPanelSlot->SetPosition(currentPosition);
 						}
+					}
+
+					if (blockInfo.RubyTextWeakPtr.IsValid())
+					{
+						SetupRubyTextPosition(currentPosition, blockInfo, segInfo);
+		
 					}
 				}
 				else
@@ -531,14 +612,14 @@ void UHorizonDialogueMsgTextBlock::TickRepeatDialogue(float DeltaTime)
 			//ResetDialogueText();
 			RepeatDialogueMsgDeltaTime += DeltaTime;
 			if (RepeatDialogueMsgDeltaTime >= RepeatDialogueMsgInterval) {
-				SetIsStartTickDialogueMsg(true);
+				SetIsStartTickDialogueMsg(true, true);
 				OnDialogueMsgLoopFunction.Broadcast();
 				OnDialogueMsgLoopFunctionNative.Broadcast();
 				RepeatDialogueMsgDeltaTime = 0.0f;
 			}
 		}
 		else {
-			SetIsStartTickDialogueMsg(false);
+			SetIsStartTickDialogueMsg(false, false);
 			OnDialogueMsgCompleteFunction.Broadcast();
 			OnDialogueMsgCompleteFunctionNative.Broadcast();
 
@@ -730,9 +811,11 @@ void UHorizonDialogueMsgTextBlock::SetDialogueMsgSpeed(float speed) {
 	}
 }
 
-void UHorizonDialogueMsgTextBlock::SetIsStartTickDialogueMsg(bool b) {
-	bIsStartTickDialogueMsg = b;
-	if (bIsStartTickDialogueMsg) {
+void UHorizonDialogueMsgTextBlock::SetIsStartTickDialogueMsg(bool bShouldStartTick, bool bShouldResetDialogue) 
+{
+	bIsStartTickDialogueMsg = bShouldStartTick;
+	if (bShouldResetDialogue)
+	{
 		ResetDialogueMsgText();
 	}
 }
@@ -770,7 +853,7 @@ bool UHorizonDialogueMsgTextBlock::IsNeedRebuildDialogueMsgText()
 #if 1 //============================Begin DialogueMsg=============================
 void UHorizonDialogueMsgTextBlock::StartDialogue()
 {
-	SetIsStartTickDialogueMsg(true);
+	SetIsStartTickDialogueMsg(true, true);
 };
 
 
@@ -779,13 +862,16 @@ void UHorizonDialogueMsgTextBlock::StopDialogue()
 	//reset dialogue
 	ResetDialogueMsgText();
 	//stop tick
-	SetIsStartTickDialogueMsg(false);
+	SetIsStartTickDialogueMsg(false, false);
 }
 
 
 void UHorizonDialogueMsgTextBlock::SkipDialogue()
 {
-	SetDialogueMsgPage(DialoguePageInfoList.Num() - 1);
+	if (GetCurrentPageIndex() != DialoguePageInfoList.Num() - 1)
+	{
+		SetDialogueMsgPage(DialoguePageInfoList.Num() - 1);
+	}
 	SkipCurrentDialoguePage();
 }
 
@@ -797,12 +883,14 @@ void UHorizonDialogueMsgTextBlock::SkipDialogue()
 
 void UHorizonDialogueMsgTextBlock::PauseDialogue()
 {
-	bIsStartTickDialogueMsg = false;
+	SetIsStartTickDialogueMsg(false, false);
+
 }
 
 void UHorizonDialogueMsgTextBlock::ResumeDialogue()
 {
-	bIsStartTickDialogueMsg = true;
+	SetIsStartTickDialogueMsg(true, false);
+
 }
 
 void UHorizonDialogueMsgTextBlock::ResetDialogueMsgText()
@@ -821,6 +909,11 @@ void UHorizonDialogueMsgTextBlock::ResetDialogueMsgText()
 				{
 					blockInfoIt.WidgetBackgroundWeakPtr->SetVisibility(ESlateVisibility::Hidden);
 				}
+				if (blockInfoIt.RubyTextWeakPtr.IsValid())
+				{
+					blockInfoIt.RubyTextWeakPtr->SetVisibility(ESlateVisibility::Hidden);
+				}
+				
 			}
 		}
 
@@ -848,16 +941,20 @@ void UHorizonDialogueMsgTextBlock::RebuildDialogueMsgTextBlock()
 
 
 	RebuildBlockInfoJustification();
+	//RebuildBlockInfoDecoration();
+
 
 
 
 
 	MsgDeltaTime = 0.0f;
-	if (bIsDialogueMsgText) {
-		SetIsStartTickDialogueMsg(true);
+	if (bIsDialogueMsgText)
+	{
+		SetIsStartTickDialogueMsg(true, true);
 	}
-	else {
-		SetIsStartTickDialogueMsg(false);
+	else 
+	{
+		SetIsStartTickDialogueMsg(false, false);
 	}
 
 	CalculateAutoNextDialogueMsgPageInterval();
@@ -892,17 +989,71 @@ void UHorizonDialogueMsgTextBlock::TriggerPlaySound(FHorizonDialogueSegmentInfo&
 #endif //============================End DialogueMsg=============================
 
 #if 1 //============================Begin DialogueMsg Page=============================
-void UHorizonDialogueMsgTextBlock::NextDialogueMsgPage()
+void UHorizonDialogueMsgTextBlock::NextDialogueMsgPage(bool bShouldStartTick)
 {
-	++CurrentPageIndex;
-	CurrentPageIndex = FMath::Min(CurrentPageIndex, DialoguePageInfoList.Num());
-	SetDialogueMsgPage(CurrentPageIndex);
+	int32 newPage = CurrentPageIndex + 1;
+
+	if(newPage >= DialoguePageInfoList.Num())
+	{ 
+		if (bIsRepeatDialogueMsg)
+		{
+			newPage = 0;
+			SetDialogueMsgPage(newPage, bShouldStartTick);
+		}
+		else
+		{
+			newPage = DialoguePageInfoList.Num() - 1;
+		}
+		
+	}
+	if (newPage != CurrentPageIndex)
+	{
+		SetDialogueMsgPage(newPage, bShouldStartTick);
+	}
 
 }
 
 
 
-void UHorizonDialogueMsgTextBlock::SetDialogueMsgPage(int32 InPageIndex)
+void UHorizonDialogueMsgTextBlock::PrevDialogueMsgPage(bool bShouldStartTick)
+{
+	int32 newPage = CurrentPageIndex - 1;
+
+	if (newPage < 0)
+	{
+		newPage = 0;
+	}
+	if (newPage != CurrentPageIndex)
+	{
+		SetDialogueMsgPage(newPage, bShouldStartTick);
+	}
+
+}
+
+
+TOptional<float> UHorizonDialogueMsgTextBlock::GetMinimalPaddingMarginTopOffset(const FHorizonDialogueLineInfo& InLineInfo)
+{
+	TOptional<float> minPadingMarginTopOffset;
+	for (auto& blockInfoIt : InLineInfo.DialogueBlockInfoList)
+	{
+		// skip zero
+		if (!FMath::IsNearlyZero(DialogueSegmentInfoList[blockInfoIt.SegmentReferenceIndex].PaddingMargin.Top))
+		{
+			if (!minPadingMarginTopOffset.IsSet())
+			{
+				minPadingMarginTopOffset = DialogueSegmentInfoList[blockInfoIt.SegmentReferenceIndex].PaddingMargin.Top;
+			}
+			else
+			{
+				minPadingMarginTopOffset = FMath::Min(minPadingMarginTopOffset.GetValue(), DialogueSegmentInfoList[blockInfoIt.SegmentReferenceIndex].PaddingMargin.Top);
+			}
+		}
+	}
+
+	return minPadingMarginTopOffset;
+}
+
+void UHorizonDialogueMsgTextBlock::SetDialogueMsgPage(int32 InPageIndex, bool bShouldStartTick)
 {
 	if (InPageIndex < DialoguePageInfoList.Num())
 	{
@@ -916,9 +1067,66 @@ void UHorizonDialogueMsgTextBlock::SetDialogueMsgPage(int32 InPageIndex)
 			CurrentPageHeightOffset += DialoguePageInfoList[i].PageHeight;
 			CurrentPageHeightOffset = CurrentPageHeightOffset + (LineMargin.Bottom - LineMargin.Top);
 		}
+		//MaxLineHeight
 		CurrentPageIndex = InPageIndex;
+		auto& currentPageInfo = DialoguePageInfoList[InPageIndex];
 		CurrentDialogueLineIndex = DialoguePageInfoList[InPageIndex].StartLineIndex;
 
+#if 1 // Add padingMarginTopOffset for each page
+		for (int32 nPageIndex = 0; nPageIndex < InPageIndex; ++nPageIndex)
+		{
+			auto& prevCurrentPageInfo = DialoguePageInfoList[nPageIndex];
+
+	
+			for (int32 i = prevCurrentPageInfo.StartLineIndex; i < prevCurrentPageInfo.EndLineIndex; ++i)
+			{
+				// find minimal off set in the line
+				FHorizonDialogueLineInfo& lineInfo = DialogueLineInfoList[i];
+				TOptional<float> minPadingMarginTopOffset = GetMinimalPaddingMarginTopOffset(lineInfo);
+			
+
+				if (minPadingMarginTopOffset.IsSet())
+				{
+					CurrentPageHeightOffset += minPadingMarginTopOffset.GetValue();
+				}
+			}
+		}
+
+
+
+
+#endif
+		
+
+		TOptional<float> currentPagePadingMarginTopOffset;
+
+		for (int32 i = currentPageInfo.StartLineIndex; i < currentPageInfo.EndLineIndex; ++i)
+		{
+			FHorizonDialogueLineInfo& lineInfo = DialogueLineInfoList[i];
+			lineInfo.CurrentDialogueBlockIndex = 0;
+			for (auto& blockInfoIt : lineInfo.DialogueBlockInfoList)
+			{
+				blockInfoIt.CurrentCharIndex = 0;
+			}
+			if (!currentPagePadingMarginTopOffset.IsSet())
+			{
+				currentPagePadingMarginTopOffset = GetMinimalPaddingMarginTopOffset(lineInfo);
+
+				// Skip calculate offset for last page
+				if (DialoguePageInfoList.Num()-1 == InPageIndex)
+				{
+					currentPagePadingMarginTopOffset.Reset();
+				}
+			}
+		}
+
+		if (currentPagePadingMarginTopOffset.IsSet())
+		{
+			float lineOffOffset = currentPagePadingMarginTopOffset.GetValue();
+			CurrentPageHeightOffset += lineOffOffset;
+		}
+
+		SetIsStartTickDialogueMsg(bShouldStartTick, false);
 		FHorizonDialogueDialoguePageResult result;
 		result.PageIndex = InPageIndex;
 		OnSetDialoguePageFunction.Broadcast(result);
@@ -1010,20 +1218,30 @@ void UHorizonDialogueMsgTextBlock::SkipCurrentDialoguePage()
 				if (blockInfo.WidgetWeakPtr.IsValid())
 				{
 					UCanvasPanelSlot* canvasPanelSlot = Cast<UCanvasPanelSlot>(blockInfo.WidgetWeakPtr->Slot);
-					auto currentPosition = canvasPanelSlot->GetPosition();
-					if (CurrentPageIndex > 0)
-					{
-						currentPosition.Y = lineInfo.Position.Y - CurrentPageHeightOffset;
-					}
-					canvasPanelSlot->SetPosition(currentPosition);
-					blockInfo.WidgetWeakPtr->SetVisibility(ESlateVisibility::HitTestInvisible);
-					if (blockInfo.WidgetBackgroundWeakPtr.IsValid())
-					{
-						blockInfo.WidgetBackgroundWeakPtr->SetVisibility(ESlateVisibility::Visible);
-						UCanvasPanelSlot* buttonCanvasPanelSlot = Cast<UCanvasPanelSlot>(blockInfo.WidgetBackgroundWeakPtr->Slot);
-						if (buttonCanvasPanelSlot)
+					if(canvasPanelSlot)
+					{ 
+						auto currentPosition = canvasPanelSlot->GetPosition();
+						if (CurrentPageIndex > 0)
 						{
-							buttonCanvasPanelSlot->SetPosition(currentPosition);
+							currentPosition.Y = lineInfo.Position.Y - CurrentPageHeightOffset + DialogueSegmentInfoList[blockInfo.SegmentReferenceIndex].PaddingMargin.Top;
+						}
+						canvasPanelSlot->SetPosition(currentPosition);
+
+						blockInfo.WidgetWeakPtr->SetVisibility(ESlateVisibility::HitTestInvisible);
+						if (blockInfo.WidgetBackgroundWeakPtr.IsValid())
+						{
+							blockInfo.WidgetBackgroundWeakPtr->SetVisibility(ESlateVisibility::Visible);
+							UCanvasPanelSlot* buttonCanvasPanelSlot = Cast<UCanvasPanelSlot>(blockInfo.WidgetBackgroundWeakPtr->Slot);
+							if (buttonCanvasPanelSlot)
+							{
+								buttonCanvasPanelSlot->SetPosition(currentPosition);
+							}
+						}
+						if (blockInfo.RubyTextWeakPtr.IsValid())
+						{
+							blockInfo.RubyTextWeakPtr->SetVisibility(ESlateVisibility::HitTestInvisible);
+							blockInfo.RubyTextWeakPtr->SetText(FText::FromString(blockInfo.RubyText));
+							SetupRubyTextPosition(currentPosition, blockInfo, DialogueSegmentInfoList[blockInfo.SegmentReferenceIndex]);
 						}
 					}
 
@@ -1097,7 +1315,8 @@ void UHorizonDialogueMsgTextBlock::SetPageVisiblity(bool bVisibility, const FHor
 		FHorizonDialogueLineInfo& lineInfo = DialogueLineInfoList[i];
 		for (auto& blockInfo : lineInfo.DialogueBlockInfoList)
 		{
-			if (blockInfo.WidgetWeakPtr.IsValid()) {
+			if (blockInfo.WidgetWeakPtr.IsValid()) 
+			{
 				if (bVisibility)
 				{
 					blockInfo.WidgetWeakPtr->SetVisibility(ESlateVisibility::HitTestInvisible);
@@ -1119,11 +1338,25 @@ void UHorizonDialogueMsgTextBlock::SetPageVisiblity(bool bVisibility, const FHor
 					blockInfo.WidgetBackgroundWeakPtr->SetVisibility(ESlateVisibility::Hidden);
 				}
 			}
+
+			if (blockInfo.RubyTextWeakPtr.IsValid()) 
+			{
+				if (bVisibility)
+				{
+					blockInfo.RubyTextWeakPtr->SetVisibility(ESlateVisibility::HitTestInvisible);
+				}
+				else
+				{
+					blockInfo.RubyTextWeakPtr->SetVisibility(ESlateVisibility::Hidden);
+
+				}
+			}
 		}
 
 	}
 
 }
+
 
 
 
@@ -1193,7 +1426,7 @@ void UHorizonDialogueMsgTextBlock::RebuildLineInfoList()
 	ClearChildren();
 	DialogueLineInfoList.Empty();
 
-	auto geometry = GetCachedGeometry();
+	auto& geometry = GetCachedGeometry();
 
 	float widgetWidth = 0.0f;
 	// setup line init info 
@@ -1242,14 +1475,14 @@ void UHorizonDialogueMsgTextBlock::RebuildLineInfoList()
 		case EHorizonDialogueSegmentType::Text:
 		{
 
-			switch (TextOverFlowWarpMethod)
+			switch (GetTextOverflowWrapMethod())
 			{
-			case EHorizonDialogueTextOverflowWarpMethod::Normal:
+			case EHorizonDialogueTextOverflowWrapMethod::Normal:
 			{
 				TextOverflowWarpNormal_Implement(currentLineWidth, blockPos, currentSegInfoIndex, MaxLineWidth, segInfo);
 			}
 			break;
-			case EHorizonDialogueTextOverflowWarpMethod::BreakAll:
+			case EHorizonDialogueTextOverflowWrapMethod::BreakAll:
 			{
 				TextOverflowWarpBreakAll_Implement(currentLineWidth, blockPos, currentSegInfoIndex, MaxLineWidth, segInfo);
 			}
@@ -1258,6 +1491,7 @@ void UHorizonDialogueMsgTextBlock::RebuildLineInfoList()
 
 		}
 		break;
+		case EHorizonDialogueSegmentType::NewPage:
 		case EHorizonDialogueSegmentType::NewLine:
 		{
 
@@ -1265,11 +1499,16 @@ void UHorizonDialogueMsgTextBlock::RebuildLineInfoList()
 			DialogueLineInfoList.Last().LineWidth = currentLineWidth;
 			//new line
 			auto lineInfo = FHorizonDialogueLineInfo();
+			if (EHorizonDialogueSegmentType::NewPage == segInfo.TypeEnum)
+			{
+				lineInfo.bNewPage = true;
+
+			}
 			lineInfo.MaxLineHeight = Font.Size;
 			lineInfo.Position.Y = DialogueLineInfoList.Last().Position.Y + DialogueLineInfoList.Last().MaxLineHeight + LineMargin.Bottom;
 			DialogueLineInfoList.Emplace(lineInfo);
 			currentLineWidth = 0;
-			continue;
+			break;
 		}
 		break;
 		case EHorizonDialogueSegmentType::Image:
@@ -1299,7 +1538,6 @@ void UHorizonDialogueMsgTextBlock::RebuildLineInfoList()
 
 			if (blockInfo.WidgetWeakPtr.IsValid())
 			{
-
 				UCanvasPanelSlot* canvasPanelSlot = Cast<UCanvasPanelSlot>(blockInfo.WidgetWeakPtr->Slot);
 				if (canvasPanelSlot) {
 					FVector2D size = canvasPanelSlot->GetSize();
@@ -1332,8 +1570,7 @@ void UHorizonDialogueMsgTextBlock::RebuildLineInfoList()
 						canvasPanelSlot->SetPosition(paddingPos);
 						AddBackgroundButton(currentSegInfoIndex, blockInfo, canvasPanelSlot, paddingPos);
 					}
-
-					DialogueLineInfoList.Last().MaxLineHeight = FMath::Max(DialogueLineInfoList.Last().MaxLineHeight, (int)(size.Y + segInfo.PaddingMargin.Top));
+					CalculateMaxLineHeight(DialogueLineInfoList.Last(), segInfo, size);
 					AddDialogueBlock(DialogueLineInfoList.Last(), MoveTemp(blockInfo));
 
 				}
@@ -1361,7 +1598,7 @@ void UHorizonDialogueMsgTextBlock::RebuildPageInfoList()
 	DialoguePageInfoList.Empty();
 
 	// setup line init info 
-	auto geometry = GetCachedGeometry();
+	auto& geometry = GetCachedGeometry();
 	float canvasHeight = geometry.Size.Y;
 
 
@@ -1376,16 +1613,24 @@ void UHorizonDialogueMsgTextBlock::RebuildPageInfoList()
 	{
 		const auto& lineInfo = DialogueLineInfoList[currentLineIndex];
 		float maxPageHeight = FMath::Max((float)Font.Size, canvasHeight - lineInfo.MaxLineHeight);
-		if (currentPageHeight >= maxPageHeight)
+		if ((currentPageHeight >= maxPageHeight) || 
+			(lineInfo.bNewPage && !FMath::IsNearlyZero(currentPageHeight)) // Handle NewPage tag
+		   )
 		{
 			//handle extreme case, just paging everyline if startLineIndex == (currentLineIndex - 1)
-			if (startLineIndex != (currentLineIndex - 1))
+			if (startLineIndex < (currentLineIndex - 1) && !lineInfo.bNewPage)
 			{
 				--currentLineIndex;
 				currentPageHeight = currentPageHeight - (LineMargin.Bottom);
 				auto& prevLineInfo = DialogueLineInfoList[currentLineIndex];
 				currentPageHeight = currentPageHeight - prevLineInfo.MaxLineHeight;
 			}
+			if (startLineIndex == currentLineIndex)
+			{
+				++currentLineIndex;
+				ensureMsgf(false, TEXT("oops! something error"));
+			}
+
 			DialoguePageInfoList.Emplace(FHorizonDialoguePageInfo(startLineIndex, currentLineIndex, currentPageHeight));
 			startLineIndex = currentLineIndex;
 			currentPageHeight = 0;
@@ -1407,7 +1652,6 @@ void UHorizonDialogueMsgTextBlock::RebuildPageInfoList()
 		}
 
 	}
-
 	//last page
 	DialoguePageInfoList.Emplace(FHorizonDialoguePageInfo(startLineIndex, currentLineIndex, currentPageHeight));
 
@@ -1430,54 +1674,175 @@ void UHorizonDialogueMsgTextBlock::RebuildBlockInfoJustification()
 				widgetBackgroundCanvasPanelSlot = Cast<UCanvasPanelSlot>(blockInfo.WidgetBackgroundWeakPtr->Slot);
 			}
 
+			UCanvasPanelSlot* widgetRubyTextCanvasPanelSlot = nullptr;
+			if (blockInfo.RubyTextWeakPtr.IsValid())
+			{
+				widgetRubyTextCanvasPanelSlot = Cast<UCanvasPanelSlot>(blockInfo.RubyTextWeakPtr->Slot);
+			}
+			float widthOffset = 0.0f;
 			switch (Justification)
 			{
 			case ETextJustify::Left:
-				break;
+			{
+				widthOffset = 0.0f;
+			}
+			break;
 			case ETextJustify::Right:
 			{
-				auto widthOffset = MaxLineWidth - lineInfo.LineWidth;
-				if (widgetCanvasPanelSlot)
-				{
-					auto currentPos = widgetCanvasPanelSlot->GetPosition();
-					currentPos.X += widthOffset;
-					widgetCanvasPanelSlot->SetPosition(currentPos);
-				}
-				if (widgetBackgroundCanvasPanelSlot)
-				{
-					auto currentPos = widgetBackgroundCanvasPanelSlot->GetPosition();
-					currentPos.X += widthOffset;
-					widgetBackgroundCanvasPanelSlot->SetPosition(currentPos);
-				}
+				widthOffset = MaxLineWidth - lineInfo.LineWidth;
 			}
 			break;
 			case ETextJustify::Center:
 			{
-				auto widthOffset = (MaxLineWidth - lineInfo.LineWidth) * 0.5f;
-				if (widgetCanvasPanelSlot)
-				{
-					auto currentPos = widgetCanvasPanelSlot->GetPosition();
-					currentPos.X += widthOffset;
-					widgetCanvasPanelSlot->SetPosition(currentPos);
-				}
-
-				if (widgetBackgroundCanvasPanelSlot)
-				{
-					auto currentPos = widgetBackgroundCanvasPanelSlot->GetPosition();
-					currentPos.X += widthOffset;
-					widgetBackgroundCanvasPanelSlot->SetPosition(currentPos);
-				}
-
+				widthOffset = (MaxLineWidth - lineInfo.LineWidth) * 0.5f;
 			}
 			break;
 			}
 
-			
+			if (widgetCanvasPanelSlot)
+			{
+				auto currentPos = widgetCanvasPanelSlot->GetPosition();
+				currentPos.X += widthOffset;
+				widgetCanvasPanelSlot->SetPosition(currentPos);
+			}
+			if (widgetBackgroundCanvasPanelSlot)
+			{
+				auto currentPos = widgetBackgroundCanvasPanelSlot->GetPosition();
+				currentPos.X += widthOffset;
+				widgetBackgroundCanvasPanelSlot->SetPosition(currentPos);
+			}
+			if (widgetRubyTextCanvasPanelSlot)
+			{
+				auto currentPos = widgetRubyTextCanvasPanelSlot->GetPosition();
+				currentPos.X += widthOffset;
+				widgetRubyTextCanvasPanelSlot->SetPosition(currentPos);
+			}
 
 		}
 	}
 
 }
+
+void UHorizonDialogueMsgTextBlock::CalculateBlockSize(FHorizonDialogueBlockInfo& InBlockInfo)
+{
+	if (InBlockInfo.WidgetWeakPtr.IsValid())
+	{
+		// Reinit current widget BlockSize in case Decorator change widget content
+		UTextBlock* pTextBlock = Cast<UTextBlock>(InBlockInfo.WidgetWeakPtr.Get());
+		if (pTextBlock)
+		{
+			FHorizonDialogueSegmentInfo& segInfo = DialogueSegmentInfoList[InBlockInfo.SegmentReferenceIndex];
+			const TSharedRef< FSlateFontMeasure >& fontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
+			InBlockInfo.BlockSize = fontMeasure->Measure(InBlockInfo.MsgText, segInfo.Font);
+
+			if (segInfo.RubyTextInfo.Text.IsSet() && InBlockInfo.RubyTextWeakPtr.IsValid())
+			{
+				InBlockInfo.RubyTextBlockSize = fontMeasure->Measure(InBlockInfo.RubyText, segInfo.RubyTextInfo.Font);
+				InBlockInfo.BlockSize.Y = InBlockInfo.BlockSize.Y + InBlockInfo.RubyTextBlockSize.Y + segInfo.RubyTextInfo.PaddingMargin.Bottom;
+			}
+
+		}
+		else
+		{
+			UCanvasPanelSlot* canvasPanelSlot = Cast<UCanvasPanelSlot>(InBlockInfo.WidgetWeakPtr->Slot);
+			if (canvasPanelSlot)
+			{
+				InBlockInfo.BlockSize = canvasPanelSlot->GetSize();
+			}
+		}
+	}
+}
+
+void UHorizonDialogueMsgTextBlock::CalculateMaxLineHeight(FHorizonDialogueLineInfo& InLineInfo, 
+	const FHorizonDialogueSegmentInfo& InSegInfo, 
+	const FVector2D& InOneCharSize)
+{
+
+	InLineInfo.MaxLineHeight = FMath::Max(InLineInfo.MaxLineHeight, (int32)(InOneCharSize.Y + FMath::Abs(InSegInfo.PaddingMargin.Top)));
+
+	if (InSegInfo.RubyTextInfo.Text.IsSet())
+	{
+		const TSharedRef<FSlateFontMeasure>& fontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
+		FVector2D rubyTextOneCharSize = fontMeasure->Measure(InSegInfo.RubyTextInfo.Text.GetValue(), 0, 1, InSegInfo.RubyTextInfo.Font);
+		if(!FMath::IsNearlyZero(InSegInfo.RubyTextInfo.PaddingMargin.Top))
+		{ 
+			InLineInfo.MaxLineHeight = FMath::Max(InLineInfo.MaxLineHeight, (int32)( rubyTextOneCharSize.Y + FMath::Abs(InSegInfo.RubyTextInfo.PaddingMargin.Top)));
+		}
+	}
+}
+
+void UHorizonDialogueMsgTextBlock::SetupRubyTextPosition(const FVector2D& InCurrentPosition, 
+FHorizonDialogueBlockInfo& InBlockInfo, const FHorizonDialogueSegmentInfo& InSegInfo)
+{
+	if(InBlockInfo.RubyTextWeakPtr.IsValid())
+	{ 
+		UCanvasPanelSlot* pRubyTextCanvasPanelSlot = Cast<UCanvasPanelSlot>(InBlockInfo.RubyTextWeakPtr->Slot);
+		if (pRubyTextCanvasPanelSlot)
+		{
+			auto rubyTextCurrentPosition = InCurrentPosition;
+			rubyTextCurrentPosition = rubyTextCurrentPosition + FVector2D(0, InSegInfo.PaddingMargin.Top + InSegInfo.RubyTextInfo.PaddingMargin.Top);
+			// padding to block center
+			rubyTextCurrentPosition.X = rubyTextCurrentPosition.X + (InBlockInfo.BlockSize.X * 0.5f) - (InBlockInfo.RubyTextBlockSize.X * 0.5f);
+			pRubyTextCanvasPanelSlot->SetPosition(rubyTextCurrentPosition);
+		}
+	}
+}
+
+void UHorizonDialogueMsgTextBlock::PreBuildDecoration(FHorizonDialogueBlockInfo& InBlockInfo)
+{
+	if (DecoratorClasses.Num() > 0)
+	{
+		for (TSubclassOf<UHorizonDialogueMsgDecorator>& decoratorClass : DecoratorClasses)
+		{
+			auto pDecorator = decoratorClass.GetDefaultObject();
+			if (pDecorator)
+			{
+				check(InBlockInfo.SegmentReferenceIndex < DialogueSegmentInfoList.Num());
+				pDecorator->PreRun(this, InBlockInfo, DialogueSegmentInfoList[InBlockInfo.SegmentReferenceIndex]);
+			}
+		}
+	}
+}
+
+void UHorizonDialogueMsgTextBlock::BuildDecoration(FHorizonDialogueBlockInfo& InBlockInfo)
+{
+	if (DecoratorClasses.Num() > 0)
+	{
+		for (TSubclassOf<UHorizonDialogueMsgDecorator>& decoratorClass : DecoratorClasses)
+		{
+			auto pDecorator = decoratorClass.GetDefaultObject();
+			if (pDecorator)
+			{
+				check(InBlockInfo.SegmentReferenceIndex < DialogueSegmentInfoList.Num());
+				pDecorator->Run(this, InBlockInfo, DialogueSegmentInfoList[InBlockInfo.SegmentReferenceIndex]);
+			}
+		}
+		// Recalculate BlockSize in case decorator change block content
+		CalculateBlockSize(InBlockInfo);
+	}
+}
+//
+//void UHorizonDialogueMsgTextBlock::RebuildBlockInfoDecoration()
+//{
+//	if (DecoratorClasses.Num() > 0)
+//	{
+//		for (TSubclassOf<UHorizonDialogueMsgDecorator>& decoratorClass : DecoratorClasses)
+//		{
+//			auto pDecorator = decoratorClass.GetDefaultObject();
+//			if(pDecorator)
+//			{ 
+//				for (auto& lineInfo : DialogueLineInfoList)
+//				{
+//					for (auto& blockInfo : lineInfo.DialogueBlockInfoList)
+//					{
+//						check(blockInfo.SegmentReferenceIndex < DialogueSegmentInfoList.Num());
+//						pDecorator->Run(this, blockInfo, DialogueSegmentInfoList[blockInfo.SegmentReferenceIndex]);
+//					}
+//				}
+//			}
+//		}
+//	}
+//}
 
 void UHorizonDialogueMsgTextBlock::RebuildSegmentInfoListImplement(const FHorizonDialogueSegmentInfo& parentSegParam, const FXmlNode* pCurrentNode) {
 
@@ -1540,6 +1905,12 @@ FHorizonDialogueSegmentInfo UHorizonDialogueMsgTextBlock::CreateDefaultSegmentIn
 	info.Font = Font;
 	info.ShadowColorAndOpacity = ShadowColorAndOpacity;
 	info.ShadowOffset = ShadowOffset;
+
+	info.RubyTextInfo.Font = Font;
+	info.RubyTextInfo.ColorAndOpacity = ColorAndOpacity;
+	info.RubyTextInfo.ShadowColorAndOpacity = ShadowColorAndOpacity;
+	info.RubyTextInfo.ShadowOffset = ShadowOffset;
+	info.RubyTextInfo.PaddingMargin.Top = -(info.RubyTextInfo.Font.Size + 5);
 	return info;
 }
 
@@ -1555,6 +1926,11 @@ FHorizonDialogueSegmentInfo UHorizonDialogueMsgTextBlock::CreateSegmentInfo(cons
 
 	if (pXmlNode->GetTag().Equals(TEXT("br"), ESearchCase::IgnoreCase)) {
 		segParam.TypeEnum = EHorizonDialogueSegmentType::NewLine;
+	}
+
+
+	if (pXmlNode->GetTag().Equals(TEXT("p"), ESearchCase::IgnoreCase)) {
+		segParam.TypeEnum = EHorizonDialogueSegmentType::NewPage;
 	}
 
 	if (pXmlNode->GetTag().Equals(TEXT("PaperFlipBook"), ESearchCase::IgnoreCase) ||
@@ -1585,7 +1961,6 @@ FHorizonDialogueSegmentInfo UHorizonDialogueMsgTextBlock::CreateSegmentInfo(cons
 			{
 				for (int32 i = 0; i < StyleInfoList.Num(); ++i)
 				{
-					
 					//if (styleInfo)
 					{
 						auto& styleInfo = StyleInfoList[i];
@@ -1611,25 +1986,32 @@ FHorizonDialogueSegmentInfo UHorizonDialogueMsgTextBlock::CreateSegmentInfo(cons
 				//HorizonUIPluginLog.Notify(FText::FromString(message));
 				ensureMsgf(bStyleFound, TEXT("%s"), *message);
 			}
+			continue;
 		}
 
 
-		if (tag.Equals(TEXT("color"), ESearchCase::IgnoreCase)) {
-			value.ReplaceInline(TEXT("0x"), TEXT("#"), ESearchCase::IgnoreCase);
-			FColor color = FColor::FromHex(value);
-			float colorBase = (float)255.0f;
-			segParam.ColorAndOpacity = FLinearColor(color.R / colorBase, color.G / colorBase, color.B / colorBase, color.A / colorBase);
+		if (tag.Equals(TEXT("color"), ESearchCase::IgnoreCase)) 
+		{
+			TOptional<FLinearColor> color = ParseLinearColor(value);
+			if (color.IsSet())
+			{
+				segParam.ColorAndOpacity = color.GetValue();
+			}
+
+			continue;
 		}
 
 		if (tag.Equals(TEXT("speed"), ESearchCase::IgnoreCase)) {
 			if (value.IsNumeric()) {
 				segParam.DialogueMsgSpeed = FCString::Atof(*value);
 			}
+			continue;
 		}
 
 		if (tag.Equals(TEXT("sound"), ESearchCase::IgnoreCase))
 		{
 			segParam.DialogueSoundPath = value;
+			continue;
 		}
 
 		if (tag.Equals(TEXT("soundVolume"), ESearchCase::IgnoreCase))
@@ -1638,6 +2020,7 @@ FHorizonDialogueSegmentInfo UHorizonDialogueMsgTextBlock::CreateSegmentInfo(cons
 			{
 				segParam.DialogueSoundVolumeMultiplier = FCString::Atof(*value);
 			}
+			continue;
 		}
 
 
@@ -1647,6 +2030,7 @@ FHorizonDialogueSegmentInfo UHorizonDialogueMsgTextBlock::CreateSegmentInfo(cons
 			{
 				segParam.DialogueSoundPitchMultiplier = FCString::Atof(*value);
 			}
+			continue;
 		}
 
 
@@ -1656,6 +2040,7 @@ FHorizonDialogueSegmentInfo UHorizonDialogueMsgTextBlock::CreateSegmentInfo(cons
 			{
 				segParam.DialogueSoundStartTime = FCString::Atof(*value);
 			}
+			continue;
 		}
 
 
@@ -1664,36 +2049,33 @@ FHorizonDialogueSegmentInfo UHorizonDialogueMsgTextBlock::CreateSegmentInfo(cons
 			if (value.IsNumeric()) {
 				segParam.DialogueMsgWait = FCString::Atof(*value);
 			}
+			continue;
 		}
 
 
 
 		if (tag.Equals(TEXT("shadowColor"), ESearchCase::IgnoreCase) ||
 			tag.Equals(TEXT("shadow_color"), ESearchCase::IgnoreCase)) {
-			value.ReplaceInline(TEXT("0x"), TEXT("#"), ESearchCase::IgnoreCase);
-			FColor color = FColor::FromHex(value);
-			float colorBase = (float)255.0f;
-			segParam.ShadowColorAndOpacity = FLinearColor(color.R / colorBase, color.G / colorBase, color.B / colorBase, color.A / colorBase);
+			TOptional<FLinearColor> color = ParseLinearColor(value);
+			if (color.IsSet())
+			{
+				segParam.ShadowColorAndOpacity = color.GetValue();
+			}
+
+			continue;
 		}
 
 		//	FVector2D ShadowOffset;
 		if (tag.Equals(TEXT("shadowOffset"), ESearchCase::IgnoreCase) ||
-			tag.Equals(TEXT("shadow_offset"), ESearchCase::IgnoreCase)) {
-			value.ReplaceInline(TEXT("("), TEXT(" "));
-			value.ReplaceInline(TEXT("{"), TEXT(" "));
-			value.ReplaceInline(TEXT("["), TEXT(" "));
-			value.ReplaceInline(TEXT(")"), TEXT(" "));
-			value.ReplaceInline(TEXT("}"), TEXT(" "));
-			value.ReplaceInline(TEXT("]"), TEXT(" "));
-			value.TrimStartAndEndInline();
-			//value.Trim();
-			//value.TrimTrailing();
-			TArray<FString> parse;
-
-			value.ParseIntoArray(parse, TEXT(","), true);
-			if (parse.Num() >= 2) {
-				segParam.ShadowOffset = FVector2D(FCString::Atof(*parse[0]), FCString::Atof(*parse[1]));
+			tag.Equals(TEXT("shadow_offset"), ESearchCase::IgnoreCase)) 
+		{
+			TOptional<FVector2D> result = ParseVector2D(value);
+			if(result.IsSet())
+			{
+				segParam.ShadowOffset = result.GetValue();
 			}
+		
+			continue;
 		}
 
 
@@ -1704,11 +2086,13 @@ FHorizonDialogueSegmentInfo UHorizonDialogueMsgTextBlock::CreateSegmentInfo(cons
 			UFont* font = UHorizonFileSystem::GetInstance()->LoadFont(*value);
 			segParam.Font = FSlateFontInfo(font, Font.Size, Font.TypefaceFontName);
 			//segParam.Font.TypefaceFontName 
+			continue;
 		}
 
 		if (tag.Equals(TEXT("fontType"), ESearchCase::IgnoreCase) ||
 			tag.Equals(TEXT("font_type"), ESearchCase::IgnoreCase)) {
 			segParam.Font.TypefaceFontName = *value;
+			continue;
 		}
 
 		if (tag.Equals(TEXT("fontSize"), ESearchCase::IgnoreCase) ||
@@ -1716,24 +2100,28 @@ FHorizonDialogueSegmentInfo UHorizonDialogueMsgTextBlock::CreateSegmentInfo(cons
 			if (value.IsNumeric()) {
 				segParam.Font.Size = FCString::Atoi(*value);
 			}
+			continue;
 		}
 
 		if (tag.Equals(TEXT("padding-left"), ESearchCase::IgnoreCase)) {
 			if (value.IsNumeric()) {
 				segParam.PaddingMargin.Left = FCString::Atof(*value);
 			}
+			continue;
 		}
 
 		if (tag.Equals(TEXT("padding-right"), ESearchCase::IgnoreCase)) {
 			if (value.IsNumeric()) {
 				segParam.PaddingMargin.Right = FCString::Atof(*value);
 			}
+			continue;
 		}
 
 		if (tag.Equals(TEXT("padding-top"), ESearchCase::IgnoreCase)) {
 			if (value.IsNumeric()) {
 				segParam.PaddingMargin.Top = FCString::Atof(*value);
 			}
+			continue;
 		}
 
 
@@ -1741,112 +2129,293 @@ FHorizonDialogueSegmentInfo UHorizonDialogueMsgTextBlock::CreateSegmentInfo(cons
 			tag.Equals(TEXT("file_path"), ESearchCase::IgnoreCase)) {
 
 			segParam.FilePath = value;
+			continue;
 		}
 
-		if (tag.Equals(TEXT("size"), ESearchCase::IgnoreCase)) {
-			value.ReplaceInline(TEXT("("), TEXT(" "));
-			value.ReplaceInline(TEXT("{"), TEXT(" "));
-			value.ReplaceInline(TEXT("["), TEXT(" "));
-			value.ReplaceInline(TEXT(")"), TEXT(" "));
-			value.ReplaceInline(TEXT("}"), TEXT(" "));
-			value.ReplaceInline(TEXT("]"), TEXT(" "));
-			value.TrimStartAndEndInline();
-			//value.Trim();
-			//value.TrimTrailing();
-			TArray<FString> parse;
-
-			value.ParseIntoArray(parse, TEXT(","), true);
-			if (parse.Num() >= 2) {
-				segParam.ImageSize = FVector2D(FCString::Atof(*parse[0]), FCString::Atof(*parse[1]));
+		if (tag.Equals(TEXT("size"), ESearchCase::IgnoreCase))
+		{
+			TOptional<FVector2D> result = ParseVector2D(value);
+			if (result.IsSet())
+			{
+				segParam.ImageSize = result.GetValue();
 			}
+			continue;
 		}
 
 
 		if (tag.Equals(TEXT("href"), ESearchCase::IgnoreCase))
 		{
 			segParam.HypertextReference = value;
-
+			continue;
 		}
 
 		if (tag.Equals(TEXT("hoveredColor"), ESearchCase::IgnoreCase))
 		{
-			value.ReplaceInline(TEXT("0x"), TEXT("#"), ESearchCase::IgnoreCase);
-			FColor color = FColor::FromHex(value);
-			float colorBase = (float)255.0f;
-			segParam.HypertextHoveredColor = FLinearColor(color.R / colorBase, color.G / colorBase, color.B / colorBase, color.A / colorBase);
+			TOptional<FLinearColor> color = ParseLinearColor(value);
+			if (color.IsSet())
+			{
+				segParam.HypertextHoveredColor = color.GetValue();
+			}
+			continue;
 		}
 
 		if (tag.Equals(TEXT("visitedColor"), ESearchCase::IgnoreCase))
 		{
-			value.ReplaceInline(TEXT("0x"), TEXT("#"), ESearchCase::IgnoreCase);
-			FColor color = FColor::FromHex(value);
-			float colorBase = (float)255.0f;
-			segParam.HypertextVisitedColor = FLinearColor(color.R / colorBase, color.G / colorBase, color.B / colorBase, color.A / colorBase);
+			TOptional<FLinearColor> color = ParseLinearColor(value);
+			if (color.IsSet())
+			{
+				segParam.HypertextVisitedColor = color.GetValue();
+			}
+
+			continue;
 		}
 
 		if (tag.Equals(TEXT("eventName"), ESearchCase::IgnoreCase))
 		{
 			segParam.EventName = value;
+			continue;
 		}
 
 		if (tag.Equals(TEXT("eventPayload"), ESearchCase::IgnoreCase))
 		{
 			segParam.EventPayload = value;
+			continue;
+		}
+
+
+		if(ParseRubyTextSegmentInfo(tag, value, segParam))
+		{
+			continue;
 		}
 	}
 
 	return segParam;
 }
 
-FHorizonDialogueBlockInfo UHorizonDialogueMsgTextBlock::CreateDialogueTextBlockInfo(int32 segmentIndex, int32 startIndex, int32 endIndex, const FVector2D& pos) {
+
+bool UHorizonDialogueMsgTextBlock::ParseRubyTextSegmentInfo(const FString& InTag, FString InValue, FHorizonDialogueSegmentInfo& InSegParam)
+{
+	bool bResult = false;
+
+	do 
+	{
+		if (InTag.Equals(TEXT("ruby.text"), ESearchCase::IgnoreCase))
+		{
+			InSegParam.RubyTextInfo.Text = InValue;
+			bResult = true;
+			break;
+		}
+		if (InTag.Equals(TEXT("ruby.color"), ESearchCase::IgnoreCase))
+		{
+
+			TOptional<FLinearColor> color = ParseLinearColor(InValue);
+			if (color.IsSet())
+			{
+				InSegParam.RubyTextInfo.ColorAndOpacity = color.GetValue();
+			}
+			continue;
+		}
+		if (InTag.Equals(TEXT("ruby.shadowColor"), ESearchCase::IgnoreCase)) 
+		{
+
+			TOptional<FLinearColor> color = ParseLinearColor(InValue);
+			if(color.IsSet())
+			{ 
+				InSegParam.RubyTextInfo.ShadowColorAndOpacity = color.GetValue();
+			}
+			continue;
+		}
+
+		//	FVector2D ShadowOffset;
+		if (InTag.Equals(TEXT("ruby.shadowOffset"), ESearchCase::IgnoreCase)) 
+		{
+			TOptional<FVector2D> result = ParseVector2D(InValue);
+			if (result.IsSet())
+			{
+				InSegParam.RubyTextInfo.ShadowOffset = result.GetValue();
+			}
+			continue;
+		}
+
+
+		if (InTag.Equals(TEXT("ruby.fontPath"), ESearchCase::IgnoreCase))
+		{
+			UFont* font = UHorizonFileSystem::GetInstance()->LoadFont(*InValue);
+			InSegParam.RubyTextInfo.Font = FSlateFontInfo(font, Font.Size, Font.TypefaceFontName);
+			continue;
+		}
+
+		if (InTag.Equals(TEXT("ruby.fontType"), ESearchCase::IgnoreCase))
+		{
+			InSegParam.RubyTextInfo.Font.TypefaceFontName = *InValue;
+			continue;
+		}
+
+		if (InTag.Equals(TEXT("ruby.fontSize"), ESearchCase::IgnoreCase))
+		{
+			if (InValue.IsNumeric()) {
+				InSegParam.RubyTextInfo.Font.Size = FCString::Atoi(*InValue);
+			}
+			continue;
+		}
+
+		if (InTag.Equals(TEXT("ruby.padding-left"), ESearchCase::IgnoreCase))
+		{
+			if (InValue.IsNumeric()) {
+				InSegParam.RubyTextInfo.PaddingMargin.Left = FCString::Atof(*InValue);
+			}
+			continue;
+		}
+
+		if (InTag.Equals(TEXT("ruby.padding-right"), ESearchCase::IgnoreCase))
+		{
+			if (InValue.IsNumeric()) {
+				InSegParam.RubyTextInfo.PaddingMargin.Right = FCString::Atof(*InValue);
+			}
+			continue;
+		}
+
+		if (InTag.Equals(TEXT("ruby.padding-top"), ESearchCase::IgnoreCase))
+		{
+			if (InValue.IsNumeric()) 
+			{
+				InSegParam.RubyTextInfo.PaddingMargin.Top = FCString::Atof(*InValue);
+			}
+			continue;
+		}
+
+	} while (0);
+
+
+	return bResult;
+}
+
+TOptional<FVector2D> UHorizonDialogueMsgTextBlock::ParseVector2D(FString& InValue)
+{
+	TOptional<FVector2D> result;
+	InValue.ReplaceInline(TEXT("("), TEXT(" "));
+	InValue.ReplaceInline(TEXT("{"), TEXT(" "));
+	InValue.ReplaceInline(TEXT("["), TEXT(" "));
+	InValue.ReplaceInline(TEXT(")"), TEXT(" "));
+	InValue.ReplaceInline(TEXT("}"), TEXT(" "));
+	InValue.ReplaceInline(TEXT("]"), TEXT(" "));
+	InValue.TrimStartAndEndInline();
+	//value.Trim();
+	//value.TrimTrailing();
+	TArray<FString> parse;
+
+	InValue.ParseIntoArray(parse, TEXT(","), true);
+	if (parse.Num() >= 2) 
+	{
+		result = FVector2D(FCString::Atof(*parse[0]), FCString::Atof(*parse[1]));
+	}
+	return result;
+}
+
+TOptional<FLinearColor> UHorizonDialogueMsgTextBlock::ParseLinearColor(FString& InValue)
+{
+	TOptional<FLinearColor> result;
+	InValue.ReplaceInline(TEXT("0x"), TEXT("#"), ESearchCase::IgnoreCase);
+	FColor color = FColor::FromHex(InValue);
+	float colorBase = (float)255.0f;
+	result = FLinearColor(color.R / colorBase, color.G / colorBase, color.B / colorBase, color.A / colorBase);
+	return result;
+}
+
+FHorizonDialogueBlockInfo UHorizonDialogueMsgTextBlock::CreateDialogueTextBlockInfo(int32 segmentIndex, int32 startIndex, int32 endIndex, const FVector2D& pos) 
+{
 	FHorizonDialogueSegmentInfo& segInfo = DialogueSegmentInfoList[segmentIndex];
 	FName name = *FString::Printf(TEXT("%s.%d.%d.%d"), *FString(GetName()), segmentIndex, startIndex, endIndex);
 
+	FVector2D paddingPos = pos + FVector2D(0, segInfo.PaddingMargin.Top);
+	const TSharedRef<FSlateFontMeasure>& fontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
 	int32 count = (endIndex - startIndex);
 	FHorizonDialogueBlockInfo blockInfo;
+	blockInfo.Name = name;
+	blockInfo.SegmentReferenceIndex = segmentIndex;
 	blockInfo.MsgText = segInfo.Text.Mid(startIndex, count);
+	if (segInfo.RubyTextInfo.Text.IsSet())
+	{
+		blockInfo.RubyText = segInfo.RubyTextInfo.Text.GetValue();
+	}
+	PreBuildDecoration(blockInfo);
+	// MsgText
+	{
+		blockInfo.WidgetWeakPtr = CreateDialogueTextBlock(segInfo);//NewObject<UHorizonTextBlock>(GetOuter());
 
-	blockInfo.WidgetWeakPtr = CreateDialogueTextBlock(segInfo);//NewObject<UHorizonTextBlock>(GetOuter());
+		if (blockInfo.WidgetWeakPtr.IsValid()) 
+		{
+			UHorizonTextBlock* pTextBlock = Cast<UHorizonTextBlock>(blockInfo.WidgetWeakPtr.Get());
+			RemoveChild(pTextBlock);
+			AddChild(pTextBlock);
 
-	if (blockInfo.WidgetWeakPtr.IsValid()) {
-		UHorizonTextBlock* pTextBlock = Cast<UHorizonTextBlock>(blockInfo.WidgetWeakPtr.Get());
-		RemoveChild(pTextBlock);
-		AddChild(pTextBlock);
-		const TSharedRef< FSlateFontMeasure >& FontMeasure = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
-		blockInfo.BlockSize = FontMeasure->Measure(blockInfo.MsgText, segInfo.Font);
+		
 
-		pTextBlock->SetColorAndOpacity(segInfo.ColorAndOpacity);
-		pTextBlock->SetShadowColorAndOpacity(segInfo.ShadowColorAndOpacity.GetSpecifiedColor());
-		pTextBlock->SetShadowOffset(segInfo.ShadowOffset);
-		pTextBlock->SetFont(segInfo.Font);
-		pTextBlock->SetJustification(Justification);
-		if (!bIsDialogueMsgText) {
-			pTextBlock->SetText(FText::FromString(blockInfo.MsgText));
+			pTextBlock->SetColorAndOpacity(segInfo.ColorAndOpacity);
+			pTextBlock->SetShadowColorAndOpacity(segInfo.ShadowColorAndOpacity.GetSpecifiedColor());
+			pTextBlock->SetShadowOffset(segInfo.ShadowOffset);
+			pTextBlock->SetFont(segInfo.Font);
+			pTextBlock->SetJustification(Justification);
+			if (!bIsDialogueMsgText)
+			{
+				pTextBlock->SetText(FText::FromString(blockInfo.MsgText));
+			}
+			else 
+			{
+				//info.TextBlock->SetText(FText::FromString(info.MsgText));
+			}
+
+			UCanvasPanelSlot* canvasPanelSlot = Cast<UCanvasPanelSlot>(pTextBlock->Slot);
+			canvasPanelSlot->SetAutoSize(true);
+
+		
+			canvasPanelSlot->SetPosition(paddingPos);
+			//UCanvasPanelSlot* pDialogueTextBlockCanvasPanelSlot = UHorizonWidgetFunctionLibrary::GetParentCanvasPanelSlot(this);
+			//verifyf(pDialogueTextBlockCanvasPanelSlot, TEXT("oops! You need put HorizonDialogueMsgTextBlock under the hierarchy of CanvasPanel"));
+			//canvasPanelSlot->SetSize(pDialogueTextBlockCanvasPanelSlot->GetSize());
+
+			pTextBlock->SetVisibility(ESlateVisibility::HitTestInvisible); //should not have hit test in UMG editor
+
+			AddBackgroundButton(segmentIndex, blockInfo, canvasPanelSlot, paddingPos);
 		}
-		else {
-			//info.TextBlock->SetText(FText::FromString(info.MsgText));
+
+	}
+
+	// Has RubyText
+	if(segInfo.RubyTextInfo.Text.IsSet())
+	{
+		blockInfo.RubyTextWeakPtr = CreateDialogueRubyTextBlock(segInfo);
+		if (blockInfo.RubyTextWeakPtr.IsValid())
+		{
+			UHorizonTextBlock* pTextBlock = Cast<UHorizonTextBlock>(blockInfo.RubyTextWeakPtr.Get());
+			RemoveChild(pTextBlock);
+			AddChild(pTextBlock);
+			pTextBlock->SetColorAndOpacity(segInfo.RubyTextInfo.ColorAndOpacity);
+			pTextBlock->SetShadowColorAndOpacity(segInfo.RubyTextInfo.ShadowColorAndOpacity.GetSpecifiedColor());
+			pTextBlock->SetShadowOffset(segInfo.RubyTextInfo.ShadowOffset);
+			pTextBlock->SetFont(segInfo.RubyTextInfo.Font);
+			pTextBlock->SetJustification(Justification);
+			if (!bIsDialogueMsgText)
+			{
+				pTextBlock->SetText(FText::FromString(blockInfo.RubyText));
+			}
+
+			UCanvasPanelSlot* canvasPanelSlot = Cast<UCanvasPanelSlot>(pTextBlock->Slot);
+			canvasPanelSlot->SetAutoSize(true);
+			CalculateBlockSize(blockInfo);
+			SetupRubyTextPosition(paddingPos, blockInfo, segInfo);
+			pTextBlock->SetVisibility(ESlateVisibility::HitTestInvisible); //should not have hit test in UMG editor
+
 		}
 
-		UCanvasPanelSlot* canvasPanelSlot = Cast<UCanvasPanelSlot>(pTextBlock->Slot);
-		canvasPanelSlot->SetAutoSize(true);
-
-		FVector2D paddingPos = pos + FVector2D(0, (int32)segInfo.PaddingMargin.Top);
-		canvasPanelSlot->SetPosition(paddingPos);
-		//UCanvasPanelSlot* pDialogueTextBlockCanvasPanelSlot = UHorizonWidgetFunctionLibrary::GetParentCanvasPanelSlot(this);
-		//verifyf(pDialogueTextBlockCanvasPanelSlot, TEXT("oops! You need put HorizonDialogueMsgTextBlock under the hierarchy of CanvasPanel"));
-		//canvasPanelSlot->SetSize(pDialogueTextBlockCanvasPanelSlot->GetSize());
-
-		pTextBlock->SetVisibility(ESlateVisibility::HitTestInvisible); //should not have hit test in UMG editor
-
-		AddBackgroundButton(segmentIndex, blockInfo, canvasPanelSlot, paddingPos);
 	}
 
 
-	//pTextBlock->SetJustification(segInfo)
 
-	blockInfo.Name = name;
+	CalculateBlockSize(blockInfo);
+	BuildDecoration(blockInfo);
 
-	blockInfo.SegmentReferenceIndex = segmentIndex;
+
 	return blockInfo;
 }
 
@@ -1855,6 +2424,9 @@ FHorizonDialogueBlockInfo UHorizonDialogueMsgTextBlock::CreateDialogueImageBlock
 	FName name = *FString::Printf(TEXT("%s.image%d"), *FString(GetName()), segmentIndex);
 
 	FHorizonDialogueBlockInfo blockInfo;
+	blockInfo.Name = name;
+	blockInfo.SegmentReferenceIndex = segmentIndex;
+	PreBuildDecoration(blockInfo);
 	auto& segInfo = DialogueSegmentInfoList[segmentIndex];
 	blockInfo.WidgetWeakPtr = CreateDialogueImage(segInfo);//NewObject<UHorizonImage>(GetOuter());
 	if (blockInfo.WidgetWeakPtr.IsValid()) {
@@ -1868,7 +2440,8 @@ FHorizonDialogueBlockInfo UHorizonDialogueMsgTextBlock::CreateDialogueImageBlock
 		UMaterial* pMaterial = nullptr;
 		UPaperSprite* pSprite = nullptr;
 		
-		if (segInfo.FilePath.IsSet()) {
+		if (segInfo.FilePath.IsSet()) 
+		{
 			FSoftObjectPath assetRef = segInfo.FilePath.GetValue();
 			auto loadedObject = assetRef.TryLoad();
 			pSprite = Cast<UPaperSprite>(loadedObject);
@@ -1880,13 +2453,14 @@ FHorizonDialogueBlockInfo UHorizonDialogueMsgTextBlock::CreateDialogueImageBlock
 
 
 		}
-		else {
+		else 
+		{
 			if (segInfo.StyleInfoReferenceIndex >= 0)
 			{
 				
 				if (segInfo.SegmentStyleReferenceIndex >= 0)
 				{
-					auto & segStyleList = StyleInfoList[segInfo.StyleInfoReferenceIndex]->SegmentStyleList;
+					auto& segStyleList = StyleInfoList[segInfo.StyleInfoReferenceIndex]->SegmentStyleList;
 					auto& segInfoStyle = segStyleList[segInfo.SegmentStyleReferenceIndex];
 					pTexture = segInfoStyle.Texture2D.LoadSynchronous();
 					pMaterial = segInfoStyle.Material.LoadSynchronous();
@@ -1910,12 +2484,14 @@ FHorizonDialogueBlockInfo UHorizonDialogueMsgTextBlock::CreateDialogueImageBlock
 
 
 
-		if (pTexture) {
+		if (pTexture) 
+		{
 			pImage->SetBrushFromTexture(pTexture, true);
 		}
 
 
-		if (pMaterial) {
+		if (pMaterial) 
+		{
 			pImage->SetBrushFromMaterial(pMaterial);
 		}
 
@@ -1927,19 +2503,21 @@ FHorizonDialogueBlockInfo UHorizonDialogueMsgTextBlock::CreateDialogueImageBlock
 
 		pImage->SynchronizeProperties();
 		UCanvasPanelSlot* canvasPanelSlot = Cast<UCanvasPanelSlot>(pImage->Slot);
-		if (segInfo.ImageSize.IsSet()) {
+		if (segInfo.ImageSize.IsSet()) 
+		{
 			canvasPanelSlot->SetSize(segInfo.ImageSize.GetValue());
 		}
 		FVector2D paddingPos = pos + FVector2D(0, (int)segInfo.PaddingMargin.Top);
 		canvasPanelSlot->SetPosition(paddingPos);
 		pImage->SetColorAndOpacity(segInfo.ColorAndOpacity.GetSpecifiedColor());
-		if (bIsDialogueMsgText) {
+		if (bIsDialogueMsgText) 
+		{
 			pImage->SetVisibility(ESlateVisibility::Hidden);
 		}
-		else {
+		else 
+		{
 			pImage->SetVisibility(ESlateVisibility::HitTestInvisible);
 		}
-		blockInfo.BlockSize = canvasPanelSlot->GetSize();
 		AddBackgroundButton(segmentIndex, blockInfo, canvasPanelSlot, paddingPos);
 
 	}
@@ -1947,8 +2525,9 @@ FHorizonDialogueBlockInfo UHorizonDialogueMsgTextBlock::CreateDialogueImageBlock
 
 
 
-	blockInfo.Name = name;
-	blockInfo.SegmentReferenceIndex = segmentIndex;
+
+	CalculateBlockSize(blockInfo);
+	BuildDecoration(blockInfo);
 	return blockInfo;
 }
 
@@ -1958,14 +2537,22 @@ FHorizonDialogueBlockInfo UHorizonDialogueMsgTextBlock::CreateDialogueFlipbookBl
 	FName name = *FString::Printf(TEXT("%s.PaperFlipbookWidget%d"), *FString(GetName()), segmentIndex);
 	auto& segInfo = DialogueSegmentInfoList[segmentIndex];
 	FHorizonDialogueBlockInfo blockInfo;
+	blockInfo.Name = name;
+	blockInfo.SegmentReferenceIndex = segmentIndex;
+	PreBuildDecoration(blockInfo);
 	blockInfo.WidgetWeakPtr = CreateDialogueFlipbook(segInfo);//NewObject<UHorizonFlipbookWidget>(GetOuter());
 	if (blockInfo.WidgetWeakPtr.IsValid()) {
 		UHorizonFlipbookWidget* pWidget = Cast<UHorizonFlipbookWidget>(blockInfo.WidgetWeakPtr.Get());
 		//FStringAssetReference assetRef = segInfo.ImageFilePath.GetValue();
 		//UHorizonFileSystem::LoadPaperFlipbook
 		UPaperFlipbook* flipbook = nullptr;
-		
-		if (segInfo.StyleInfoReferenceIndex >= 0)
+		if (segInfo.FilePath.IsSet())
+		{
+			FSoftObjectPath assetRef = segInfo.FilePath.GetValue();
+			flipbook = UHorizonFileSystem::GetInstance()->LoadPaperFlipbook(assetRef.ToString());
+
+		}
+		else if (segInfo.StyleInfoReferenceIndex >= 0)
 		{
 			if (segInfo.SegmentStyleReferenceIndex >= 0)
 			{
@@ -1986,37 +2573,36 @@ FHorizonDialogueBlockInfo UHorizonDialogueMsgTextBlock::CreateDialogueFlipbookBl
 
 
 
-		if (segInfo.SegmentStyleReferenceIndex >= 0)
+
+		if (flipbook)
 		{
-			if (flipbook) {
-				
-				pWidget->SetFlipbook(flipbook);
-				pWidget->SetColorAndOpacity(segInfo.ColorAndOpacity.GetSpecifiedColor());
-				AddChild(pWidget);
-				UCanvasPanelSlot* canvasPanelSlot = Cast<UCanvasPanelSlot>(pWidget->Slot);
-				if (segInfo.ImageSize.IsSet()) {
-					canvasPanelSlot->SetSize(segInfo.ImageSize.GetValue());
-				}
-				FVector2D paddingPos = pos + FVector2D(0, (int32)segInfo.PaddingMargin.Top);
-				canvasPanelSlot->SetPosition(paddingPos);
-				pWidget->SetColorAndOpacity(segInfo.ColorAndOpacity.GetSpecifiedColor());
-				if (bIsDialogueMsgText) {
-					pWidget->SetVisibility(ESlateVisibility::Hidden);
-				}
-				else {
-					pWidget->SetVisibility(ESlateVisibility::HitTestInvisible);
-				}
-				pWidget->SynchronizeProperties();
-				blockInfo.BlockSize = canvasPanelSlot->GetSize();
-				AddBackgroundButton(segmentIndex, blockInfo, canvasPanelSlot, paddingPos);
-		
+
+			pWidget->SetFlipbook(flipbook);
+			pWidget->SetColorAndOpacity(segInfo.ColorAndOpacity.GetSpecifiedColor());
+			AddChild(pWidget);
+			UCanvasPanelSlot* canvasPanelSlot = Cast<UCanvasPanelSlot>(pWidget->Slot);
+			if (segInfo.ImageSize.IsSet()) {
+				canvasPanelSlot->SetSize(segInfo.ImageSize.GetValue());
 			}
+			FVector2D paddingPos = pos + FVector2D(0, (int32)segInfo.PaddingMargin.Top);
+			canvasPanelSlot->SetPosition(paddingPos);
+			pWidget->SetColorAndOpacity(segInfo.ColorAndOpacity.GetSpecifiedColor());
+			if (bIsDialogueMsgText) {
+				pWidget->SetVisibility(ESlateVisibility::Hidden);
+			}
+			else {
+				pWidget->SetVisibility(ESlateVisibility::HitTestInvisible);
+			}
+			pWidget->SynchronizeProperties();
+			AddBackgroundButton(segmentIndex, blockInfo, canvasPanelSlot, paddingPos);
+
 		}
+		
 	}
 
-	blockInfo.Name = name;
-	blockInfo.SegmentReferenceIndex = segmentIndex;
 
+	CalculateBlockSize(blockInfo);
+	BuildDecoration(blockInfo);
 	return blockInfo;
 }
 
@@ -2081,68 +2667,82 @@ void UHorizonDialogueMsgTextBlock::AddBackgroundButton(
 			//UGameplayStatics::GetKeyValue();
 			//FString NewPlayerName = UGameplayStatics::ParseOption(Options, TEXT("Name")).Left(20);
 			//
-
-			pButton->OnClickedDelegateNative.AddLambda(
-				[this, hyperTextResult](UHorizonButton* InButton) {
-				OnHypertextClickedDelegate.Broadcast(hyperTextResult);
-				OnHypertextClickedDelegateNative.Broadcast(hyperTextResult);
-			}
-			);
-
-			pButton->OnPressedDelegateNative.AddLambda(
-				[this, hyperTextResult](UHorizonButton* InButton) {
-
-				OnHypertextPressedDelegate.Broadcast(hyperTextResult);
-				OnHypertextPressedDelegateNative.Broadcast(hyperTextResult);
-			}
-			);
-
-			pButton->OnReleasedDelegateNative.AddLambda(
-				[this, hyperTextResult](UHorizonButton* InButton) {
-
-				OnHypertextReleasedDelegate.Broadcast(hyperTextResult);
-				OnHypertextReleasedDelegateNative.Broadcast(hyperTextResult);
-
-				if (hyperTextResult.SegmentIndex < DialogueSegmentInfoList.Num())
-				{
-					auto& tmpSegInfo = DialogueSegmentInfoList[hyperTextResult.SegmentIndex];
-					tmpSegInfo.bHypertextVisited = true;
-					SetSegmentColor(hyperTextResult.SegmentIndex, hyperTextResult.LineIndex, tmpSegInfo.HypertextVisitedColor);
-				}
-			}
-			);
-			pButton->OnHoveredDelegateNative.AddLambda(
-				[this, hyperTextResult](UHorizonButton* InButton) {
-				OnHypertextHoveredDelegate.Broadcast(hyperTextResult);
-				OnHypertextHoveredDelegateNative.Broadcast(hyperTextResult);
-				if (hyperTextResult.SegmentIndex < DialogueSegmentInfoList.Num())
-				{
-					auto& tmpSegInfo = DialogueSegmentInfoList[hyperTextResult.SegmentIndex];
-					SetSegmentColor(hyperTextResult.SegmentIndex, hyperTextResult.LineIndex, tmpSegInfo.HypertextHoveredColor);
-
-				}
-
-			}
-			);
-			pButton->OnUnhoveredDelegateNative.AddLambda(
-				[this, hyperTextResult, pButton](UHorizonButton* InButton) {
-				OnHypertextUnhoveredDelegate.Broadcast(hyperTextResult);
-				OnHypertextUnhoveredDelegateNative.Broadcast(hyperTextResult);
-				if (hyperTextResult.SegmentIndex < DialogueSegmentInfoList.Num())
-				{
-					auto& tmpSegInfo = DialogueSegmentInfoList[hyperTextResult.SegmentIndex];
-					FSlateColor color = tmpSegInfo.ColorAndOpacity;
-					if (tmpSegInfo.bHypertextVisited)
-					{
-						color = tmpSegInfo.HypertextVisitedColor;
+			if (!pButton->OnClickedDelegateNative.IsBoundToObject(this))
+			{
+				pButton->OnClickedDelegateNative.AddWeakLambda(this,
+					[this, hyperTextResult](UHorizonButton* InButton) {
+						OnHypertextClickedDelegate.Broadcast(hyperTextResult);
+						OnHypertextClickedDelegateNative.Broadcast(hyperTextResult);
 					}
-
-					SetSegmentColor(hyperTextResult.SegmentIndex, hyperTextResult.LineIndex, color);
-				}
+				);
 			}
-			);
+			if (!pButton->OnPressedDelegateNative.IsBoundToObject(this))
+			{
+				pButton->OnPressedDelegateNative.AddWeakLambda(this,
+					[this, hyperTextResult](UHorizonButton* InButton) {
+
+						OnHypertextPressedDelegate.Broadcast(hyperTextResult);
+						OnHypertextPressedDelegateNative.Broadcast(hyperTextResult);
+					}
+				);
+			}
+			if (!pButton->OnReleasedDelegateNative.IsBoundToObject(this))
+			{
+				pButton->OnReleasedDelegateNative.AddWeakLambda(this,
+					[this, hyperTextResult](UHorizonButton* InButton) {
+
+						OnHypertextReleasedDelegate.Broadcast(hyperTextResult);
+						OnHypertextReleasedDelegateNative.Broadcast(hyperTextResult);
+
+						if (hyperTextResult.SegmentIndex < DialogueSegmentInfoList.Num())
+						{
+							auto& tmpSegInfo = DialogueSegmentInfoList[hyperTextResult.SegmentIndex];
+							tmpSegInfo.bHypertextVisited = true;
+							SetSegmentColor(hyperTextResult.SegmentIndex, hyperTextResult.LineIndex, tmpSegInfo.HypertextVisitedColor);
+						}
+					}
+				);
+			}
+			if (!pButton->OnHoveredDelegateNative.IsBoundToObject(this))
+			{
+				pButton->OnHoveredDelegateNative.AddWeakLambda(this,
+					[this, hyperTextResult](UHorizonButton* InButton) {
+						OnHypertextHoveredDelegate.Broadcast(hyperTextResult);
+						OnHypertextHoveredDelegateNative.Broadcast(hyperTextResult);
+						if (hyperTextResult.SegmentIndex < DialogueSegmentInfoList.Num())
+						{
+							auto& tmpSegInfo = DialogueSegmentInfoList[hyperTextResult.SegmentIndex];
+							SetSegmentColor(hyperTextResult.SegmentIndex, hyperTextResult.LineIndex, tmpSegInfo.HypertextHoveredColor);
+
+						}
+
+					}
+				);
+			}
+
+			if (!pButton->OnUnhoveredDelegateNative.IsBoundToObject(this))
+			{
+				pButton->OnUnhoveredDelegateNative.AddWeakLambda(this,
+					[this, hyperTextResult, pButton](UHorizonButton* InButton) {
+						OnHypertextUnhoveredDelegate.Broadcast(hyperTextResult);
+						OnHypertextUnhoveredDelegateNative.Broadcast(hyperTextResult);
+						if (hyperTextResult.SegmentIndex < DialogueSegmentInfoList.Num())
+						{
+							auto& tmpSegInfo = DialogueSegmentInfoList[hyperTextResult.SegmentIndex];
+							FSlateColor color = tmpSegInfo.ColorAndOpacity;
+							if (tmpSegInfo.bHypertextVisited)
+							{
+								color = tmpSegInfo.HypertextVisitedColor;
+							}
+
+							SetSegmentColor(hyperTextResult.SegmentIndex, hyperTextResult.LineIndex, color);
+						}
+					}
+				);
+			}
 
 			UCanvasPanelSlot* pButtonCanvasPanelSlot = Cast<UCanvasPanelSlot>(pButton->Slot);
+			CalculateBlockSize(blockInfo);
 			pButtonCanvasPanelSlot->SetSize(blockInfo.BlockSize);
 			pButtonCanvasPanelSlot->SetPosition(paddingPos);
 
@@ -2242,13 +2842,23 @@ void UHorizonDialogueMsgTextBlock::SetSegmentColor(int32 segmentIndex, int32 lin
 
 
 
+
+
 #endif //============================End Dialogue: Rebuild=============================
 
 
 
 
 #if 1 //============================Begin Dialogue Method: Text Overflow=============================
+EHorizonDialogueTextOverflowWrapMethod UHorizonDialogueMsgTextBlock::GetTextOverflowWrapMethod() const
+{
+	return TextOverFlowWrapMethod;
+}
 
+void UHorizonDialogueMsgTextBlock::SetTextOverflowWrapMethod(EHorizonDialogueTextOverflowWrapMethod InOverflowWrapMethod)
+{
+	TextOverFlowWrapMethod = InOverflowWrapMethod;
+}
 
 bool UHorizonDialogueMsgTextBlock::TryAddNewLine(
 	TCHAR currentChar, float& currentLineWidth,
@@ -2301,7 +2911,13 @@ bool UHorizonDialogueMsgTextBlock::TryAddDialogueBlock(
 
 		blockPos.X = LineMargin.Left;
 		//new line
-		DialogueLineInfoList.Last().LineWidth = currentLineWidth;
+		auto& lastLineInfo = DialogueLineInfoList.Last();
+		lastLineInfo.LineWidth = currentLineWidth;
+		if (0 == lastLineInfo.LineWidth)
+		{
+			// Remove empty line with only space for some edge case
+			DialogueLineInfoList.RemoveAt(DialogueLineInfoList.Num()-1);
+		}
 		DialogueLineInfoList.Emplace(FHorizonDialogueLineInfo());
 		//don't skip this char and advance for next line
 		currentLineWidth = 0;
@@ -2336,7 +2952,9 @@ void UHorizonDialogueMsgTextBlock::TextOverflowWarpNormal_WordBreakImplement(int
 
 		FVector2D oneCharSize = FontMeasure->Measure(segInfo.Text, segCharIndex, segCharIndex + 1, segInfo.Font);
 
-		DialogueLineInfoList.Last().MaxLineHeight = FMath::Max(DialogueLineInfoList.Last().MaxLineHeight, (int)(oneCharSize.Y + segInfo.PaddingMargin.Top));
+
+		CalculateMaxLineHeight(DialogueLineInfoList.Last(), segInfo, oneCharSize);
+
 
 		bool bEndOfLine = TryAddDialogueBlock(maxLineWidth, oneCharSize,
 			currentLineWidth, blockPos,
@@ -2398,7 +3016,11 @@ void  UHorizonDialogueMsgTextBlock::TextOverflowWarpNormal_Implement(float& curr
 
 
 		int32 segWordCharEndIndex = segCharIndex;
-		if (segInfo.Text[segWordCharEndIndex] <= 0xFF)
+		auto charCodePoint = segInfo.Text[segWordCharEndIndex];
+		if ((charCodePoint >= 0 && charCodePoint <= 255) || // English
+			(charCodePoint >= 256 && charCodePoint <= 546) ||
+			(charCodePoint >= 1024 && charCodePoint <= 1314) // Russian 
+			)
 		{
 			segWordCharEndIndex = UHorizonWidgetFunctionLibrary::FindCharIndexFromStr(segCharIndex, charList, segInfo.Text);
 			//plus 1 if current char is
@@ -2426,8 +3048,8 @@ void  UHorizonDialogueMsgTextBlock::TextOverflowWarpNormal_Implement(float& curr
 
 
 
+		CalculateMaxLineHeight(DialogueLineInfoList.Last(), segInfo, oneWordSize);
 
-		DialogueLineInfoList.Last().MaxLineHeight = FMath::Max(DialogueLineInfoList.Last().MaxLineHeight, (int)(oneWordSize.Y + segInfo.PaddingMargin.Top));
 
 		//if (currentLineWidth != 0) 
 		{
@@ -2458,6 +3080,7 @@ void  UHorizonDialogueMsgTextBlock::TextOverflowWarpNormal_Implement(float& curr
 				if (' ' == currentChar && 0 == currentLineWidth)
 				{
 					++segCharIndex; //skip space char at beginning of line
+					++segStartCharIndex;
 				}
 
 				if (0 == currentLineWidth && oneWordSize.X > maxLineWidth)
@@ -2521,8 +3144,8 @@ void UHorizonDialogueMsgTextBlock::TextOverflowWarpBreakAll_Implement(
 			oneWordSize.X = Font.Size * 2;
 		}
 
-
-		DialogueLineInfoList.Last().MaxLineHeight = FMath::Max(DialogueLineInfoList.Last().MaxLineHeight, (int)(oneWordSize.Y + segInfo.PaddingMargin.Top));
+		CalculateMaxLineHeight(DialogueLineInfoList.Last(), segInfo, oneWordSize);
+		
 
 
 		if (TryAddDialogueBlock(maxLineWidth, oneWordSize,
@@ -2569,6 +3192,11 @@ UHorizonFlipbookWidget* UHorizonDialogueMsgTextBlock::CreateDialogueFlipbook(FHo
 }
 
 UHorizonTextBlock* UHorizonDialogueMsgTextBlock::CreateDialogueTextBlock(FHorizonDialogueSegmentInfo& InSegInfo)
+{
+	return NewObject<UHorizonTextBlock>(GetOuter());
+}
+
+UHorizonTextBlock* UHorizonDialogueMsgTextBlock::CreateDialogueRubyTextBlock(FHorizonDialogueSegmentInfo& InSegInfo)
 {
 	return NewObject<UHorizonTextBlock>(GetOuter());
 }

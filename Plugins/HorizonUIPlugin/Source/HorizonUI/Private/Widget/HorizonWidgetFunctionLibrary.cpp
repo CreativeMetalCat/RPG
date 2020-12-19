@@ -296,17 +296,20 @@ EHorizonUIInputMode UHorizonWidgetFunctionLibrary::GetInputMode(const APlayerCon
 
 	if (IsValid(InPC))
 	{
-		UGameViewportClient* GameViewportClient = InPC->GetWorld()->GetGameViewport();
-		ULocalPlayer* LocalPlayer = InPC->GetLocalPlayer();
+		UGameViewportClient* pGameViewportClient = InPC->GetWorld()->GetGameViewport();
+		 
+		bool bIgnore = pGameViewportClient->IgnoreInput();
 
-		bool ignore = GameViewportClient->IgnoreInput();
-		EMouseCaptureMode capt = GameViewportClient->CaptureMouseOnClick();
-
-		if (ignore == false && capt == EMouseCaptureMode::CaptureDuringMouseDown)
+#if (ENGINE_MAJOR_VERSION <= 4) && (ENGINE_MINOR_VERSION <= 25)
+		EMouseCaptureMode eCapt = pGameViewportClient->CaptureMouseOnClick();
+#else
+		EMouseCaptureMode eCapt = pGameViewportClient->GetMouseCaptureMode();
+#endif
+		if (bIgnore == false && eCapt == EMouseCaptureMode::CaptureDuringMouseDown)
 		{
 			return EHorizonUIInputMode::GameAndUI;
 		}
-		else if (ignore == true && capt == EMouseCaptureMode::NoCapture)
+		else if (bIgnore == true && eCapt == EMouseCaptureMode::NoCapture)
 		{
 			return EHorizonUIInputMode::UIOnly;
 		}

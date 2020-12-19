@@ -17,6 +17,18 @@
 #include "Components/CanvasPanelSlot.h"
 
 
+#if WITH_EDITOR
+
+const FText UHorizonFlipbookWidget::GetPaletteCategory()
+{
+	return NSLOCTEXT("HorizonPlugin", "HorizonPlugin", "HorizonPlugin");
+}
+
+
+#endif //#if WITH_EDITOR
+
+
+
 #if 1 // override
 
 void UHorizonFlipbookWidget::OnWidgetRebuilt()

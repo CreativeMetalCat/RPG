@@ -72,6 +72,8 @@ public:
 
 	virtual TArray<FName> GetEnemyTags_Implementation() override;
 
+	virtual void GetActorEyesViewPoint(FVector& Location, FRotator& Rotation) const override;
+
 	UFUNCTION()
 	void OnAttackCollisionOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };

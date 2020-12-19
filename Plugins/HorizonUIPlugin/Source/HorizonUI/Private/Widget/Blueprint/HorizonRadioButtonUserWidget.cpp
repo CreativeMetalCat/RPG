@@ -20,8 +20,8 @@ void UHorizonRadioButtonUserWidget::NativeConstruct()
 	{
 		CheckBox_Main->OnCheckStateChanged.AddDynamic(this, &ThisClass::NativeOnCheckStateChanged);
 		TryChecked();
-	
-	}	
+
+	}
 
 }
 
@@ -39,26 +39,28 @@ void UHorizonRadioButtonUserWidget::NativeTick(const FGeometry& MyGeometry, floa
 
 void UHorizonRadioButtonUserWidget::OnSynchronizeProperties_Implementation()
 {
+	Super::OnSynchronizeProperties_Implementation();
+	GatherAllRadioButton();
 	if (TextBlock_Main)
 	{
 		TextBlock_Main->SetText(FText::AsCultureInvariant(Text_Main));
 	}
+
+	if (bCheckedByDefault)
+	{
+		SetChecked();	
+	}
+
 }
 
 
 
 void UHorizonRadioButtonUserWidget::SetChecked()
 {
-	if (CheckBox_Main)
-	{
-		bool _bIsChecked = CheckBox_Main->IsChecked();
-		NativeOnCheckStateChanged(true);
-		if (!_bIsChecked)
-		{
-			OnCheckedDelegate.Broadcast();
-			OnCheckedDelegateNative.Broadcast();
-		}
-	}
+
+	NativeOnCheckStateChanged(true);
+
+	
 }
 
 bool UHorizonRadioButtonUserWidget::IsChecked()
@@ -70,69 +72,111 @@ bool UHorizonRadioButtonUserWidget::IsChecked()
 	return false;
 }
 
+
+
 void UHorizonRadioButtonUserWidget::NativeOnCheckStateChanged(bool bIsChecked)
 {
-
-	auto pParentPanel = GetParent();
-	if (pParentPanel)
+	if (AllRadioButtons.Num() > 0)
 	{
-		TArray<UWidget*> allChridren = pParentPanel->GetAllChildren();
-		for (auto& it : allChridren)
+		for (auto& it : AllRadioButtons)
 		{
 			UHorizonRadioButtonUserWidget* pRadioButtonWidget = Cast<UHorizonRadioButtonUserWidget>(it);
 			if (nullptr == pRadioButtonWidget || nullptr == pRadioButtonWidget->CheckBox_Main) { continue; }
 			if (pRadioButtonWidget != this)
 			{
 				// uncheck others if the widget is checked
-				if (pRadioButtonWidget->CheckBox_Main->GetCheckedState() == ECheckBoxState::Checked)
+				if (pRadioButtonWidget->IsChecked())
 				{
-					pRadioButtonWidget->CheckBox_Main->SetIsChecked(false);
-					pRadioButtonWidget->OnUnCheckedDelegate.Broadcast();
-					pRadioButtonWidget->OnUnCheckedDelegateNative.Broadcast();
+					pRadioButtonWidget->HandleOnCheckStateChanged(false);
 
 				}
 			}
 			else
 			{
-				if (CheckBox_Main->GetCheckedState() != ECheckBoxState::Checked)
+				bool _bIsChecked = IsChecked();
+
+				if (!_bIsChecked && !bIsChecked)
 				{
-					// click same widget, force checked
-					CheckBox_Main->SetIsChecked(true);
+					HandleOnCheckStateChanged(true);
 				}
 				else
 				{
-					OnCheckedDelegate.Broadcast();
-					OnCheckedDelegateNative.Broadcast();
+					HandleOnCheckStateChanged(bIsChecked);
 				}
+				
 			}
 		}
 	}
+	else
+	{
+		HandleOnCheckStateChanged(bIsChecked);
+	}
+
 
 }
 
 
-void UHorizonRadioButtonUserWidget::TryChecked()
+
+
+void UHorizonRadioButtonUserWidget::HandleOnCheckStateChanged(bool bIsChecked)
 {
-	bool bHasChecked = false;
-	auto pParentPanel = GetParent();
+	if (CheckBox_Main)
+	{
+		CheckBox_Main->SetIsChecked(bIsChecked);
+		BP_OnCheckStateChanged(bIsChecked);
+		if (bIsChecked)
+		{
+			OnCheckedDelegate.Broadcast();
+			OnCheckedDelegateNative.Broadcast();
+		}
+		else
+		{
+			OnUnCheckedDelegate.Broadcast();
+			OnUnCheckedDelegateNative.Broadcast();			
+		}
+
+	}
+}
+
+void UHorizonRadioButtonUserWidget::GatherAllRadioButton()
+{
+	AllRadioButtons.Reset();
+	UPanelWidget* pParentPanel = GetParent();
 	if (pParentPanel)
 	{
 		TArray<UWidget*> allChridren = pParentPanel->GetAllChildren();
 		for (auto& it : allChridren)
 		{
 			UHorizonRadioButtonUserWidget* pRadioButtonWidget = Cast<UHorizonRadioButtonUserWidget>(it);
-			if (pRadioButtonWidget && pRadioButtonWidget->CheckBox_Main)
+			if (pRadioButtonWidget)
 			{
-				if (pRadioButtonWidget->CheckBox_Main->IsChecked())
-				{
-					bHasChecked = true;
-					break;
-				}
+				AllRadioButtons.AddUnique(pRadioButtonWidget);
 			}
 		}
 	}
+}
+
+void UHorizonRadioButtonUserWidget::TryChecked()
+{
+	bool bHasChecked = false;
+
+	for (auto& it : AllRadioButtons)
+	{
+		UHorizonRadioButtonUserWidget* pRadioButtonWidget = Cast<UHorizonRadioButtonUserWidget>(it);
+		if (pRadioButtonWidget)
+		{
+			if (pRadioButtonWidget->IsChecked())
+			{
+				bHasChecked = true;
+				break;
+			}
+		}
+	}
+	
 	if (false == bHasChecked)
 	{
 		NativeOnCheckStateChanged(true);
 	}
 }
+
+

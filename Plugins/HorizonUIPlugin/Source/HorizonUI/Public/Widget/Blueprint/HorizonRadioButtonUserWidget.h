@@ -13,13 +13,13 @@ class UCheckBox;
 class UButton;
 class UTextBlock;
 /**
- * 
+ *
  */
 UCLASS()
 class HORIZONUI_API UHorizonRadioButtonUserWidget : public UHorizonDesignableUserWidget
 {
 	GENERATED_BODY()
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHorizonRadioButtonEvent);
+		DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHorizonRadioButtonEvent);
 	DECLARE_MULTICAST_DELEGATE(FOnHorizonRadioButtonEventNative);
 public:
 	UHorizonRadioButtonUserWidget();
@@ -32,17 +32,29 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "HorizonPlugin|UI|RadioButton")
 	virtual void SetChecked();
 	virtual bool IsChecked();
-private:
+
+protected:
+	//virtual void SetUnchecked();
 	UFUNCTION()
 	virtual void NativeOnCheckStateChanged(bool bIsChecked);
+	virtual void HandleOnCheckStateChanged(bool bIsChecked);
+	UFUNCTION(BlueprintImplementableEvent, Category = "HorizonPlugin|UI|RadioButton")
+	void BP_OnCheckStateChanged(bool bIsChecked);
 
-	void TryChecked();
+
+	virtual void GatherAllRadioButton();
+protected:
+
+
+
+	// TryCheck is no other RadioButton checked
+	virtual void TryChecked();
 public:
 	UPROPERTY(BlueprintAssignable, Category = "HorizonPlugin|UI|Delegate")
-	FOnHorizonRadioButtonEvent OnCheckedDelegate;
+		FOnHorizonRadioButtonEvent OnCheckedDelegate;
 
 	UPROPERTY(BlueprintAssignable, Category = "HorizonPlugin|UI|Delegate")
-	FOnHorizonRadioButtonEvent OnUnCheckedDelegate;
+		FOnHorizonRadioButtonEvent OnUnCheckedDelegate;
 
 	// for c++ callback binding
 	FOnHorizonRadioButtonEventNative OnCheckedDelegateNative;
@@ -57,4 +69,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Content", meta = (MultiLine = true))
 	FText Text_Main;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Content")
+	bool bCheckedByDefault = false;
+
+private:
+	TArray<TWeakObjectPtr<UHorizonRadioButtonUserWidget>> AllRadioButtons;
 };

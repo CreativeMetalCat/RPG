@@ -19,6 +19,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Async/Async.h"
 #include "Runtime/Launch/Resources/Version.h"
+#include "ImageUtils.h"
 
 /**
 Initalization
@@ -308,6 +309,18 @@ TArray<FString> UEMSObject::GetSortedSaveSlots()
 	}
 	
 	return SaveSlotNames;
+}
+
+bool UEMSObject::DoesSaveGameExist(const FString& SaveGameName)
+{
+	const FString SaveFile = FPaths::Combine(BaseSaveDir(), SaveGameName);
+
+	if (IFileManager::Get().DirectoryExists(*SaveFile))
+	{
+		return true;
+	}
+
+	return false;
 }
 
 /**
@@ -1483,6 +1496,13 @@ FTimerManager& UEMSObject::GetTimerManager()
 
 bool UEMSObject::IsAsyncSaveOrLoadTaskActive(const ESaveGameMode& Mode)
 {
+	//This will prevent the functions from being executed at all during pause
+	if (GetWorld()->IsPaused())
+	{
+		UE_LOG(LogEasyMultiSave, Warning, TEXT(" Async save or load called during pause. Operation was canceled."));
+		return true;
+	}
+
 	for (TObjectIterator<UEMSAsyncLoadGame> It; It; ++It)
 	{
 		if (*It && It->bIsActive && (It->Mode == Mode || It->Mode == ESaveGameMode::MODE_All))
@@ -1502,6 +1522,17 @@ bool UEMSObject::IsAsyncSaveOrLoadTaskActive(const ESaveGameMode& Mode)
 	}
 
 	return false;
+}
+
+bool UEMSObject::HasValidGameMode()
+{
+	const AGameModeBase* GameMode = GetWorld()->GetAuthGameMode();
+	return IsValid(GameMode);
+}
+
+bool UEMSObject::HasValidPlayer()
+{
+	return IsValid(GetPlayerPawn());
 }
 
 /**
@@ -1552,12 +1583,13 @@ UTexture2D* UEMSObject::ImportSaveThumbnail(const FString& SaveGameName)
 	{
 		return FImageUtils::ImportFileAsTexture2D(SaveThumbnailName);
 	}
-
+	
 	return nullptr;
 }
 
 void UEMSObject::ExportSaveThumbnail(UTextureRenderTarget2D* TextureRenderTarget, const FString& SaveGameName)
 {
+	
 	FString SaveThumbnailName = ThumbnailSaveFile(SaveGameName);
 	FText PathError;
 
@@ -1604,6 +1636,7 @@ void UEMSObject::ExportSaveThumbnail(UTextureRenderTarget2D* TextureRenderTarget
 			UE_LOG(LogEasyMultiSave, Warning, TEXT("ExportSaveThumbnailRT: FileWrite failed to create"));
 		}
 	}
+	
 }
 
 

@@ -19,15 +19,15 @@ class HORIZONUI_API UHorizonFlipbookWidget :
 public:
 
 
-//#if WITH_EDITOR
-//	//~ Begin UWidget Interface
-//	//#if (ENGINE_MAJOR_VERSION <= 4) && (ENGINE_MINOR_VERSION <= 12)
-//	//virtual const FSlateBrush* GetEditorIcon() override;
-//	//#endif
-//	virtual const FText GetPaletteCategory() override;
-//
-//	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-//#endif
+#if WITH_EDITOR
+	//~ Begin UWidget Interface
+	//#if (ENGINE_MAJOR_VERSION <= 4) && (ENGINE_MINOR_VERSION <= 12)
+	//virtual const FSlateBrush* GetEditorIcon() override;
+	//#endif
+	virtual const FText GetPaletteCategory() override;
+
+
+#endif
 
 #if 1 // override
 protected:

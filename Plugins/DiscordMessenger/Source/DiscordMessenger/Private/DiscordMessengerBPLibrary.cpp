@@ -17,7 +17,7 @@ void UDiscordMessengerBPLibrary::SendDiscordMessage(
 	bool IncludeEmbed
 	)
 {
-	TSharedPtr<IHttpRequest> Request = FHttpModule::Get().CreateRequest();
+	TSharedPtr<IHttpRequest, ESPMode::ThreadSafe> Request = FHttpModule::Get().CreateRequest();
 	
 	Request->SetVerb("POST");
 	Request->SetURL(Webhook);

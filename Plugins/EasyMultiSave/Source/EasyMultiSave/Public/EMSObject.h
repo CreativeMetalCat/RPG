@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ImageUtils.h"
 #include "Misc/Paths.h"
 #include "Engine/World.h"
 #include "Serialization/BufferArchive.h"
@@ -99,6 +98,8 @@ public:
 	void SaveSlotInfoObject();
 	UEMSInfoSaveGame* GetSlotInfoObject(FString SaveGameName = FString());
 
+	bool DoesSaveGameExist(const FString& SaveGameName);
+
 	void PrepareLoadAndSaveActors(uint32 Flags, bool bFullReload = false);
 	void LogFinishLoadingLevel();
 
@@ -125,6 +126,9 @@ public:
 	FTimerManager& GetTimerManager();
 
 	bool IsAsyncSaveOrLoadTaskActive(const ESaveGameMode& Mode = ESaveGameMode::MODE_All);
+
+	bool HasValidGameMode();
+	bool HasValidPlayer();
 
 /** Internal Functions  */
 

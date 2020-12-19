@@ -9,6 +9,7 @@
 #include "Misc/AssertionMacros.h"
 #include "Algo/Accumulate.h"
 #include "Misc/CommandLine.h"
+#include "Logging/MessageLog.h"
 //Engine
 #include "Engine/Brush.h"
 #include "Engine/Font.h"
@@ -66,4 +67,3 @@ DECLARE_LOG_CATEGORY_EXTERN(LogHorizonUI, Log, All);
 #define UE_HORIZONUI_VERY_VERBOSE(msg, ...) UE_LOG(LogHorizonUI, VeryVerbose, TEXT(msg), ##__VA_ARGS__)
 
 
-//static FName GName_HorizonUIPlugin = "HorizonUIPlugin";

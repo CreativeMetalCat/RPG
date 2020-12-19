@@ -7,10 +7,10 @@
 	"Category": "Misc",
 	"CreatedBy": "CodeSpartan",
 	"CreatedByURL": "https://forums.unrealengine.com/showthread.php?105999-Dialogue-Plugin",
-	"DocsURL": "https://docs.google.com/document/d/1gKlNNxpNIEJ7Fx9cjOdHb6V8GmLwdI3PX8jlOGHZsxU/",
+	"DocsURL": "https://docs.google.com/document/d/1qw06osFKccB5mjqe_e7QvWssXS1U14wPRQkWPBWzTHE/",
 	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/847aa65dc3024a37ae83ed89307524bd",
 	"SupportURL": "",
-	"EngineVersion": "4.25.0",
+	"EngineVersion": "4.26.0",
 	"CanContainContent": true,
 	"Installed": true,
 	"Modules": [

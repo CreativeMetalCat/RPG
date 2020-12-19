@@ -121,6 +121,6 @@ public:
 	bool bFocusOnHovered = true;
 
 
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidgetOptional), Category = "UI")
+	UPROPERTY(BlueprintReadOnly, Category = "UI")
 	bool bButtonFocused = false;
 };

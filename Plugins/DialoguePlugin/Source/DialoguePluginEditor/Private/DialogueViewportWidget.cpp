@@ -25,6 +25,9 @@
 #include "Serialization/BufferArchive.h"
 #include "Serialization/MemoryReader.h"
 #include "Editor/PropertyEditor/Public/DetailLayoutBuilder.h"
+#include "Fonts/FontMeasure.h"
+#include "EdGraphNode_Comment.h"
+#include "SGraphNodeComment.h"
 
 #define LOCTEXT_NAMESPACE "SDialogueViewportWidget"
 
@@ -134,13 +137,21 @@ void SDialogueViewportWidget::Construct(const FArguments& InArgs, TSharedPtr<FDi
 	PostChangedZoom();
 	UpdateZoomAffectedValues();
 	NodeFont = IDetailLayoutBuilder::GetDetailFont();
-	UpdateFontInfo();
+	UpdateFontInfo();	
 
 	Dialogue = InArgs._Dialogue;
 	DialogueEditorPtr = InDialogueEditor;
 	ShowGraphStateOverlay = InArgs._ShowGraphStateOverlay;
 	IsEditable = InArgs._IsEditable;
-	
+
+	// Get resources/settings for drawing comment bubbles
+	CommentCalloutArrow = FEditorStyle::GetBrush(TEXT("Graph.Node.CommentArrow"));
+	CommentCalloutBubble = FEditorStyle::GetBrush(TEXT("Graph.Node.CommentBubble"));
+	CommentFont = FEditorStyle::GetFontStyle(TEXT("Graph.Node.CommentFont"));
+	CommentTintColor = FLinearColor(1.f, 1.f, 1.f);
+	CommentTextColor = FLinearColor(0.06f, 0.06f, 0.06f);	
+	CommentBubblePadding = FVector2D(9.f, 6.f); // originally FEditorStyle::GetVector(TEXT("Graph.Node.Comment.BubblePadding")); // = 3
+
 	ChildSlot
 	[
 		SNew(SBox)
@@ -159,15 +170,22 @@ void SDialogueViewportWidget::SpawnNodes(int32 IdToFocus)
 	isNodeVisible.Empty();
 	NodeIdsIndexes.Empty();
 
-	if (!Dialogue->Data.IsValidIndex(0)) // if we're opening the dataAsset for the first time, create the Start node
+	// if we're opening the dataAsset for the first time, create the Start node
+	if (!Dialogue->Data.IsValidIndex(0))
 	{
 		FDialogueNode NewNode;
 		NewNode.id = 0;
-		NewNode.Text = FText::FromString(TEXT("Start"));
+		NewNode.Text = FText::GetEmpty();
 		bFirstNodeRequiresRepositionning = true;
 		Dialogue->NextNodeId = 1;
 		Dialogue->Data.Add(NewNode);
 	}
+	// BugFix for previously created dialogues prior to 4.26
+	// TODO: Remove this around 4.30
+	else
+	{
+		Dialogue->Data[0].Text = FText::GetEmpty();
+	}		
 
 	// nodes themselves
 	int i = 0;
@@ -960,9 +978,10 @@ int32 SDialogueViewportWidget::OnPaint(const FPaintArgs& Args, const FGeometry& 
 	// draw lines and arrows between nodes, representing links
 	for (auto Node : Dialogue->Data) //for each dialogue node
 	{
-		// Draw node shadow/selection overlay for this node
+		
 		if (isNodeVisible[nodeIndex])
 		{
+			// Draw node shadow/selection overlay for this node
 			FVector2D overlaySize = NodeWidgets[nodeIndex]->NodeSize + FVector2D(24.f, 24.f);
 			FVector2D upperLeft = (Node.Coordinates + panningOffset) * GetZoomAmount() - (overlaySize / 2.f);
 
@@ -972,8 +991,23 @@ int32 SDialogueViewportWidget::OnPaint(const FPaintArgs& Args, const FGeometry& 
 				AllottedGeometry.ToPaintGeometry(FVector2D(overlaySize), FSlateLayoutTransform(FVector2D(upperLeft))),
 				FEditorStyle::GetBrush(NodeWidgets[nodeIndex]->isSelected ? TEXT("Graph.Node.ShadowSelected")  : TEXT("Graph.Node.Shadow"))
 				);
-		}
 
+			// Draw a commentary bubble above each node
+			if (ZoomLevel > 4 && Node.bDrawBubbleComment && !Node.BubbleComment.IsEmpty())
+			{								
+				// only drawn full comment at ZoomLevel -5 and higher
+				if (ZoomLevel > 6)
+				{
+					PaintComment(Node.BubbleComment, true, NodeWidgets[nodeIndex]->GetPaintSpaceGeometry(), MyClippingRect, OutDrawElements, LayerId + 6);
+				}
+				// at ZoomLevels -7 and -6, only paint a comment with empty string inside
+				else
+				{
+					PaintComment(FText::GetEmpty(), false, NodeWidgets[nodeIndex]->GetPaintSpaceGeometry(), MyClippingRect, OutDrawElements, LayerId + 6);
+				}
+				// at ZoomLevels -8 and lower, don't pain any comment bubbles
+			}
+		}
 
 		for (auto Link : Node.Links) // for each link
 		{
@@ -1139,9 +1173,83 @@ int32 SDialogueViewportWidget::OnPaint(const FPaintArgs& Args, const FGeometry& 
 			ESlateDrawEffect::None,
 			FLinearColor::White
 			);
-	}
+	}	
 
 	return maxLayerId;
+}
+
+void SDialogueViewportWidget::PaintComment(const FText& CommentText, const bool& PaintDetailed, const FGeometry& AllottedGeometry, const FSlateRect& MyCullingRect, FSlateWindowElementList& OutDrawElements, int32 DrawLayerId) const
+{			
+	if (PaintDetailed)
+	{
+		const TSharedRef<FSlateFontMeasure> FontMeasureService = FSlateApplication::Get().GetRenderer()->GetFontMeasureService();
+		FVector2D CommentTextSize = FontMeasureService->Measure(CommentText, CommentFont) + (CommentBubblePadding * 2);
+		const float PositionBias = 2.f;
+		const FVector2D CommentBubbleOffset = FVector2D(0, -(CommentTextSize.Y + CommentCalloutArrow->ImageSize.Y) - PositionBias);
+		const FVector2D CommentBubbleArrowOffset(8, -10); // = FVector2D(CommentCalloutArrow->ImageSize.X, -CommentCalloutArrow->ImageSize.Y - PositionBias);
+
+		//UE_LOG(LogTemp, Log, TEXT("Debug. TextSize: (%f, %f)... Bubble offset: (%f, %f)"), CommentTextSize.X, CommentTextSize.Y, CommentBubbleOffset.X, CommentBubbleOffset.Y);
+
+		// Draw a comment bubble
+		FSlateDrawElement::MakeBox(
+			OutDrawElements,
+			DrawLayerId - 1,
+			AllottedGeometry.ToPaintGeometry(CommentTextSize, FSlateLayoutTransform(1.0f, TransformPoint(1.0f, CommentBubbleOffset))),
+			CommentCalloutBubble,
+			ESlateDrawEffect::None,
+			CommentTintColor
+		);
+
+		// Draw the arrow
+		FSlateDrawElement::MakeBox(
+			OutDrawElements,
+			DrawLayerId - 1,
+			AllottedGeometry.ToPaintGeometry(CommentCalloutArrow->ImageSize, FSlateLayoutTransform(1.0f, TransformPoint(1.0f, CommentBubbleArrowOffset))),
+			CommentCalloutArrow,
+			ESlateDrawEffect::None,
+			CommentTintColor
+		);
+
+		// Draw the comment text itself
+		FSlateDrawElement::MakeText(
+			OutDrawElements,
+			DrawLayerId,
+			AllottedGeometry.ToPaintGeometry(CommentTextSize, FSlateLayoutTransform(1.0f, TransformPoint(1.0f, CommentBubbleOffset + CommentBubblePadding))),
+			CommentText,
+			CommentFont,
+			ESlateDrawEffect::None,
+			CommentTextColor
+		);
+	}
+	else
+	{
+		const FVector2D CommentTextSize(23, 18);
+		const float PositionBias = 2.f;
+		const FVector2D CommentBubbleOffset(0, -27);
+		const FVector2D CommentBubbleArrowOffset(8, -10);		
+
+		// Draw a comment bubble
+		FSlateDrawElement::MakeBox(
+			OutDrawElements,
+			DrawLayerId - 1,
+			AllottedGeometry.ToPaintGeometry(CommentTextSize, FSlateLayoutTransform(1.0f, TransformPoint(1.0f, CommentBubbleOffset))),
+			CommentCalloutBubble,
+			ESlateDrawEffect::None,
+			CommentTintColor
+		);
+
+		// Draw the arrow
+		FSlateDrawElement::MakeBox(
+			OutDrawElements,
+			DrawLayerId - 1,
+			//AllottedGeometry.ToPaintGeometry(CommentBubbleArrowOffset, CommentCalloutArrow->ImageSize),
+			AllottedGeometry.ToPaintGeometry(CommentCalloutArrow->ImageSize, FSlateLayoutTransform(1.0f, TransformPoint(1.0f, CommentBubbleArrowOffset))),
+			CommentCalloutArrow,
+			ESlateDrawEffect::None,
+			CommentTintColor
+		);
+	}
+
 }
 
 float SDialogueViewportWidget::GetZoomAmount() const
@@ -1245,6 +1353,8 @@ EVisibility SDialogueViewportWidget::IsSimulating() const
 
 void SDialogueViewportWidget::UpdateZoomAffectedValues()
 {
+	CommentFont.Size = FEditorStyle::GetFontStyle(TEXT("Graph.Node.CommentFont")).Size + GetZoomLevel() - 12;
+
 	switch (ZoomLevel)
 	{
 		// zoom -12

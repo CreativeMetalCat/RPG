@@ -309,7 +309,12 @@ FText SDialogueNodeWidget::GetNodeText() const
 {
 	if (!isVisible)
 	{
-		return FText::FromString("");
+		return FText::GetEmpty();
+	}
+
+	if (Dialogue->Data[NodeIndex].id == 0)
+	{
+		return FText::FromString("Start");
 	}
 
 	FText NodeText = Dialogue->Data[NodeIndex].Text;

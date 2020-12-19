@@ -74,6 +74,18 @@ TArray<FName> AEnemyCharacterBase::GetEnemyTags_Implementation()
     return EnemyTags;
 }
 
+void AEnemyCharacterBase::GetActorEyesViewPoint(FVector& Location, FRotator& Rotation) const
+{
+    Location = GetActorLocation();
+
+    switch (CurrentDirection)
+    {
+        case EDirection::ED_Down:
+            
+            break;
+    }
+}
+
 void AEnemyCharacterBase::OnAttackCollisionOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
                                                         UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {

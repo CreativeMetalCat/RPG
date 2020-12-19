@@ -118,6 +118,12 @@ struct FDialogueNode
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue Node")
 	class UDialogueWave* DialogueWave = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue Node", meta = (MultiLine = "true"))
+	FText BubbleComment;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dialogue Node")
+	bool bDrawBubbleComment;
 };
 
 UCLASS(Blueprintable, BlueprintType)
@@ -128,6 +134,10 @@ class DIALOGUEPLUGIN_API UDialogue : public UDataAsset
 public:
 
 	UDialogue(const FObjectInitializer& ObjectInitializer);
+
+#if WITH_EDITOR
+	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
+#endif
 
 	UFUNCTION(BlueprintCallable, Category = Dialogue)
 	FDialogueNode GetFirstNode();

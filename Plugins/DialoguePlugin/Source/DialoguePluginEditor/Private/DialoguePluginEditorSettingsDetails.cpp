@@ -69,12 +69,16 @@ void FDialoguePluginEditorSettingsDetails::CustomizeDetails( IDetailLayoutBuilde
 		const TSharedPtr<IPropertyHandleArray> Array = DataProperty->AsArray();
 		const TSharedPtr<IPropertyHandle> Child = Array->GetElement(index);
 		const TSharedPtr<IPropertyHandle> IsPlayerField = Child->GetChildHandle("isPlayer");
+		const TSharedPtr<IPropertyHandle> DrawCommentBubble = Child->GetChildHandle("bDrawBubbleComment");
+		const TSharedPtr<IPropertyHandle> Comment = Child->GetChildHandle("BubbleComment");
 		const TSharedPtr<IPropertyHandle> EventsField = Child->GetChildHandle("Events");
 		const TSharedPtr<IPropertyHandle> ConditionsField = Child->GetChildHandle("Conditions");
 		const TSharedPtr<IPropertyHandle> SoundField = Child->GetChildHandle("Sound");
 		const TSharedPtr<IPropertyHandle> DialogueWaveField = Child->GetChildHandle("DialogueWave");
 		
 		CurrentNodeCategory.AddProperty(IsPlayerField);
+		CurrentNodeCategory.AddProperty(DrawCommentBubble);
+		CurrentNodeCategory.AddProperty(Comment);
 		CurrentNodeCategory.AddProperty(EventsField);		
 		
 		/* 

@@ -26,8 +26,8 @@
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AI/AIInterface.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AI/EnemyAIBase.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/AI/EnemyAIBase.cpp" />
-      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/EnemyCharacterBase.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/EnemyCharacterBase.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/EnemyCharacterBase.cpp" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1jSDjgaV6fdvnuJSqu7NpLdyr2x" />

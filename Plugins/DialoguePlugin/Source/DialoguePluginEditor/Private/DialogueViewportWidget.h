@@ -153,7 +153,7 @@ public:
 	void ForceSlateToStayAwake();
 	TOptional<FSlateRenderTransform> GetIconScale();
 	FMargin GetLeftCornerPadding();
-	/** @return zoom level; e.g. values between 0 and 16 */
+	/** @return zoom level; e.g. values between 0 and 16; 1:1 zoom is 12. */
 	int32 GetZoomLevel() const;
 	FDialogueNode GetNodeById(int32 Id);
 	void DuplicateSelected();
@@ -175,7 +175,7 @@ public:
 	TArray<SConstraintCanvas::FSlot*> NodeFSlots;
 	TArray<bool> isNodeVisible;
 	int32 breakingLinksFromId;
-	int32 EditTextNode;
+	int32 EditTextNode = -1;
 	bool isLinkingAndCapturing;
 	bool bBreakingLinksMode;
 	bool isSelectingMultiple;
@@ -189,6 +189,8 @@ private:
 	
 	// Paint the background as lines
 	void PaintBackgroundAsLines(const FSlateBrush* BackgroundImage, const FGeometry& AllottedGeometry, const FSlateRect& MyClippingRect, FSlateWindowElementList& OutDrawElements, int32& DrawLayerId) const;
+	// Paint a comment bubble above a particular dialogue node
+	void PaintComment(const FText& CommentText, const bool& PaintDetailed, const FGeometry& AllottedGeometry, const FSlateRect& MyCullingRect, FSlateWindowElementList& OutDrawElements, int32 DrawLayerId) const;
 	/** Given a coordinate in graph space (e.g. a node's position), return the same coordinate in widget space while taking zoom and panning into account */
 	FVector2D GraphCoordToPanelCoord(const FVector2D& GraphSpaceCoordinate) const;
 	void OnAddNodeClicked();
@@ -258,4 +260,11 @@ private:
 	FCurveSequence ZoomLevelFade;
 
 	FIntPoint CoordsForPasting;
+
+	const FSlateBrush* CommentCalloutArrow;
+	const FSlateBrush* CommentCalloutBubble;
+	FSlateFontInfo CommentFont;
+	FLinearColor CommentTintColor;
+	FLinearColor CommentTextColor;
+	FVector2D CommentBubblePadding;
 };
