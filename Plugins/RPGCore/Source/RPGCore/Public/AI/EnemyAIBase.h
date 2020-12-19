@@ -133,5 +133,7 @@ public:
 
 	virtual FVector GetCurrentRandomPointGoal_Implementation() override { return RandomMovementGoal; }
 
+	virtual AActor* GetCurrentTarget_Implementation()override{return CurrentTarget;}
+
 
 };

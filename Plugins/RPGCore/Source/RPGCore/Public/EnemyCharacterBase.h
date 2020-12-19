@@ -19,6 +19,8 @@ UCLASS()
 class RPGCORE_API AEnemyCharacterBase : public ARPGCharacterBase, public IAIInterface
 {
 	GENERATED_BODY()
+protected:
+	FTimerHandle AttackCollisionCheckUpdateTimerHandle;
 public:
 
 	AEnemyCharacterBase();
@@ -56,21 +58,45 @@ public:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "AI|Movement")
 	EAIMovementType MovementType = EAIMovementType::EAIMT_Random;
 
-	virtual void BeginPlay() override;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Update")
+	float AttackCheckUpdateRate = 1.f;
 
-	virtual ARPGCharacterBase* GetCurrentTarget_Implementation() override{return CurrentTarget;}
+	virtual void BeginPlay() override;
 	
 	public:
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "AI")
+	bool bIsControllerCompatible = false;
+	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "AI|Target")
-	ARPGCharacterBase* CurrentTarget = nullptr;
+	AActor* CurrentTarget = nullptr;
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category =  "AI|Target|Classes",meta=(ExposeOnSpawn = true))
 	TArray<FName> EnemyTags;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "AI|Attack")
+	bool bAnythingOverlappingUpperCollision = false;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "AI|Attack")
+	bool bAnythingOverlappingLowerCollision = false;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "AI|Attack")
+	bool bAnythingOverlappingRightCollision = false;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "AI|Attack")
+	bool bAnythingOverlappingLeftCollision = false;
+	
+	UFUNCTION(BlueprintCallable,Category = "AI|Attack")
+	void CheckAttackCollision();
 
 	virtual TArray<FName> GetEnemyTags_Implementation() override;
 
 	virtual void GetActorEyesViewPoint(FVector& Location, FRotator& Rotation) const override;
 
+	virtual void SetNewTarget_Implementation(AActor*Target)override;
+
 	UFUNCTION()
 	void OnAttackCollisionOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnAttackCollisionEndOverlap(UPrimitiveComponent* OverlappedComp,AActor* OtherActor, UPrimitiveComponent* OtherComp,int32 OtherBodyIndex);
 };

@@ -28,7 +28,7 @@ public:
 	FVector GetCurrentRandomPointGoal();
 
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category="AI|Target")
-	ARPGCharacterBase* GetCurrentTarget();
+	AActor* GetCurrentTarget();
 	
 	/*Passing nullptr MUST clear the value*/
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category="AI|Target")

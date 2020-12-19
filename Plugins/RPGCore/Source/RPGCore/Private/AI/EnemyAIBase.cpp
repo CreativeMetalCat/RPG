@@ -235,6 +235,10 @@ void AEnemyAIBase::SetNewTarget_Implementation(AActor* Target)
 void AEnemyAIBase::SetTarget(AActor* Target)
 {
    CurrentTarget = Target;
+   if(Cast<IAIInterface>(GetPawn()) || GetPawn()->Implements<UAIInterface>())
+   {
+      IAIInterface::Execute_SetNewTarget(GetPawn(),Target);
+   }
    if(Blackboard)
    {
       if(Target != nullptr)
