@@ -39,6 +39,7 @@
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Developer/PluginUtils" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Developer/PropertyAccessNode" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Developer/RenderDocPlugin" />
+    <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Developer/RiderLink" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Developer/RiderSourceCodeAccess" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Developer/SubversionSourceControl" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Developer/TraceDataFiltering" />
@@ -169,7 +170,9 @@
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Marketplace/CustomConfig" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Marketplace/DialoguePlugin" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Marketplace/DiscordMessenger" />
+    <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Marketplace/EasyJsonParser" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Marketplace/EasyMultiSave" />
+    <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Marketplace/EasyXMLParser" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Marketplace/HorizonUIPlugin" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Marketplace/LDAssistant" />
     <content url="file://$MODULE_DIR$/../../../../Program Files/Epic Games/UE_4.26/Engine/Plugins/Marketplace/RegexInBP" />
