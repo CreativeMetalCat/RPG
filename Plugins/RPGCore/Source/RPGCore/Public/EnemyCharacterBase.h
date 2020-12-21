@@ -7,6 +7,7 @@
 
 #include "AI/AIInterface.h"
 #include "AI/AIMovementType.h"
+#include "AI/EnemyAIBase.h"
 #include "Components/SphereComponent.h"
 #include "RPGCore/Public/RPGCharacterBase.h"
 #include "RPGCore/Public/AI/PatrolPointBase.h"
@@ -24,7 +25,11 @@ protected:
 public:
 
 	AEnemyCharacterBase();
-	
+
+	/*The controller to use if default controller is null on spawn */
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "AI")
+	TSubclassOf<AEnemyAIBase> ControllerClass;
+		
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI|Sense")
 	USphereComponent*SenseSphereComponent;
 	

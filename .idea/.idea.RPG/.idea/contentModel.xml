@@ -49557,6 +49557,9 @@
                 </e>
                 <e p="RPGCharacterBase.cpp" t="Include" />
                 <e p="RPGCore.cpp" t="Include" />
+                <e p="Spawner" t="Include">
+                  <e p="SpawnerBase.cpp" t="Include" />
+                </e>
               </e>
               <e p="Public" t="Include">
                 <e p="Ability" t="Include">
@@ -49585,6 +49588,9 @@
                 </e>
                 <e p="RPGCharacterBase.h" t="Include" />
                 <e p="RPGCore.h" t="Include" />
+                <e p="Spawner" t="Include">
+                  <e p="SpawnerBase.h" t="Include" />
+                </e>
               </e>
               <e p="RPGCore.Build.cs" t="Include" />
             </e>
