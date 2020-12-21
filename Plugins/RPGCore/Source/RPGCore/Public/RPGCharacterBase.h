@@ -405,6 +405,10 @@ public:
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Display)
     void UpdatePlayerInfo();
 
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Damage)
+	void ReactToDamage();
+	
+	//here it represents character TAKING damage
 	virtual int DealDamage_Implementation(int Damage,AActor*DamageDealer =nullptr, TSubclassOf<ASpecialEffect> SpecialEffect =nullptr) override;
 
 	virtual void BeginPlay() override;
@@ -476,6 +480,12 @@ public:
 	/*The health is amount of hits player can take(techincally some attacks deal more then one damage)*/
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Stats|Health",SaveGame)
 	int Health = 100;
+
+	/*Set this to false if you don't want this character to die
+	 * Useful for Important NPCs or for invniciblity frames
+	 */
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Stats|Health",SaveGame)
+	bool bCanDie = true;
 	
 	/*The max health is max amount of health player can have(changed with level up)*/
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Stats|Health",SaveGame)

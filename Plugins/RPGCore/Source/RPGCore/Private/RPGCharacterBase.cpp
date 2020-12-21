@@ -828,8 +828,15 @@ void ARPGCharacterBase::EndDodgeRollCooldown()
 	bCanDodgeRoll = true;
 }
 
+void ARPGCharacterBase::ReactToDamage_Implementation()
+{
+	//Play camera shakes, damage anims, etc. here
+}
+
 int ARPGCharacterBase::DealDamage_Implementation(int Damage,AActor*DamageDealer, TSubclassOf<ASpecialEffect> SpecialEffect)
 {
+	//this character can not die and as such doesn't receive damage
+	if (!bCanDie) { return 0; }
 	int TotalArmor = Defense;
 	bool hasArmorPiece = false;
 	FItemInfo item = GetCurrentBottomPartArmor(hasArmorPiece);
@@ -870,6 +877,7 @@ int ARPGCharacterBase::DealDamage_Implementation(int Damage,AActor*DamageDealer,
 			SpecialEffect.GetDefaultObject()->ApplyEffect(DamageDealer,GetActorLocation(),GetWorld(),this);//this will get destroyed after function executes
 		}
 	}
+	ReactToDamage();
 	return Damage;
 }
 
