@@ -52,6 +52,15 @@ public:
 	/*How ofter stuff will spawn*/
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Spawn|Rate",meta=(ExposeOnSpawn = true))
 	float SpawnRate = 1.f;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Spawn|Amount",meta=(ExposeOnSpawn = true))
+	int MaxAmountOfSpawnedActors = 3;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category=Spawned)
+	int CurrentlySpawnedCount = 0;
+
+	UFUNCTION()
+	void OnSpawnedCharacterDied();
 	
 	void UpdateAndSpawn();
 };

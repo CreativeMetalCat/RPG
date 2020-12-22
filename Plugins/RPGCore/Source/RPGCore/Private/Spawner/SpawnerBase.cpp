@@ -51,12 +51,18 @@ void ASpawnerBase::Tick(float DeltaTime)
 
 }
 
+void ASpawnerBase::OnSpawnedCharacterDied()
+{
+	CurrentlySpawnedCount--;
+	if (CurrentlySpawnedCount < 0) { CurrentlySpawnedCount = 0; }
+}
+
 void ASpawnerBase::UpdateAndSpawn()
 {
 	//Spawn location
 	FNavLocation location;
 
-	if(NavSystem)
+	if(NavSystem && ((CurrentlySpawnedCount < MaxAmountOfSpawnedActors)|| MaxAmountOfSpawnedActors == -1))
 	{
 		if(NavSystem != GetWorld()->GetNavigationSystem())
 		{
@@ -67,7 +73,10 @@ void ASpawnerBase::UpdateAndSpawn()
 		FActorSpawnParameters SpawnParameters = FActorSpawnParameters();
 		SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	
-		GetWorld()->SpawnActor<ARPGCharacterBase>(ClassToSpawn,location.Location,FRotator::ZeroRotator,SpawnParameters);
+		ARPGCharacterBase* character = GetWorld()->SpawnActor<ARPGCharacterBase>(ClassToSpawn,location.Location,FRotator::ZeroRotator,SpawnParameters);
+		character->OnDied.AddDynamic(this, &ASpawnerBase::OnSpawnedCharacterDied);
+		
+		CurrentlySpawnedCount++;
 	}
 	
 }
