@@ -99,6 +99,9 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Update")
 	float AIUpdateRate = 1.f;
+
+	UFUNCTION(BlueprintCallable,Category=Setup)
+	void Setup();
 	
 	UFUNCTION(BlueprintCallable,Category="Movement|Patrolling")
 	void SetNewPatrolPoint();

@@ -15,6 +15,64 @@ AEnemyAIBase::AEnemyAIBase()
    
 }
 
+void AEnemyAIBase::Setup()
+{
+   if(GetPawn())
+   {
+      SpawnLocation = GetPawn()->GetActorLocation();
+      
+      if(AEnemyCharacterBase* Enemy = Cast<AEnemyCharacterBase>(GetPawn()))
+      {
+         MovementType = Enemy->MovementType;
+         
+         /*Setup random movement*/
+         MaxDistanceOfRandomMovement = Enemy->MaxDistanceOfRandomMovement;
+         RandomMovementTime = Enemy->RandomMovementTime;
+         bGenerateRandomPointsFromDefaultLocation = Enemy->bGenerateRandomPointsFromDefaultLocation;
+         
+         /*Setup patrol movement*/
+         PatrolPoints = Enemy->PatrolPoints;
+         bRandomPatrol = Enemy->bRandomPatrol;
+
+         /*Setup ai hatred*/
+         if(Cast<IAIInterface>(GetPawn()) || GetPawn()->Implements<UAIInterface>())
+         {
+            EnemyTags =  IAIInterface::Execute_GetEnemyTags(GetPawn());
+         }
+
+         //setup AI update timer
+         GetWorldTimerManager().SetTimer(AIUpdateTimerHandle,this,&AEnemyAIBase::Update,AIUpdateRate,true);
+
+         GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,FString::FromInt(Enemy->PatrolPoints.Num()));
+      }
+      else
+      {
+         GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
+                                          "AIController " + GetName() + " is not used with correct class. Class: " +
+                                          GetPawn()->GetClass()->GetName() + " Correct is child of: " +
+                                          AEnemyCharacterBase::StaticClass()->GetName());
+         return;
+      }
+   
+      if(MovementType == EAIMovementType::EAIMT_Random)
+      {
+         RandomMovementGoalLocationActor = GetWorld()->SpawnActor(ATargetPoint::StaticClass());
+         SetNextGoalForRandomMovement();
+      }
+      else if(MovementType == EAIMovementType::EAIMT_Points)
+      {
+         SetNewPatrolPoint();
+      }
+
+   }
+   else
+   {
+      GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,"AIController " + GetName() + " has null Pawn in control");
+      return;
+   }
+
+}
+
 void AEnemyAIBase::SetNewPatrolPoint()
 {
    if(Blackboard)
@@ -171,60 +229,8 @@ bool AEnemyAIBase::IsEnemy(AActor* Actor)
 void AEnemyAIBase::BeginPlay()
 {
    Super::BeginPlay();
-   if(GetPawn())
-   {
-      SpawnLocation = GetPawn()->GetActorLocation();
-      
-      if(AEnemyCharacterBase* Enemy = Cast<AEnemyCharacterBase>(GetPawn()))
-      {
-         MovementType = Enemy->MovementType;
-         
-         /*Setup random movement*/
-         MaxDistanceOfRandomMovement = Enemy->MaxDistanceOfRandomMovement;
-         RandomMovementTime = Enemy->RandomMovementTime;
-         bGenerateRandomPointsFromDefaultLocation = Enemy->bGenerateRandomPointsFromDefaultLocation;
-         
-         /*Setup patrol movement*/
-         PatrolPoints = Enemy->PatrolPoints;
-         bRandomPatrol = Enemy->bRandomPatrol;
 
-         /*Setup ai hatred*/
-         if(Cast<IAIInterface>(GetPawn()) || GetPawn()->Implements<UAIInterface>())
-         {
-           EnemyTags =  IAIInterface::Execute_GetEnemyTags(GetPawn());
-         }
-
-         //setup AI update timer
-         GetWorldTimerManager().SetTimer(AIUpdateTimerHandle,this,&AEnemyAIBase::Update,AIUpdateRate,true);
-
-         GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,FString::FromInt(Enemy->PatrolPoints.Num()));
-      }
-      else
-      {
-         GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
-                                          "AIController " + GetName() + " is not used with correct class. Class: " +
-                                          GetPawn()->GetClass()->GetName() + " Correct is child of: " +
-                                          AEnemyCharacterBase::StaticClass()->GetName());
-         return;
-      }
-   
-      if(MovementType == EAIMovementType::EAIMT_Random)
-      {
-         RandomMovementGoalLocationActor = GetWorld()->SpawnActor(ATargetPoint::StaticClass());
-         SetNextGoalForRandomMovement();
-      }
-      else if(MovementType == EAIMovementType::EAIMT_Points)
-      {
-         SetNewPatrolPoint();
-      }
-
-   }
-   else
-   {
-      GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,"AIController " + GetName() + " has null Pawn in control");
-      return;
-   }
-
+   Setup();
 }
 
 void AEnemyAIBase::SetNewTarget_Implementation(AActor* Target)

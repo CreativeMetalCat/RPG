@@ -53,36 +53,21 @@ void AEnemyCharacterBase::BeginPlay()
 {
     Super::BeginPlay();
 
-    if(!GetController() && ControllerClass)//if we don't have any ai -> spawn it
-        {
-        AEnemyAIBase* ai = GetWorld()->SpawnActor<AEnemyAIBase>(ControllerClass,GetActorLocation(),GetActorRotation());
-        if(ai)
-        {
-            ai->Possess(this);
-            
-            FTimerHandle fakeHandle;
-            GetWorldTimerManager().SetTimer(fakeHandle,this,&AEnemyCharacterBase::BeginPlay,0.1f,false);
-            return;
-        }
-        else
-        {
-            //Destroy();//if we still fail to create ai -> destroy it
-            return;
-        }
-    }
-    else if (!ControllerClass)
+    /*
+     * due to weird issue with TSubClassOf that always sets in to null in AEnemyCharacterBase in begin play
+     * the creation of controller was moved to BP_NPCBase
+     */
+    if (GetController())
     {
-        /*Destroy();*/
-        return;/*Ai doesn't have brain-> delete it*/
-    }
+        if (Cast<IAIInterface>(GetController()) || GetController()->Implements<UAIInterface>())
+        {
+            bIsControllerCompatible = true;
+        }
 
- 
-    if(Cast<IAIInterface>(GetController()) || GetController()->Implements<UAIInterface>())
-    {
-        bIsControllerCompatible = true;
+        GetWorldTimerManager().SetTimer(AttackCollisionCheckUpdateTimerHandle, this,
+                                        &AEnemyCharacterBase::CheckAttackCollision, AttackCheckUpdateRate, true);
     }
     
-    GetWorldTimerManager().SetTimer(AttackCollisionCheckUpdateTimerHandle,this,&AEnemyCharacterBase::CheckAttackCollision,AttackCheckUpdateRate,true);
 }
 
 void AEnemyCharacterBase::CheckAttackCollision()

@@ -28,7 +28,7 @@ public:
 
 	/*The controller to use if default controller is null on spawn */
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "AI")
-	TSubclassOf<AEnemyAIBase> ControllerClass;
+	TSubclassOf<AEnemyAIBase> FallbackControllerClass = AEnemyAIBase::StaticClass();
 		
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI|Sense")
 	USphereComponent*SenseSphereComponent;
