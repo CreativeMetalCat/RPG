@@ -367,25 +367,9 @@ public:
 	UFUNCTION(BlueprintCallable,Category="Magic")
 	int AddMagicJuice(int Amount);
 
-	/*This function exists only make code look prettier*/
+	/*This is unified function for getting current items*/
 	UFUNCTION(BlueprintPure,Category=Items)
-	FItemInfo GetCurrentWeapon(bool &has);
-
-	/*This function exists only make code look prettier*/
-	UFUNCTION(BlueprintPure,Category=Items)
-    FItemInfo GetCurrentTopPartArmor(bool &has);
-
-	/*This function exists only make code look prettier*/
-	UFUNCTION(BlueprintPure,Category=Items)
-    FItemInfo GetCurrentBottomPartArmor(bool &has);
-
-	/*This function exists only make code look prettier*/
-	UFUNCTION(BlueprintPure,Category=Items)
-    FItemInfo GetCurrentMiddleArmor(bool &has);
-
-	/*This function exists only make code look prettier*/
-	UFUNCTION(BlueprintPure,Category=Items)
-    FItemInfo GetCurrentShield(bool &has);
+	FItemInfo GetCurrentItemForType(bool &has,EItemType type);
 
 	/*Does roll in direction of Direction
 	 * This function is mostly for other functions to use

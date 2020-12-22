@@ -38,6 +38,8 @@ ArmorTopPartDisplayFlipbookComponent->SetLooping(false);
 	itemName##DisplayFlipbookComponent->SetLooping(loop);\
 	itemName##DisplayFlipbookComponent->Play();\
 	}
+
+
 	
 DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
 
@@ -729,40 +731,61 @@ int ARPGCharacterBase::AddMagicJuice(int Amount)
 	}
 }
 
-FItemInfo ARPGCharacterBase::GetCurrentWeapon(bool& has)
+FItemInfo ARPGCharacterBase::GetCurrentItemForType(bool& has, EItemType type)
 {
 	has = false;
-	if(Items.IsValidIndex(CurrentWeaponId)){has = true; return Items[CurrentWeaponId];}
+	switch (type)
+	{
+		case EItemType::EIT_Weapon:
+			if(Items.IsValidIndex(CurrentWeaponId)){has = true; return Items[CurrentWeaponId];}break;
+		case EItemType::EIT_ArmorTop:
+			if(Items.IsValidIndex(TopPartArmorItemId)){has = true; return Items[TopPartArmorItemId];}break;
+		case EItemType::EIT_ArmorMiddle:
+			if(Items.IsValidIndex(BottomPartArmorItemId)){has = true; return Items[BottomPartArmorItemId];}break;
+		case EItemType::EIT_ArmorBottom:
+			if(Items.IsValidIndex(BottomPartArmorItemId)){has = true; return Items[BottomPartArmorItemId];}break;
+		case EItemType::EIT_Shield:
+			if(Items.IsValidIndex(ShieldItemId)){has = true; return Items[ShieldItemId];}break;
+		default:
+			return FItemInfo();
+	}
 	return FItemInfo();
 }
 
-FItemInfo ARPGCharacterBase::GetCurrentTopPartArmor(bool& has)
-{
-	has = false;
-	if(Items.IsValidIndex(TopPartArmorItemId)){has = true; return Items[TopPartArmorItemId];}
-	return FItemInfo();
-}
-
-FItemInfo ARPGCharacterBase::GetCurrentBottomPartArmor(bool& has)
-{
-	has = false;
-	if(Items.IsValidIndex(BottomPartArmorItemId)){has = true; return Items[BottomPartArmorItemId];}
-	return FItemInfo();
-}
-
-FItemInfo ARPGCharacterBase::GetCurrentMiddleArmor(bool& has)
-{
-	has = false;
-	if(Items.IsValidIndex(BottomPartArmorItemId)){has = true; return Items[BottomPartArmorItemId];}
-	return FItemInfo();
-}
-
-FItemInfo ARPGCharacterBase::GetCurrentShield(bool& has)
-{
-	has = false;
-	if(Items.IsValidIndex(ShieldItemId)){has = true; return Items[ShieldItemId];}
-	return FItemInfo();
-}
+// FItemInfo ARPGCharacterBase::GetCurrentWeapon(bool& has)
+// {
+// 	has = false;
+// 	if(Items.IsValidIndex(CurrentWeaponId)){has = true; return Items[CurrentWeaponId];}
+// 	return FItemInfo();
+// }
+//
+// FItemInfo ARPGCharacterBase::GetCurrentTopPartArmor(bool& has)
+// {
+// 	has = false;
+// 	if(Items.IsValidIndex(TopPartArmorItemId)){has = true; return Items[TopPartArmorItemId];}
+// 	return FItemInfo();
+// }
+//
+// FItemInfo ARPGCharacterBase::GetCurrentBottomPartArmor(bool& has)
+// {
+// 	has = false;
+// 	if(Items.IsValidIndex(BottomPartArmorItemId)){has = true; return Items[BottomPartArmorItemId];}
+// 	return FItemInfo();
+// }
+//
+// FItemInfo ARPGCharacterBase::GetCurrentMiddleArmor(bool& has)
+// {
+// 	has = false;
+// 	if(Items.IsValidIndex(BottomPartArmorItemId)){has = true; return Items[BottomPartArmorItemId];}
+// 	return FItemInfo();
+// }
+//
+// FItemInfo ARPGCharacterBase::GetCurrentShield(bool& has)
+// {
+// 	has = false;
+// 	if(Items.IsValidIndex(ShieldItemId)){has = true; return Items[ShieldItemId];}
+// 	return FItemInfo();
+// }
 
 void ARPGCharacterBase::Roll(EDirection Direction)
 {
@@ -839,22 +862,22 @@ int ARPGCharacterBase::DealDamage_Implementation(int Damage,AActor*DamageDealer,
 	if (!bCanDie) { return 0; }
 	int TotalArmor = Defense;
 	bool hasArmorPiece = false;
-	FItemInfo item = GetCurrentBottomPartArmor(hasArmorPiece);
+	FItemInfo item = GetCurrentItemForType(hasArmorPiece,EItemType::EIT_ArmorBottom);
 	if (hasArmorPiece)
 	{
 		TotalArmor += item.Defence;
 	}
-	item = GetCurrentTopPartArmor(hasArmorPiece);
+	item = GetCurrentItemForType(hasArmorPiece,EItemType::EIT_ArmorTop);
 	if (hasArmorPiece)
 	{
 		TotalArmor += item.Defence;
 	}
-	item = GetCurrentMiddleArmor(hasArmorPiece);
+	item = GetCurrentItemForType(hasArmorPiece,EItemType::EIT_ArmorMiddle);
 	if (hasArmorPiece)
 	{
 		TotalArmor += item.Defence;
 	}
-	item = GetCurrentShield(hasArmorPiece);
+	item = GetCurrentItemForType(hasArmorPiece,EItemType::EIT_Shield);
 	if (hasArmorPiece)
 	{
 		TotalArmor += bIsShieldPutUp ? item.Defence : 0;
