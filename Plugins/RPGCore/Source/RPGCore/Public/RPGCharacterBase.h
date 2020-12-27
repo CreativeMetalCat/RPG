@@ -279,6 +279,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Animations|Montage")
 	virtual bool PlayFlipbookAnimation(UPaperFlipbook*Animation,bool bTopPriority,float &length);
 
+	/* Tries to play animation on items currently equiped by player
+	 * There is no way of making sure that animations exists from code
+	 * The animation is taken from table DT_Items
+	 * Loop - Should animation loop(don't set to true if used in ability)
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Animations|Montage|Items")
+	virtual void PlayAnimationOnItems(FString animationName,bool loop);
+
 	/*used to make code simplier
 	 * If you want animation to actually play with bUseAnimationSystem being true use PlayFlipbookAnimation
 	 */
@@ -375,7 +383,7 @@ public:
 	 * This function is mostly for other functions to use
 	 */
 	UFUNCTION(BlueprintCallable,Category=DodgeRoll)
-	void Roll(EDirection Direction);
+	void Roll(EDirection Direction,float forceMultiplier = 1);
 
 	UFUNCTION(BlueprintCallable,Category="Items|Shield")
 	virtual bool PutUpShield();

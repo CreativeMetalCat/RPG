@@ -30,6 +30,15 @@ ArmorTopPartDisplayFlipbookComponent->SetLooping(false);
 	itemName##DisplayFlipbookComponent->Play();\
 	}
 
+#define PlAY_SPECIAL_ANIMATION_ON_ITEM(itemName,animName,loop) {\
+if(itemName##DisplayFlipbookComponent->GetFlipbook()!= itemName##Info.GetSpecialAnimation(animName,CurrentDirection))\
+{\
+itemName##DisplayFlipbookComponent->SetFlipbook(itemName##Info.GetSpecialAnimation(animName,CurrentDirection));\
+}\
+itemName##DisplayFlipbookComponent->SetLooping(loop);\
+itemName##DisplayFlipbookComponent->Play();\
+}
+
 #define PlAY_ANIMATION_ON_ITEM_WITH_SELECTION(itemName,animName1,animName2,condition,loop) {\
 	if(itemName##DisplayFlipbookComponent->GetFlipbook()!= (condition?itemName##Info.Get##animName1##Animation(CurrentDirection):itemName##Info.Get##animName2##Animation(CurrentDirection)))\
 	{\
@@ -285,6 +294,29 @@ bool ARPGCharacterBase::PlayFlipbookAnimation(UPaperFlipbook*Animation,bool bTop
 		return true;
 	}
 	return false;
+}
+
+void ARPGCharacterBase::PlayAnimationOnItems(FString animationName,bool looping)
+{
+	if(animationName != "")
+	{
+		if(TopPartArmorItemId != -1)
+		{
+			PlAY_SPECIAL_ANIMATION_ON_ITEM(ArmorTopPart,animationName,false);
+		}
+		if(MiddlePartArmorItemId != -1)
+		{
+			PlAY_SPECIAL_ANIMATION_ON_ITEM(ArmorMiddlePart,animationName,false);
+		}
+		if(BottomPartArmorItemId != -1)
+		{
+			PlAY_SPECIAL_ANIMATION_ON_ITEM(ArmorBottomPart,animationName,false);
+		}
+		if(ShieldItemId != -1)
+		{
+			PlAY_SPECIAL_ANIMATION_ON_ITEM(Shield,animationName,false);
+		}
+	}
 }
 
 void ARPGCharacterBase::SetAnimation(UPaperFlipbook* animation, bool Loop)
@@ -752,42 +784,8 @@ FItemInfo ARPGCharacterBase::GetCurrentItemForType(bool& has, EItemType type)
 	return FItemInfo();
 }
 
-// FItemInfo ARPGCharacterBase::GetCurrentWeapon(bool& has)
-// {
-// 	has = false;
-// 	if(Items.IsValidIndex(CurrentWeaponId)){has = true; return Items[CurrentWeaponId];}
-// 	return FItemInfo();
-// }
-//
-// FItemInfo ARPGCharacterBase::GetCurrentTopPartArmor(bool& has)
-// {
-// 	has = false;
-// 	if(Items.IsValidIndex(TopPartArmorItemId)){has = true; return Items[TopPartArmorItemId];}
-// 	return FItemInfo();
-// }
-//
-// FItemInfo ARPGCharacterBase::GetCurrentBottomPartArmor(bool& has)
-// {
-// 	has = false;
-// 	if(Items.IsValidIndex(BottomPartArmorItemId)){has = true; return Items[BottomPartArmorItemId];}
-// 	return FItemInfo();
-// }
-//
-// FItemInfo ARPGCharacterBase::GetCurrentMiddleArmor(bool& has)
-// {
-// 	has = false;
-// 	if(Items.IsValidIndex(BottomPartArmorItemId)){has = true; return Items[BottomPartArmorItemId];}
-// 	return FItemInfo();
-// }
-//
-// FItemInfo ARPGCharacterBase::GetCurrentShield(bool& has)
-// {
-// 	has = false;
-// 	if(Items.IsValidIndex(ShieldItemId)){has = true; return Items[ShieldItemId];}
-// 	return FItemInfo();
-// }
 
-void ARPGCharacterBase::Roll(EDirection Direction)
+void ARPGCharacterBase::Roll(EDirection Direction,float forceMultiplier)
 {
 	if(bCanDodgeRoll)
 	{
@@ -811,7 +809,7 @@ void ARPGCharacterBase::Roll(EDirection Direction)
 		{
 			bPlayingDodgeRollAnimation = true;
 		}
-		LaunchCharacter(Velocity*DodgeRollSpeed,false,false);
+		LaunchCharacter(Velocity*DodgeRollSpeed*forceMultiplier,false,false);
 		bCanDodgeRoll = false;
 		GetWorldTimerManager().SetTimer(DodgeRollCooldownTimerHandle,this,&ARPGCharacterBase::EndDodgeRollCooldown,DodgeRollCooldownTime);
 	}
