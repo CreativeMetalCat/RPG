@@ -799,10 +799,10 @@ void ARPGCharacterBase::Roll(EDirection Direction,float forceMultiplier)
 			Velocity = FVector(0,1,0);
 			break;
 		case EDirection::ED_Left:
-			Velocity = FVector(1,0,0);
+			Velocity = FVector(-1,0,0);
 			break;
 		case EDirection::ED_Right:
-			Velocity = FVector(-1,0,0);
+			Velocity = FVector(1,0,0);
 			break;
 		}
 		if(GetDodgeRollAnimation())
