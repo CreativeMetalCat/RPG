@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 
+
+#include "Check/PassiveAbilityCheck.h"
 #include "Engine/DataTable.h"
 #include "Engine/UserDefinedStruct.h"
 #include "RPGCore/Public/Item/SpecialEffect.h"
@@ -70,6 +72,12 @@ public:
 	 */
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Effect")
 	bool bApplyToSpawner = false;
+	
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Passive")
+	bool bIsPassive = false;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Passive")
+	TSubclassOf<UPassiveAbilityCheck> CheckObjectClass;
 
 	
 	UPROPERTY(BlueprintReadOnly,BlueprintReadOnly,Category=Cooldown)

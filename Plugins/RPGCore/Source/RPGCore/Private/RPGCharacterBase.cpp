@@ -854,6 +854,23 @@ void ARPGCharacterBase::ReactToDamage_Implementation()
 	//Play camera shakes, damage anims, etc. here
 }
 
+void ARPGCharacterBase::DoPassiveAbilitiesCheck()
+{
+	if(Abilities.Num() > 0)
+	{
+		for(int i = 0;i<Abilities.Num() ;i++)
+		{
+			if(Abilities[i].bIsPassive && Abilities[i].CheckObjectClass)
+			{
+				if(Abilities[i].CheckObjectClass.GetDefaultObject()->DoCheck(this))
+				{
+					UseAbility(i);
+				}
+			}
+		}
+	}
+}
+
 int ARPGCharacterBase::DealDamage_Implementation(int Damage,AActor*DamageDealer, TSubclassOf<ASpecialEffect> SpecialEffect)
 {
 	//this character can not die and as such doesn't receive damage
@@ -915,6 +932,8 @@ void ARPGCharacterBase::BeginPlay()
 			PC->SetInputMode(FInputModeGameAndUI());
 		}
 	}
+	GetWorldTimerManager().SetTimer(PassiveAbilityCheckTimerHandle, this, &ARPGCharacterBase::DoPassiveAbilitiesCheck,
+	                                0.5f, true);
 }
 
 void ARPGCharacterBase::NotifyAboutEffectStart_Implementation(ASpecialEffect* Effect)

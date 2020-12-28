@@ -51,6 +51,7 @@ class ARPGCharacterBase : public APaperCharacter, public IInteraction
 	UTextRenderComponent* TextComponent;
 	virtual void Tick(float DeltaSeconds) override;
 protected:
+	FTimerHandle PassiveAbilityCheckTimerHandle;
 
 	/*Info for current item
 	 * Only used for animation
@@ -399,6 +400,8 @@ public:
 
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Damage)
 	void ReactToDamage();
+
+	void DoPassiveAbilitiesCheck();
 	
 	//here it represents character TAKING damage
 	virtual int DealDamage_Implementation(int Damage,AActor*DamageDealer =nullptr, TSubclassOf<ASpecialEffect> SpecialEffect =nullptr) override;
