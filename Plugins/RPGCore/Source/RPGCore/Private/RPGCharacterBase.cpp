@@ -856,13 +856,13 @@ void ARPGCharacterBase::ReactToDamage_Implementation()
 
 void ARPGCharacterBase::DoPassiveAbilitiesCheck()
 {
-	if(Abilities.Num() > 0)
+	if (Abilities.Num() > 0)
 	{
-		for(int i = 0;i<Abilities.Num() ;i++)
+		for (int i = 0; i < Abilities.Num(); i++)
 		{
-			if(Abilities[i].bIsPassive && Abilities[i].CheckObjectClass)
+			if (Abilities[i].bIsPassive && Abilities[i].CheckObjectClass)
 			{
-				if(Abilities[i].CheckObjectClass.GetDefaultObject()->DoCheck(this))
+				if (Abilities[i].CheckObjectClass.GetDefaultObject()->DoCheck(this))
 				{
 					UseAbility(i);
 				}
