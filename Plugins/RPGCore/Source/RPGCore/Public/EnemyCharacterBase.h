@@ -29,9 +29,6 @@ public:
 	/*The controller to use if default controller is null on spawn */
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "AI")
 	TSubclassOf<AEnemyAIBase> FallbackControllerClass = AEnemyAIBase::StaticClass();
-		
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI|Sense")
-	USphereComponent*SenseSphereComponent;
 	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "AI|Movement|Random")
 	float MaxDistanceOfRandomMovement = 300.f;

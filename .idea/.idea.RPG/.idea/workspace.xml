@@ -26,8 +26,6 @@
       <option value="$PROJECT_DIR$/Plugins/RPGCore/RPGCore.uplugin" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AI/EnemyAIBase.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/AI/EnemyAIBase.cpp" />
-      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/EnemyCharacterBase.h" />
-      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/EnemyCharacterBase.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Spawner/SpawnerBase.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Spawner/SpawnerBase.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Ability/Check/PassiveAbilityCheck.cpp" />
@@ -37,6 +35,8 @@
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/RPGCharacterBase.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Projectile2dBase.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Projectile2dBase.cpp" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/EnemyCharacterBase.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/EnemyCharacterBase.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Projectile/Projectile2dMovementComponent.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Projectile/Projectile2dMovementComponent.cpp" />
     </changedPaths>

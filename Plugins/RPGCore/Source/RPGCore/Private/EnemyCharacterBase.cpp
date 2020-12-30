@@ -26,11 +26,6 @@
 
 AEnemyCharacterBase::AEnemyCharacterBase()
 {
-    SenseSphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SenseSphere"));
-    SenseSphereComponent->SetupAttachment(RootComponent);//Attach to RootComponent
-    SenseSphereComponent->InitSphereRadius(2000.f);//Basic radius for the sphere. Can be changed in Blueprints
-
-
     UpperCollision->OnComponentBeginOverlap.AddDynamic(this,& AEnemyCharacterBase::OnAttackCollisionOverlapBegin);
 
     LowerCollision->OnComponentBeginOverlap.AddDynamic(this,& AEnemyCharacterBase::OnAttackCollisionOverlapBegin);

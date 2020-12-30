@@ -34,6 +34,15 @@ class RPGCORE_API UProjectile2dMovementComponent : public UActorComponent
 	UPROPERTY(BlueprintReadWrite,EditDefaultsOnly,Category=Component)
 	USceneComponent *ComponentToMove = nullptr;
 
+	UFUNCTION(BlueprintCallable)
+	virtual void Init();
+
+	UFUNCTION(BlueprintCallable)
+	void SetNewInitialVelocity(FVector newVel);
+
+	UFUNCTION(BlueprintCallable)
+    void SetMaxSpeed(float speed);
+	
 	virtual void InitializeComponent()override;
 
 	virtual FVector GetCurrentVelocity() const

@@ -11,15 +11,9 @@ UProjectile2dMovementComponent::UProjectile2dMovementComponent()
 	PrimaryComponentTick.bStartWithTickEnabled = true;
 }
 
-void UProjectile2dMovementComponent::InitializeComponent()
+void UProjectile2dMovementComponent::Init()
 {
-	Super::InitializeComponent();
-
 	
-}
-
-void UProjectile2dMovementComponent::BeginPlay()
-{
 	if(ComponentToMove == nullptr && GetOwner() != nullptr )
 	{
 		if(GetOwner()->GetRootComponent())
@@ -29,6 +23,32 @@ void UProjectile2dMovementComponent::BeginPlay()
 	}
 	
 	CurrentVelocity = InitialVelocity.GetSafeNormal()*MaxSpeed;
+	
+}
+
+void UProjectile2dMovementComponent::SetNewInitialVelocity(FVector newVel)
+{
+	InitialVelocity = newVel;
+
+	CurrentVelocity = InitialVelocity.GetSafeNormal()*MaxSpeed;
+}
+
+void UProjectile2dMovementComponent::SetMaxSpeed(float speed)
+{
+	MaxSpeed = speed;
+}
+
+void UProjectile2dMovementComponent::InitializeComponent()
+{
+	Super::InitializeComponent();
+
+	
+}
+
+void UProjectile2dMovementComponent::BeginPlay()
+{
+	Init();
+
 	
 	SetComponentTickEnabled(true);	
 	
@@ -51,7 +71,6 @@ void UProjectile2dMovementComponent::TickComponent(float DeltaTime, ELevelTick T
 		Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 		FQuat NewRotation;
-		
 		ComponentToMove->MoveComponent(CurrentVelocity*DeltaTime,NewRotation,false);
 	}
 }

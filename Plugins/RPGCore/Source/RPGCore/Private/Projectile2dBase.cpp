@@ -10,8 +10,18 @@ AProjectile2dBase::AProjectile2dBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
+	RootComponent = SceneComponent;
 	
 	ProjectileDisplayComponent  = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("ProjectileDisplay"));
+	ProjectileDisplayComponent->SetupAttachment(RootComponent);
+
+	CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Collision"));
+	CollisionComponent->SetupAttachment(RootComponent);
+	CollisionComponent->InitSphereRadius(32.f);
+
+	MovementComponent = CreateDefaultSubobject<UProjectile2dMovementComponent>(TEXT("MovementComp"));
+	MovementComponent->InitialVelocity = InitialVelocity;
+	MovementComponent->MaxSpeed = Speed;
 	
 }
 
@@ -20,6 +30,7 @@ void AProjectile2dBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	MovementComponent->Init();
 }
 
 // Called every frame
