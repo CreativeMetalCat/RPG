@@ -53,6 +53,8 @@ class ARPGCharacterBase : public APaperCharacter, public IInteraction
 protected:
 	FTimerHandle PassiveAbilityCheckTimerHandle;
 
+	FTimerHandle ComboAttackResetTimerHandle;
+
 	/*Info for current item
 	 * Only used for animation
 	 */
@@ -301,6 +303,12 @@ public:
 	void UpdateCharacter();
 
 	void InputAttack(){Attack(1);}
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category="Combo")
+	void ResetCombo();
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category="Combo")
+    void ApplyComboBonus();
 	
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Attack)
 	void Attack(float damageMultiplier);
@@ -443,7 +451,20 @@ public:
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Effects,SaveGame)
 	TArray<ASpecialEffect*> CurrentlyAppliedEffects;
+	
+#pragma region ComboAttack
+	/*How many times character needs to attack someone without missing to get bonus*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Combo",SaveGame)
+	int ComboAttackNeededCount = 1;
 
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Combo",SaveGame)
+	int ComboAttackCurrentCount = 0;
+
+	/* The combo count will reset after this time passes if no attacks happend*/
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Combo",SaveGame)
+	float ComboAttackResetTime = 5.f;
+#pragma endregion
+	
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Stats,SaveGame)
 	int AttackPower = 1;
 

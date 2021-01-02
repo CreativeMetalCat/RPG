@@ -986,6 +986,18 @@ void ARPGCharacterBase::UpdateCharacter()
 	UpdateAnimation();
 }
 
+void ARPGCharacterBase::ResetCombo_Implementation()
+{
+	if(ComboAttackResetTimerHandle.IsValid()){ComboAttackResetTimerHandle.Invalidate();}
+	ComboAttackCurrentCount = 0;
+}
+
+void ARPGCharacterBase::ApplyComboBonus_Implementation()
+{
+	if(ComboAttackResetTimerHandle.IsValid()){ComboAttackResetTimerHandle.Invalidate();}
+	ComboAttackCurrentCount = 0;
+}
+
 bool ARPGCharacterBase::CanAttack()
 {
 	return (!bPlayingAnimMontage && !bIsShieldPutUp && !bAttacking);
@@ -1038,12 +1050,14 @@ void ARPGCharacterBase::Attack_Implementation(float damageMultiplier)
 			}
 		
 
+			bool AnyoneWasHit = false;
 			if(AttackedActors.Num() > 0)
 			{
-				for(int i=0;i<AttackedActors.Num();i++)
-				{
+				for (int i = 0; i < AttackedActors.Num(); i++)
+				{				
 					if (AttackedActors[i] != this && (AttackedActors[i]->Implements<UInteraction>() || (Cast<IInteraction>(GetOwner()) != nullptr)))
 					{
+						AnyoneWasHit = true;
 						IInteraction::Execute_DealDamage(AttackedActors[i], Item.Attack*AttackPower*damageMultiplier,this, Item.SpecialEffect);
 						//next section is bad code. Do not do things this way
 						if(CurrentlyAppliedEffects.Num() > 0)
@@ -1083,8 +1097,26 @@ void ARPGCharacterBase::Attack_Implementation(float damageMultiplier)
 								}
 							}
 						}
+
+						//do combo counting
+						ComboAttackCurrentCount++;
+						if(ComboAttackCurrentCount >= ComboAttackNeededCount)
+						{
+							ApplyComboBonus();
+						}
+						else if(ComboAttackCurrentCount == 1)
+						{
+							//if it's the fist time we attack since last combo reset we will create new reset timer
+							GetWorldTimerManager().SetTimer(ComboAttackResetTimerHandle, this,
+							                                &ARPGCharacterBase::ResetCombo, ComboAttackResetTime,
+							                                false);
+						}
 					}
 				}
+			}
+			if(!AnyoneWasHit)
+			{
+				ResetCombo();
 			}
 		}
 	}

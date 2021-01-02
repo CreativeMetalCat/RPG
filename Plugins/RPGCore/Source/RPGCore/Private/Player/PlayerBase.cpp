@@ -52,6 +52,56 @@ void APlayerBase::BindEventOnAbilityButtonReleased_Implementation(ASpecialEffect
 	}
 }
 
+void APlayerBase::ApplyComboBonus_Implementation()
+{
+	//clear timer and count to avoid bugs with counting
+	if(ComboAttackResetTimerHandle.IsValid()){ComboAttackResetTimerHandle.Invalidate();}
+	ComboAttackCurrentCount = 0;
+
+	//player reacts to successful combo by reducing the remaining time on abilities' cooldown
+	if(Abilities.Num() > 0)
+	{
+		float RemainingTime = 0;
+		for (int i = 0; i < Abilities.Num(); i++)
+		{
+			if(Abilities[i].bIsCoolingdown)
+			{
+				RemainingTime = GetWorldTimerManager().GetTimerRemaining(Abilities[i].CooldownTimerHandle);
+				if((RemainingTime - ComboTimeBonus) > 0)
+				{
+					//because UE4 doesn't allow to directly change timer's remaining time
+					//we will just clear it and create new on with updated time
+					GetWorldTimerManager().ClearTimer(Abilities[i].CooldownTimerHandle);
+					GetWorldTimerManager().SetTimer(Abilities[i].CooldownTimerHandle,
+                                                FTimerDelegate::CreateUObject
+                                                (
+                                                    this,
+                                                    &ARPGCharacterBase::FinishCooldownOnAbility,
+                                                    Abilities[i].DevName
+                                                ),
+                                                (RemainingTime - ComboTimeBonus),false);
+				}
+				else
+				{
+					//because UE4 doesn't allow to directly change timer's remaining time
+					//we will just clear it and create new on with updated time
+					//but because timer with 0 remaining time will not be created(and as such funtion will not be executed)
+					//we have to set a value bigger then 0
+					GetWorldTimerManager().ClearTimer(Abilities[i].CooldownTimerHandle);
+					GetWorldTimerManager().SetTimer(Abilities[i].CooldownTimerHandle,
+                                                FTimerDelegate::CreateUObject
+                                                (
+                                                    this,
+                                                    &ARPGCharacterBase::FinishCooldownOnAbility,
+                                                    Abilities[i].DevName
+                                                ),
+                                                0.01f,false);
+				}
+			}
+		}
+	}
+}
+
 
 APlayerBase::APlayerBase()
 {

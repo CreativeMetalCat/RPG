@@ -10,7 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ff447e28-7e9a-4790-9bb6-708c5570a71d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Content/Maps/TavernTechDemo/LVL_Tavern_Demo_TavernV2.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/TavernTechDemo/LVL_Tavern_Demo_TavernV2.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Build/WindowsNoEditor/FileOpenOrder/CookerOpenOrder.log" beforeDir="false" afterPath="$PROJECT_DIR$/Build/WindowsNoEditor/FileOpenOrder/CookerOpenOrder.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Build/WindowsNoEditor/FileOpenOrder/EditorOpenOrder.log" beforeDir="false" afterPath="$PROJECT_DIR$/Build/WindowsNoEditor/FileOpenOrder/EditorOpenOrder.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Projectiles/BP_LightRay.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Projectiles/BP_LightRay.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/test.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/test.umap" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +35,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$/source/repos/SFML/SFML.sln" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -46,6 +50,7 @@
       <workItem from="1605837872323" duration="27000" />
       <workItem from="1608110734599" duration="31000" />
       <workItem from="1608515750513" duration="57000" />
+      <workItem from="1609314250365" duration="64000" />
     </task>
     <servers />
   </component>
@@ -53,9 +58,9 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1608515784232">
+    <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1609314304414">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1608515784232" />
+    <state x="740" y="274" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1609314304414" />
   </component>
 </project>
