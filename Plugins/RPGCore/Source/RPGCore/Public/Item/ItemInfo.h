@@ -293,4 +293,10 @@ public:
     /*How many items are in this slot*/
     UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Count)
     int32 CurrentAmount = 0;
+
+	/*If true - this item will appear in shop
+	 * Note - this should be set on each instance separately, unless this item must be this way
+	 */
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Shop)
+	bool bForSale = true;
 };

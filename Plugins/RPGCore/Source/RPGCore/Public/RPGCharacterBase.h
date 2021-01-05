@@ -329,6 +329,10 @@ public:
 	UFUNCTION(BlueprintPure,Category= Items)
 	virtual FItemInfo GetItemByName(FString devName,bool&hasItem);
 
+	/*Returns total amount of item across all entries*/
+	UFUNCTION(BlueprintPure,Category= Items)
+    virtual int GetItemAmountByName(FString devName,bool&hasItem);
+
 	/*Add new item to player's inventory. Never returns false(added for future)*/
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Items)
 	bool AddItem(FItemInfo item);

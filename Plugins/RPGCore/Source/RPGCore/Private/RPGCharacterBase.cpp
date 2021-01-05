@@ -488,6 +488,25 @@ FItemInfo ARPGCharacterBase::GetItemByName(FString devName,bool&hasItem)
 	return FItemInfo();
 }
 
+int ARPGCharacterBase::GetItemAmountByName(FString devName, bool& hasItem)
+{
+	hasItem = false;
+	if(Items.Num() > 0)
+	{
+		int Result = 0;
+		for (int i = 0; i < Items.Num(); i++)
+		{
+			if (Items[i].DevName == devName)
+			{
+				hasItem = true;
+				Result += Items[i].CurrentAmount;
+			}
+		}
+		return Result;
+	}
+	return 0;
+}
+
 bool ARPGCharacterBase::RemoveItem(const FString &devName, int amount)
 {
 	bool hasItem;

@@ -12650,25 +12650,6 @@
         </e>
       </e>
     </e>
-    <e p="C:\Program Files\Epic Games\UE_4.26\Engine\Plugins\Marketplace\DiscordMessenger" t="Include">
-      <e p="DiscordMessenger.uplugin" t="Include" />
-      <e p="Resources" t="Include">
-        <e p="Icon128.png" t="Include" />
-      </e>
-      <e p="Source" t="Include">
-        <e p="DiscordMessenger" t="Include">
-          <e p="DiscordMessenger.Build.cs" t="Include" />
-          <e p="Private" t="Include">
-            <e p="DiscordMessenger.cpp" t="Include" />
-            <e p="DiscordMessengerBPLibrary.cpp" t="Include" />
-          </e>
-          <e p="Public" t="Include">
-            <e p="DiscordMessenger.h" t="Include" />
-            <e p="DiscordMessengerBPLibrary.h" t="Include" />
-          </e>
-        </e>
-      </e>
-    </e>
     <e p="C:\Program Files\Epic Games\UE_4.26\Engine\Plugins\Marketplace\EasyJsonParser" t="Include">
       <e p="EasyJsonParser.uplugin" t="Include" />
       <e p="Resources" t="Include">
@@ -50636,6 +50617,9 @@
                 </e>
                 <e p="RPGCharacterBase.cpp" t="Include" />
                 <e p="RPGCore.cpp" t="Include" />
+                <e p="Shop" t="Include">
+                  <e p="ShopComponent.cpp" t="Include" />
+                </e>
                 <e p="Spawner" t="Include">
                   <e p="SpawnerBase.cpp" t="Include" />
                 </e>
@@ -50674,6 +50658,9 @@
                 </e>
                 <e p="RPGCharacterBase.h" t="Include" />
                 <e p="RPGCore.h" t="Include" />
+                <e p="Shop" t="Include">
+                  <e p="ShopComponent.h" t="Include" />
+                </e>
                 <e p="Spawner" t="Include">
                   <e p="SpawnerBase.h" t="Include" />
                 </e>

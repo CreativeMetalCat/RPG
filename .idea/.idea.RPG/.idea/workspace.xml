@@ -17,7 +17,6 @@
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/SpecialEffect.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Interaction.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Direction.h" />
-      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/ItemInfo.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Item/ItemInfo.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AI/AIInterface.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/RPGCore.Build.cs" />
@@ -37,8 +36,11 @@
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Projectile/Projectile2dMovementComponent.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Player/PlayerBase.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Player/PlayerBase.cpp" />
-      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/RPGCharacterBase.cpp" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/ItemInfo.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/RPGCharacterBase.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/RPGCharacterBase.cpp" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Shop/ShopComponent.cpp" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Shop/ShopComponent.h" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1jSDjgaV6fdvnuJSqu7NpLdyr2x" />
