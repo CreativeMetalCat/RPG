@@ -12707,6 +12707,7 @@
             <e p="EasyMultiSave.cpp" t="Include" />
             <e p="EMSAsyncLoadGame.cpp" t="Include" />
             <e p="EMSAsyncSaveGame.cpp" t="Include" />
+            <e p="EMSAsyncWait.cpp" t="Include" />
             <e p="EMSFunctionLibrary.cpp" t="Include" />
             <e p="EMSObject.cpp" t="Include" />
           </e>
@@ -12715,6 +12716,7 @@
             <e p="EMSActorSaveInterface.h" t="Include" />
             <e p="EMSAsyncLoadGame.h" t="Include" />
             <e p="EMSAsyncSaveGame.h" t="Include" />
+            <e p="EMSAsyncWait.h" t="Include" />
             <e p="EMSData.h" t="Include" />
             <e p="EMSFunctionLibrary.h" t="Include" />
             <e p="EMSInfoSaveGame.h" t="Include" />
@@ -12858,6 +12860,65 @@
             <e p="LDAssistantCommands.h" t="Include" />
             <e p="LDAssistantStyle.h" t="Include" />
             <e p="OpenNewWindow.h" t="Include" />
+          </e>
+        </e>
+      </e>
+    </e>
+    <e p="C:\Program Files\Epic Games\UE_4.26\Engine\Plugins\Marketplace\PowerIK" t="Include">
+      <e p="PowerIK.uplugin" t="Include" />
+      <e p="Resources" t="Include">
+        <e p="Icon128.png" t="Include" />
+      </e>
+      <e p="Source" t="Include">
+        <e p="PowerIKRuntime" t="Include">
+          <e p="PowerIKRuntime.Build.cs" t="Include" />
+          <e p="Private" t="Include">
+            <e p="AnimNode_PowerIK.cpp" t="Include" />
+            <e p="AnimNode_PowerIK_Ground.cpp" t="Include" />
+            <e p="AnimNode_PowerIK_Walk.cpp" t="Include" />
+            <e p="PowerIK_UnrealCore.cpp" t="Include" />
+            <e p="PowerIKRuntimeModule.cpp" t="Include" />
+            <e p="RigUnit_PowerIK.cpp" t="Include" />
+          </e>
+          <e p="Public" t="Include">
+            <e p="AnimNode_PowerIK.h" t="Include" />
+            <e p="AnimNode_PowerIK_Ground.h" t="Include" />
+            <e p="AnimNode_PowerIK_Walk.h" t="Include" />
+            <e p="PowerIK_UnrealCore.h" t="Include" />
+            <e p="PowerIKRuntimeModule.h" t="Include" />
+            <e p="RigUnit_PowerIK.h" t="Include" />
+          </e>
+          <e p="sdk" t="Include">
+            <e p="include" t="Include">
+              <e p="PowerIK.h" t="Include" />
+              <e p="PowerIKCore.h" t="Include" />
+              <e p="PowerIKGround.h" t="Include" />
+              <e p="PowerIKMath.h" t="Include" />
+              <e p="PowerIKSettings.h" t="Include" />
+            </e>
+            <e p="src" t="Include">
+              <e p="PowerIK.cpp" t="Include" />
+              <e p="PowerIKCore.cpp" t="Include" />
+              <e p="PowerIKGround.cpp" t="Include" />
+              <e p="PowerIKInit.cpp" t="Include" />
+              <e p="PowerIKMath.cpp" t="Include" />
+              <e p="PowerIKSolve.cpp" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="PowerIKTool" t="Include">
+          <e p="PowerIKTool.Build.cs" t="Include" />
+          <e p="Private" t="Include">
+            <e p="AnimGraphNode_PowerIK.cpp" t="Include" />
+            <e p="AnimGraphNode_PowerIK_Ground.cpp" t="Include" />
+            <e p="AnimGraphNode_PowerIK_Walk.cpp" t="Include" />
+            <e p="PowerIKToolModule.cpp" t="Include" />
+          </e>
+          <e p="Public" t="Include">
+            <e p="AnimGraphNode_PowerIK.h" t="Include" />
+            <e p="AnimGraphNode_PowerIK_Ground.h" t="Include" />
+            <e p="AnimGraphNode_PowerIK_Walk.h" t="Include" />
+            <e p="PowerIKToolModule.h" t="Include" />
           </e>
         </e>
       </e>
@@ -50590,11 +50651,16 @@
                     <e p="PassiveAbilityCheck.cpp" t="Include" />
                   </e>
                 </e>
+                <e p="AccessibilityInterface.cpp" t="Include" />
                 <e p="AI" t="Include">
                   <e p="AIInterface.cpp" t="Include" />
                   <e p="AIMovementType.cpp" t="Include" />
                   <e p="EnemyAIBase.cpp" t="Include" />
                   <e p="PatrolPointBase.cpp" t="Include" />
+                </e>
+                <e p="Audio" t="Include">
+                  <e p="AudioCaptionFunctionLibrary.cpp" t="Include" />
+                  <e p="AudioInfo.cpp" t="Include" />
                 </e>
                 <e p="Direction.cpp" t="Include" />
                 <e p="EnemyCharacterBase.cpp" t="Include" />
@@ -50631,11 +50697,16 @@
                     <e p="PassiveAbilityCheck.h" t="Include" />
                   </e>
                 </e>
+                <e p="AccessibilityInterface.h" t="Include" />
                 <e p="AI" t="Include">
                   <e p="AIInterface.h" t="Include" />
                   <e p="AIMovementType.h" t="Include" />
                   <e p="EnemyAIBase.h" t="Include" />
                   <e p="PatrolPointBase.h" t="Include" />
+                </e>
+                <e p="Audio" t="Include">
+                  <e p="AudioCaptionFunctionLibrary.h" t="Include" />
+                  <e p="AudioInfo.h" t="Include" />
                 </e>
                 <e p="Direction.h" t="Include" />
                 <e p="EnemyCharacterBase.h" t="Include" />

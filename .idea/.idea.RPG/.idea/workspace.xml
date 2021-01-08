@@ -41,6 +41,10 @@
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/RPGCharacterBase.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Shop/ShopComponent.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Shop/ShopComponent.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AccessibilityInterface.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Audio/AudioCaptionFunctionLibrary.cpp" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Audio/AudioCaptionFunctionLibrary.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Audio/AudioInfo.h" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1jSDjgaV6fdvnuJSqu7NpLdyr2x" />
