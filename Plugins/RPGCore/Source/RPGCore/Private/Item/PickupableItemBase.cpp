@@ -28,6 +28,18 @@ APickupableItemBase::APickupableItemBase()
 void APickupableItemBase::BeginPlay()
 {
 	Super::BeginPlay();
+	LoadDataFromTable();
+}
+
+// Called every frame
+void APickupableItemBase::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
+void APickupableItemBase::LoadDataFromTable()
+{
 	if(ItemInfo.DataTable && !ItemInfo.IsNull())
 	{
 		const FItemInfo Item = *ItemInfo.GetRow<FItemInfo>("");
@@ -43,13 +55,6 @@ void APickupableItemBase::BeginPlay()
 			Sprite->SetVisibility(false);
 		}
 	}
-}
-
-// Called every frame
-void APickupableItemBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 void APickupableItemBase::Interact_Implementation(AActor* Interactor)

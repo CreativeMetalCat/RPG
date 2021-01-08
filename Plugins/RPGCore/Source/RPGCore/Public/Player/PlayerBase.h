@@ -58,6 +58,9 @@ public:
 	/* If combo was successful all abilties cooldown values will be decreased by this value*/
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Combo",SaveGame)
 	float ComboTimeBonus = 1.f;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Deaht|Sound")
+	USoundBase*DeathSound = nullptr;
 	
 	/*This return COPY of quest info, changing it will NOT affect original info. See: @ChangeQuestInfo for that
 	*
@@ -154,6 +157,8 @@ public:
 	virtual void BindEventOnAbilityButtonReleased_Implementation(ASpecialEffect*Effect) override;
 
 	virtual void ApplyComboBonus_Implementation() override;
+
+	virtual void Die_Implementation() override;
 
 	/** Returns SideViewCameraComponent subobject **/
 	FORCEINLINE  UCameraComponent* GetSideViewCameraComponent() const { return SideViewCameraComponent; }

@@ -9,10 +9,23 @@
 #include "AI/AIMovementType.h"
 #include "AI/EnemyAIBase.h"
 #include "Components/SphereComponent.h"
+#include "Item/PickupableItemBase.h"
 #include "RPGCore/Public/RPGCharacterBase.h"
 #include "RPGCore/Public/AI/PatrolPointBase.h"
 #include "EnemyCharacterBase.generated.h"
 
+/*Simple struct to replace the TMap for loot because FDataTableRowHandle can not be used in Tmap*/
+USTRUCT(BlueprintType)
+struct FLootTypeInfo
+{
+	GENERATED_BODY()
+	public:
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	FDataTableRowHandle Info;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	int Amount;
+};
 /**
  * This is base class for every enemy existing in the world
  */
@@ -86,15 +99,25 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "AI|Attack")
 	bool bAnythingOverlappingLeftCollision = false;
+
+	/*Items to drop where key is what to drop and value is how much*/
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Loot")
+	TArray<FLootTypeInfo> ItemsToDrop;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Loot")
+	TSubclassOf<APickupableItemBase> LootDropItemClass = APickupableItemBase::StaticClass();
 	
 	UFUNCTION(BlueprintCallable,Category = "AI|Attack")
 	void CheckAttackCollision();
+	
 
 	virtual TArray<FName> GetEnemyTags_Implementation() override;
 
 	virtual void GetActorEyesViewPoint(FVector& Location, FRotator& Rotation) const override;
 
 	virtual void SetNewTarget_Implementation(AActor*Target)override;
+
+	virtual void Die_Implementation() override;
 
 	UFUNCTION()
 	void OnAttackCollisionOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

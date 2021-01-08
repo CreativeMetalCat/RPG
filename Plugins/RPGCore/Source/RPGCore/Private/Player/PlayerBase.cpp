@@ -3,6 +3,8 @@
 
 #include "RPGCore/Public/Player/PlayerBase.h"
 
+
+#include "Audio/AudioCaptionFunctionLibrary.h"
 #include "Player/PlayerLevelInfo.h"
 
 void APlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -99,6 +101,22 @@ void APlayerBase::ApplyComboBonus_Implementation()
 				}
 			}
 		}
+	}
+}
+
+void APlayerBase::Die_Implementation()
+{
+	Super::Die();
+	
+	if(DeathSound != nullptr)//check validity of the sound before playing
+	{
+		//Create caption info
+		FAudioInfo info = FAudioInfo();
+		info.bIsDirectional = false;
+		info.SoundName = "Player dies";
+		info.SoundLength = DeathSound->Duration;
+		
+		UAudioCaptionFunctionLibrary::PlaySoundWithCaption(this,DeathSound,info,GetActorLocation(),GetActorRotation());
 	}
 }
 

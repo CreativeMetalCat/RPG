@@ -47,7 +47,9 @@ public:
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Item",meta = (ExposeOnSpawn="true"))
 	int Amount = 1;
-	
 
+	/*Call this function if you set itemIfo after creating*/
+	void LoadDataFromTable();
+	
 	virtual void Interact_Implementation(AActor* Interactor) override;
 };

@@ -6,6 +6,8 @@
 
 
 #include "AIController.h"
+#include "NavigationSystem.h"
+#include "Item/PickupableItemBase.h"
 #include "Player/PlayerBase.h"
 
 //Because it's stupid name for a macro so only this project should have it
@@ -124,6 +126,32 @@ void AEnemyCharacterBase::GetActorEyesViewPoint(FVector& Location, FRotator& Rot
 void AEnemyCharacterBase::SetNewTarget_Implementation(AActor* Target)
 {
     CurrentTarget = Target;
+}
+
+void AEnemyCharacterBase::Die_Implementation()
+{
+    Super::Die();
+    //Use nav system to be sure that item is spawned where character can step
+    UNavigationSystemV1* NavSystem = Cast<UNavigationSystemV1>(GetWorld()->GetNavigationSystem());
+    
+    if (NavSystem)
+    {   
+        for (int i = 0; i < ItemsToDrop.Num(); i++)
+        {
+           FNavLocation location;
+           //get reachable point
+           if(NavSystem->GetRandomReachablePointInRadius(GetActorLocation(),100.f, location))
+           {
+               FActorSpawnParameters params = FActorSpawnParameters();
+               //if it spawns in the wall we want to try to adjust it's location
+               params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+               APickupableItemBase* item = GetWorld()->SpawnActor<APickupableItemBase>(LootDropItemClass,location.Location, FRotator::ZeroRotator, params);
+               item->Amount =  ItemsToDrop[i].Amount;
+               item->ItemInfo = ItemsToDrop[i].Info;
+               item->LoadDataFromTable();
+           }
+        }
+    }
 }
 
 void AEnemyCharacterBase::OnAttackCollisionOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
