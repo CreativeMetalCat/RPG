@@ -106,7 +106,20 @@ void APlayerBase::ApplyComboBonus_Implementation()
 
 void APlayerBase::Die_Implementation()
 {
-	Super::Die();
+	if(!bDead)
+	{
+		bDead = true;
+		bUseAnimationSystem = false;
+		if(GetController())
+		{
+			APlayerController *PC = Cast<APlayerController>(GetController());
+			if(PC)
+			{
+				DisableInput(PC);
+			}
+		}
+		OnDied.Broadcast();
+	}
 	
 	if(DeathSound != nullptr)//check validity of the sound before playing
 	{

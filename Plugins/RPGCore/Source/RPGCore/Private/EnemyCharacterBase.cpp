@@ -130,7 +130,21 @@ void AEnemyCharacterBase::SetNewTarget_Implementation(AActor* Target)
 
 void AEnemyCharacterBase::Die_Implementation()
 {
-    Super::Die();
+    if(!bDead)
+    {
+        bDead = true;
+        bUseAnimationSystem = false;
+        if(GetController())
+        {
+            APlayerController *PC = Cast<APlayerController>(GetController());
+            if(PC)
+            {
+                DisableInput(PC);
+            }
+        }
+        OnDied.Broadcast();
+    }
+    
     //Use nav system to be sure that item is spawned where character can step
     UNavigationSystemV1* NavSystem = Cast<UNavigationSystemV1>(GetWorld()->GetNavigationSystem());
     
