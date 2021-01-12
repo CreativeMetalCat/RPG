@@ -41,4 +41,10 @@ public:
 	/*Button is selected based on info in effect itself (AbilityId)*/
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category=Effect)
 	void BindEventOnAbilityButtonReleased(ASpecialEffect*Effect);
+
+	/*
+	 * it same function as IInteraction::Interact, but separately from it to avoid casting to check if player or puzzle piece tried to interact
+	 */
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category=Puzzles)
+	void ToggleMechanism(AActor*activator);
 };
