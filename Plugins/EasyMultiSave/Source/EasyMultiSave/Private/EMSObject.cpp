@@ -1,4 +1,4 @@
-//Easy Multi Save - Copyright (C) 2020 by Michael Hegemann.  
+//Easy Multi Save - Copyright (C) 2021 by Michael Hegemann.  
 
 #include "EMSObject.h"
 #include "EMSFunctionLibrary.h"
@@ -111,7 +111,10 @@ UEMSObject* UEMSObject::Get(UObject* WorldContextObject)
 
 void UEMSObject::OuterActorEndPlay(AActor* Actor, EEndPlayReason::Type EndPlayReason)
 {
-	RemoveFromRoot();
+	if (!IsPendingKillOrUnreachable() && IsRooted())
+	{
+		RemoveFromRoot();
+	}
 }
 
 /**
@@ -919,13 +922,14 @@ bool UEMSObject::CheckForExistingActor(const FActorSaveData& ActorArray)
 		return false;
 	}
 
-	for (FActorIterator It(GetWorld()); It; ++It)
+	const UWorld* ThisWorld = GetWorld();
+	if (ThisWorld && ThisWorld->PersistentLevel)
 	{
-		AActor* Actor = *It;
-		if (Actor->GetName() == StringFromBytes(ActorArray.Name))
+		const FName LoadedActorName(*StringFromBytes(ActorArray.Name));
+		AActor* NewLevelActor = Cast<AActor>(StaticFindObjectFast(nullptr, GetWorld()->PersistentLevel, LoadedActorName));
+		if (NewLevelActor)
 		{
-			UE_LOG(LogEasyMultiSave, Log, TEXT("Actor %s respawned from savegame already exists in the level. Updating."), *Actor->GetName());
-			ProcessLevelActor(Actor, ActorArray);
+			ProcessLevelActor(NewLevelActor, ActorArray);
 			return true;
 		}
 	}
@@ -943,6 +947,7 @@ void UEMSObject::SpawnLevelActor(const FActorSaveData & ActorArray)
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		SpawnParams.Name = FName(*StringFromBytes(ActorArray.Name));
+		SpawnParams.NameMode = FActorSpawnParameters::ESpawnActorNameMode::Required_ErrorAndReturnNull;  //don't crash
 
 		if (!IsInGameThread())
 		{
@@ -1306,6 +1311,31 @@ void UEMSObject::SerializeStructProperties(UObject* Object)
 		if (ArrayProp && ArrayProp->GetPropertyFlags() & CPF_SaveGame)
 		{
 			SerializeArrayStruct(*ArrayProp);
+		}
+	}
+
+	//Map Properties
+	for (TFieldIterator<FMapProperty> MapProp(Object->GetClass()); MapProp; ++MapProp)
+	{
+		if (MapProp && MapProp->GetPropertyFlags() & CPF_SaveGame)
+		{
+			SerializeMap(*MapProp);
+		}
+	}
+}
+
+void UEMSObject::SerializeMap(FMapProperty* MapProp)
+{
+	FProperty* ValueProp = MapProp->ValueProp;
+
+	if (ValueProp)
+	{
+		ValueProp->SetPropertyFlags(CPF_SaveGame);
+
+		const FStructProperty* ValueStructProp = CastField<FStructProperty>(ValueProp);
+		if (ValueStructProp)
+		{
+			SerializeScriptStruct(ValueStructProp->Struct);
 		}
 	}
 }

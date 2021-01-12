@@ -1,4 +1,4 @@
-//Easy Multi Save - Copyright (C) 2020 by Michael Hegemann.  
+//Easy Multi Save - Copyright (C) 2021 by Michael Hegemann.  
 
 #include "EMSFunctionLibrary.h"
 
@@ -154,4 +154,43 @@ void UEMSFunctionLibrary::ExportSaveThumbnail(UObject* WorldContextObject, UText
 	{
 		return EMS->ExportSaveThumbnail(TextureRenderTarget, SaveGameName);
 	}
+}
+
+/**
+Other Functions
+**/
+
+void UEMSFunctionLibrary::SetActorSaveProperties(UObject* WorldContextObject, bool bSkipSave, bool bPersistent)
+{
+	AActor* SaveActor = Cast<AActor>(WorldContextObject);
+	if (SaveActor)
+	{
+		if (bSkipSave)
+		{
+			SaveActor->Tags.Add(SkipSaveTag);
+		}
+		else
+		{
+			SaveActor->Tags.Remove(SkipSaveTag);
+		}
+
+		if (bPersistent)
+		{
+			SaveActor->Tags.Add(PersistentTag);
+		}
+		else
+		{
+			SaveActor->Tags.Remove(PersistentTag);
+		}
+	}
+}
+
+bool UEMSFunctionLibrary::IsSavingOrLoading(UObject* WorldContextObject)
+{
+	if (UEMSObject* EMS = UEMSObject::Get(WorldContextObject))
+	{
+		return EMS->IsAsyncSaveOrLoadTaskActive(ESaveGameMode::MODE_All);
+	}
+
+	return false;
 }

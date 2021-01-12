@@ -1,4 +1,4 @@
-//Easy Multi Save - Copyright (C) 2020 by Michael Hegemann.  
+//Easy Multi Save - Copyright (C) 2021 by Michael Hegemann.  
 
 #pragma once
 
@@ -126,6 +126,21 @@ public:
 	*/
 	UFUNCTION(BlueprintCallable, Category = "Easy Multi Save | Thumbnail", meta = (WorldContext = "WorldContextObject"))
 	static void ExportSaveThumbnail(UObject* WorldContextObject, UTextureRenderTarget2D* TextureRenderTarget, const FString& SaveGameName);
+
+	/**
+	* Adds and Removes the common EMS property tags. 
+	*
+	* @param bSkipSave -  Adds/Removes the EMS_SkipSave tag.
+	* @param bPersistent - Adds/Removes the EMS_Persistent tag.
+	*/
+	UFUNCTION(BlueprintCallable, Category = "Easy Multi Save | Actors", meta = (WorldContext = "WorldContextObject"))
+	static void SetActorSaveProperties(UObject* WorldContextObject, bool bSkipSave, bool bPersistent);
+
+	/**
+	* Checks if SaveGameActors or LoadGameActors is currently active.
+	*/
+	UFUNCTION(BlueprintPure, Category = "Easy Multi Save | Actors", meta = (WorldContext = "WorldContextObject"))
+	static bool IsSavingOrLoading(UObject* WorldContextObject);
 };
 
 

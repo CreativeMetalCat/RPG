@@ -1,4 +1,4 @@
-//Easy Multi Save - Copyright (C) 2020 by Michael Hegemann.  
+//Easy Multi Save - Copyright (C) 2021 by Michael Hegemann.  
 
 #include "EMSAsyncLoadGame.h"
 #include "EMSFunctionLibrary.h"

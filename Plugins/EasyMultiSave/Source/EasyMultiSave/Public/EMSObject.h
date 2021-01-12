@@ -1,4 +1,4 @@
-//Easy Multi Save - Copyright (C) 2020 by Michael Hegemann.  
+//Easy Multi Save - Copyright (C) 2021 by Michael Hegemann.  
 
 #pragma once
 
@@ -157,6 +157,7 @@ protected:
 	void SerializeStructProperties(UObject* Object);
 	void SerializeScriptStruct(UStruct* ScriptStruct);
 	void SerializeArrayStruct(FArrayProperty* ArrayProp);
+	void SerializeMap(FMapProperty* MapProp);
 
 	void SaveActorComponents(AActor* Actor, TArray<FComponentSaveData>& OutComponents);
 	void LoadActorComponents(AActor* Actor, const TArray<FComponentSaveData>& InComponents);
