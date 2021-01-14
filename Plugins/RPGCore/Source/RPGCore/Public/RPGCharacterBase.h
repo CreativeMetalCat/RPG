@@ -55,6 +55,8 @@ protected:
 
 	FTimerHandle ComboAttackResetTimerHandle;
 
+	FTimerHandle MovementStopTimerHandle;
+
 	/*Info for current item
 	 * Only used for animation
 	 */
@@ -290,6 +292,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Animations|Montage|Items")
 	virtual void PlayAnimationOnItems(FString animationName,bool loop);
 
+
+	/*Stops character movement by setting speed to 0
+	 * if ForHowLong is less or equals 0 movement doesn't stop
+	 * Used for simplifying ability animations
+	 * If there are previous movement locks they get overriden
+	 */
+	UFUNCTION(BlueprintCallable,Category = Movement)
+	void StopMovement(float ForHowLong);
+
+	void ResumeMovement();
+	
 	/*used to make code simplier
 	 * If you want animation to actually play with bUseAnimationSystem being true use PlayFlipbookAnimation
 	 */

@@ -53,6 +53,20 @@ public:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= SkillPointCost)
 	int SkillPointCost = 1;
 
+	/* IF false character will stop movement for HowLongCanNotMove seconds
+	* If you want this to be based on animation length then you need to set bCanMoveWhileUsing to true
+	* And manually call StopMovement is character using animation length as parameter
+	 */
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Movement)
+	bool bCanMoveWhileUsing = false;
+
+	/*if  bCanMoveWhileUsing is false character won't move for this much time
+	 * If you want this to be based on animation length then you need to set bCanMoveWhileUsing to true
+	 * And manually call StopMovement is character using animation length as parameter
+	 */
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Movement)
+	float HowLongCanNotMove = 1.f;
+	
 	/*
 	* This ability can not be gotten before all this are gotten
 	* For abilities that are upgrades

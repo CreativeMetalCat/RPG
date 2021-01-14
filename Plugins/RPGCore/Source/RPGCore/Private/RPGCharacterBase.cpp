@@ -319,6 +319,22 @@ void ARPGCharacterBase::PlayAnimationOnItems(FString animationName,bool looping)
 	}
 }
 
+void ARPGCharacterBase::StopMovement(float ForHowLong)
+{
+	if(ForHowLong > 0)
+	{
+		if(MovementStopTimerHandle.IsValid()){MovementStopTimerHandle.Invalidate();}
+		GetWorldTimerManager().SetTimer(MovementStopTimerHandle,this,&ARPGCharacterBase::ResumeMovement,ForHowLong);
+		GetCharacterMovement()->MaxWalkSpeed = 0;
+	}
+}
+
+void ARPGCharacterBase::ResumeMovement()
+{
+	if(MovementStopTimerHandle.IsValid()){MovementStopTimerHandle.Invalidate();}
+	GetCharacterMovement()->MaxWalkSpeed = DefaultMovementSpeed;
+}
+
 void ARPGCharacterBase::SetAnimation(UPaperFlipbook* animation, bool Loop)
 {
 	if(GetSprite()->GetFlipbook() != animation)
@@ -666,6 +682,11 @@ bool ARPGCharacterBase::UseAbility(int id)
                                                     Abilities[id].DevName
                                                 ),
                                                 Abilities[id].CooldownTime,false);
+			}
+			
+			if(!Abilities[id].bCanMoveWhileUsing)
+			{
+				StopMovement(Abilities[id].HowLongCanNotMove);
 			}
 			
 			CurrentMagicJuice -= Abilities[id].MannaUsage;
