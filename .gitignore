@@ -2,6 +2,13 @@ Binaries
 DerivedDataCache
 Intermediate
 Plugins\Developer
+Plugins\CustomConfig
+Plugins\DialoguePlugin
+Plugins\DiscordMessenger
+Plugins\EasyMultiSave
+Plugins\HorizonUIPlugin
+Plugins\LDAssistant
+Plugins\RegexInBP
 Saved
 .vscode
 .vs
