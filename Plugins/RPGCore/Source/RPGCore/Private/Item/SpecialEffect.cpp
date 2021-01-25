@@ -46,3 +46,13 @@ void ASpecialEffect::OnAbilityButtonReleased_Implementation()
 {
     
 }
+
+void ASpecialEffect::OnAccessoryPutOn_Implementation(AActor*accessoryOwner)
+{
+    Creator = accessoryOwner;
+}
+
+void ASpecialEffect::OnAccessoryTakeoff_Implementation()
+{
+    Destroy();
+}

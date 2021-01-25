@@ -26,6 +26,8 @@ enum class EItemType :uint8
     EIT_Consumable UMETA(DisplayName = "Consumable"),
     EIT_KeyItems UMETA(DisplayName = "KeyItems"),
     EIT_Materials UMETA(DisplayName = "Materials"),
+	//Accessory is type of item that is put on and applies effect until it's taken off
+	EIT_Accessory UMETA(DisplayName = "Accessory"),
     //Used for loot that drops from enemies
     EIT_Money UMETA(DisplayName = "Money"),
     EIT_Other UMETA(DisplayName = "Other",Description = "For items that can not be worn or used")

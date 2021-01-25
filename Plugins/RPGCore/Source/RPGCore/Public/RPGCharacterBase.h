@@ -358,6 +358,12 @@ public:
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Items)
 	bool SetCurrentItemById(int id,EItemType type);
 
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category="Items|Accessory")
+	bool PutOnAccessory();
+	
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category="Items|Accessory")
+    bool TakeOffAccessory();
+
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Death)
 	void Die();
 
@@ -584,6 +590,12 @@ public:
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Items|Shield",SaveGame)
 	bool bIsShieldPutUp = false;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Items|Accessory",SaveGame)
+	int32 AccessoryItemId = -1;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Items|Accessory",SaveGame)
+	ASpecialEffect*CurrentAccessoryEffect = nullptr;
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category="Movement",SaveGame)
 	float DefaultMovementSpeed = 600.f;

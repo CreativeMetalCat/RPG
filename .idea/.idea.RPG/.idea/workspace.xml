@@ -13,8 +13,6 @@
   </component>
   <component name="IdeDocumentHistory">
     <changedPaths>
-      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Item/SpecialEffect.cpp" />
-      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/SpecialEffect.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Direction.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Item/ItemInfo.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AI/AIInterface.h" />
@@ -30,7 +28,6 @@
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Projectile2dBase.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Projectile/Projectile2dMovementComponent.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Projectile/Projectile2dMovementComponent.cpp" />
-      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/ItemInfo.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Shop/ShopComponent.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Shop/ShopComponent.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/AccessibilityInterface.h" />
@@ -44,8 +41,11 @@
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Player/PlayerBase.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/EnemyCharacterBase.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Interaction.h" />
-      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/RPGCharacterBase.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Ability/AbilityInfo.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/ItemInfo.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/RPGCharacterBase.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/SpecialEffect.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Item/SpecialEffect.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/RPGCharacterBase.cpp" />
     </changedPaths>
   </component>

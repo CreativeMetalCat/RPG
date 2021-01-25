@@ -119,4 +119,12 @@ class RPGCORE_API ASpecialEffect : public AActor
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Player)
 	void OnAbilityButtonReleased();
 
+	/*Called when item that has this effect is put on like accessory*/
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Accessory)
+	void OnAccessoryPutOn(AActor*accessoryOwner);
+
+	/*Called when item that has this effect is taken of*/
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Accessory)
+    void OnAccessoryTakeoff();
+
 };

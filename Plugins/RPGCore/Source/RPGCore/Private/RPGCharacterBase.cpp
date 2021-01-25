@@ -549,6 +549,25 @@ bool ARPGCharacterBase::RemoveItem(const FString &devName, int amount)
 	return false;
 }
 
+bool ARPGCharacterBase::PutOnAccessory_Implementation()
+{
+	if(AccessoryItemId != INDEX_NONE)
+	{
+		if(Items[AccessoryItemId].SpecialEffect)
+		{
+			CurrentAccessoryEffect = Cast<ASpecialEffect>(GetWorld()->SpawnActor(Items[AccessoryItemId].SpecialEffect));
+			if(CurrentAccessoryEffect)
+			{
+				CurrentAccessoryEffect->AbilityId = AccessoryItemId;//for abilities that need to wait for player to release the button
+				CurrentAccessoryEffect->Damage *= AttackPower;//damage of the ability will increase with player's growing
+				CurrentAccessoryEffect->OnAccessoryPutOn(this);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 bool ARPGCharacterBase::AddItem_Implementation(FItemInfo item)
 {
 	int Count = item.CurrentAmount;
@@ -605,6 +624,11 @@ bool ARPGCharacterBase::SetCurrentItemById_Implementation(int id, EItemType type
 				ShieldItemId = id;
 				ShieldInfo = item;
 				return true;
+			case EItemType::EIT_Accessory:
+				if(AccessoryItemId != INDEX_NONE){TakeOffAccessory();}
+				AccessoryItemId = id;
+				GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,"EItemType::EIT_Accessory");
+				return PutOnAccessory();
 			default:
 				/*nothing else can be equipped*/
 				return false;
@@ -630,6 +654,17 @@ void ARPGCharacterBase::Die_Implementation()
 		}
 		OnDied.Broadcast();
 	}
+}
+
+bool ARPGCharacterBase::TakeOffAccessory_Implementation()
+{
+	if(AccessoryItemId != INDEX_NONE && CurrentAccessoryEffect)
+	{
+		CurrentAccessoryEffect->OnAccessoryTakeoff();
+		AccessoryItemId = INDEX_NONE;
+		return true;
+	}
+	return false;
 }
 
 int ARPGCharacterBase::AddHealth(int AddHealth)
@@ -818,6 +853,8 @@ FItemInfo ARPGCharacterBase::GetCurrentItemForType(bool& has, EItemType type)
 			if(Items.IsValidIndex(BottomPartArmorItemId)){has = true; return Items[BottomPartArmorItemId];}break;
 		case EItemType::EIT_Shield:
 			if(Items.IsValidIndex(ShieldItemId)){has = true; return Items[ShieldItemId];}break;
+		case EItemType::EIT_Accessory:
+			if(Items.IsValidIndex(AccessoryItemId)){has = true; return Items[AccessoryItemId];}break;
 		default:
 			return FItemInfo();
 	}
