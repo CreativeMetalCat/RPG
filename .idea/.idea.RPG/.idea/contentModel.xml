@@ -50774,11 +50774,12 @@
                   <e p="AudioCaptionFunctionLibrary.cpp" t="Include" />
                   <e p="AudioInfo.cpp" t="Include" />
                 </e>
+                <e p="Crafting" t="Include">
+                  <e p="CraftingActorBase.cpp" t="Include" />
+                  <e p="Recipe.cpp" t="Include" />
+                </e>
                 <e p="Direction.cpp" t="Include" />
                 <e p="EnemyCharacterBase.cpp" t="Include" />
-                <e p="Food" t="Include">
-                  <e p="FoodRecipe.cpp" t="Include" />
-                </e>
                 <e p="Interaction.cpp" t="Include" />
                 <e p="Item" t="Include">
                   <e p="ItemInfo.cpp" t="Include" />
@@ -50823,11 +50824,12 @@
                   <e p="AudioCaptionFunctionLibrary.h" t="Include" />
                   <e p="AudioInfo.h" t="Include" />
                 </e>
+                <e p="Crafting" t="Include">
+                  <e p="CraftingActorBase.h" t="Include" />
+                  <e p="Recipe.h" t="Include" />
+                </e>
                 <e p="Direction.h" t="Include" />
                 <e p="EnemyCharacterBase.h" t="Include" />
-                <e p="Food" t="Include">
-                  <e p="FoodRecipe.h" t="Include" />
-                </e>
                 <e p="Interaction.h" t="Include" />
                 <e p="Item" t="Include">
                   <e p="ItemInfo.h" t="Include" />

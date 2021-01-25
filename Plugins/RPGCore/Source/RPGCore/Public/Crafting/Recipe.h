@@ -5,14 +5,26 @@
 #include "CoreMinimal.h"
 
 #include "Engine/DataTable.h"
-#include "Engine/UserDefinedStruct.h"
-#include "FoodRecipe.generated.h"
+
+#include "Recipe.generated.h"
+
+USTRUCT(BlueprintType)
+struct FIngredientInfo
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	FDataTableRowHandle Info;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	int32 Count = 0;
+};
 
 /**
- * 
- */
+* 
+*/
 USTRUCT(BlueprintType)
-struct FFoodRecipe :public
+struct FRecipe :public
 FTableRowBase
 {
 	GENERATED_BODY()
@@ -39,7 +51,7 @@ public:
 
 	//Must point to a table that uses FItemInfo as row base
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Food")
-	TArray<FDataTableRowHandle> Ingredients;
+	TArray<FIngredientInfo> Ingredients;
 
 	//Must point to a table that uses FItemInfo as row base
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Food")
