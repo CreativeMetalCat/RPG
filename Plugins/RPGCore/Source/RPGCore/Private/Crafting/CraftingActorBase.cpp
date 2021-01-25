@@ -20,19 +20,37 @@ void ACraftingActorBase::BeginPlay()
 
 bool ACraftingActorBase::Craft(ARPGCharacterBase* Crafter, FRecipe Recipe)
 {
-	if(Crafter && Recipe.Ingredients.Num() > 0)
+	if(Crafter && Recipe.Ingredients.Num() > 0 && Recipe.ResultItem.Count > 0)
 	{
 		bool has = false;
 		int amount = 0;
-		for(int i = 0;i < Recipe.Ingredients.Num();i++)
+		//check if Character has items
+		for (int i = 0; i < Recipe.Ingredients.Num(); i++)
 		{
-			amount = Crafter->GetItemAmountByName(Recipe.Ingredients[i].Info.RowName.ToString(),has);
-			if(!(amount >= Recipe.Ingredients[i].Count && has))
+			amount = Crafter->GetItemAmountByName(Recipe.Ingredients[i].Info.RowName.ToString(), has);
+			if (amount < Recipe.Ingredients[i].Count || !has)
 			{
-				
+				//if not we say so
+				return false;
 			}
 		}
+
+		for (int i = 0; i < Recipe.Ingredients.Num(); i++)
+		{
+			Crafter->RemoveItem(Recipe.Ingredients[i].Info.RowName.ToString(),Recipe.Ingredients[i].Count);
+		}
+		
+		if(Recipe.ResultItem.Info.DataTable)
+		{
+			if(FItemInfo* result = Recipe.ResultItem.Info.GetRow<FItemInfo>(""))
+			{
+				result->CurrentAmount = Recipe.ResultItem.Count;
+				Crafter->AddItem(*result);
+				return true;
+			}			
+		}
 	}
+	
 	return false;
 }
 

@@ -55,5 +55,5 @@ public:
 
 	//Must point to a table that uses FItemInfo as row base
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Food")
-	FDataTableRowHandle ResultItem;
+	FIngredientInfo ResultItem;
 };
