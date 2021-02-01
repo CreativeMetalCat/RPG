@@ -130,19 +130,14 @@ void AEnemyCharacterBase::SetNewTarget_Implementation(AActor* Target)
 
 void AEnemyCharacterBase::Die_Implementation()
 {
-    if(!bDead)
+    
+    if(Killer)
     {
-        bDead = true;
-        bUseAnimationSystem = false;
-        if(GetController())
+        if(Cast<IInteraction>(Killer) || Killer->Implements<UInteraction>())
         {
-            APlayerController *PC = Cast<APlayerController>(GetController());
-            if(PC)
-            {
-                DisableInput(PC);
-            }
+            IInteraction::Execute_AddExperience(Killer,Experience);
+            GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Magenta,"Killer IInteraction");
         }
-        OnDied.Broadcast();
     }
     
     //Use nav system to be sure that item is spawned where character can step

@@ -47,4 +47,8 @@ public:
 	 */
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category=Puzzles)
 	void ToggleMechanism(AActor*activator);
+
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category=Expirience)
+	void AddExperience(int exp);
+	
 };

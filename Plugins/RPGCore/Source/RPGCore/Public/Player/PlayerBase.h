@@ -120,6 +120,9 @@ public:
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Exp)
     void LevelUp();
 
+	UFUNCTION(BlueprintPure)
+	int GetExpNeeded()const;
+
 	APlayerBase();
 
 	void DodgeRoll();
@@ -167,6 +170,8 @@ public:
 	virtual void ApplyComboBonus_Implementation() override;
 
 	virtual void Die_Implementation() override;
+
+	virtual void AddExperience_Implementation(int exp) override;
 
 	/** Returns SideViewCameraComponent subobject **/
 	FORCEINLINE  UCameraComponent* GetSideViewCameraComponent() const { return SideViewCameraComponent; }

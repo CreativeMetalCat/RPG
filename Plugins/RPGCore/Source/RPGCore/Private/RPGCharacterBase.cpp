@@ -1033,7 +1033,7 @@ int ARPGCharacterBase::DealDamage_Implementation(int Damage,AActor*DamageDealer,
 	}
 
 	Health -= ((Damage - TotalArmor) >= 0) ? (Damage - TotalArmor) : 0;
-	if(Health <= 0){Health = 0; Die();}
+	if(Health <= 0){Health = 0; Killer = Cast<ARPGCharacterBase>(DamageDealer);Die();}
 	else if(SpecialEffect)
 	{
 		if(SpecialEffect.GetDefaultObject()->bDoesEffectLasts)

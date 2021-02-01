@@ -133,6 +133,33 @@ void APlayerBase::Die_Implementation()
 	}
 }
 
+void APlayerBase::AddExperience_Implementation(int exp)
+{
+	AddExp(exp);
+}
+
+
+int APlayerBase::GetExpNeeded() const
+{
+	if(PlayerLevelInfoTable)
+	{
+		if(PlayerLevelInfoTable->GetRowNames().IsValidIndex(Level+1))
+		{
+			FPlayerLevelInfo info = *(PlayerLevelInfoTable->FindRow<FPlayerLevelInfo>(PlayerLevelInfoTable->GetRowNames()[Level+1],""));
+			return  info.NeededExp;
+		}
+		else
+		{
+			//if row wasn't found do it this way
+			return (Level + 1) * NeededExperienceMultiplier;
+		}
+	}
+	else
+	{
+		//if row wasn't found do it this way
+		return (Level + 1) * NeededExperienceMultiplier;
+	}
+}
 
 APlayerBase::APlayerBase()
 {
@@ -204,25 +231,7 @@ void APlayerBase::MoveUp(float Value)
 void APlayerBase::AddExp_Implementation(int amount)
 {
 	Experience += amount;
-	int neededExp = 0;
-	if(PlayerLevelInfoTable)
-	{
-		if(PlayerLevelInfoTable->GetRowNames().IsValidIndex(Level))
-		{
-			FPlayerLevelInfo info = *(PlayerLevelInfoTable->FindRow<FPlayerLevelInfo>(PlayerLevelInfoTable->GetRowNames()[Level],""));
-			neededExp = info.NeededExp;
-		}
-		else
-		{
-			//if row wasn't found do it this way
-			neededExp = (Level + 1) * NeededExperienceMultiplier;
-		}
-	}
-	else
-	{
-		//if row wasn't found do it this way
-		neededExp = (Level + 1) * NeededExperienceMultiplier;
-	}
+	const int neededExp = GetExpNeeded();
 	
 	if(Experience >= neededExp)
 	{

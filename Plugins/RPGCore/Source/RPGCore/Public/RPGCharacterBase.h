@@ -255,6 +255,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Montage")
 	bool bPlayingTopPriorityAnimMontage = false;
 #pragma endregion
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Death")
+	ARPGCharacterBase*Killer = nullptr;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Dodge")
 	bool bPlayingDodgeRollAnimation= false;
@@ -461,6 +463,9 @@ public:
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Direction,SaveGame)
 	EDirection CurrentDirection;
 
+	/*Amount of the experience this character has
+	 * In ai this value represents how much exp will player get for killing this ai
+	 */
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= Info,SaveGame)
 	int Experience = 0;
 	
