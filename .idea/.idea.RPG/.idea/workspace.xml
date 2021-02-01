@@ -42,7 +42,6 @@
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Interaction.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Ability/AbilityInfo.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/ItemInfo.h" />
-      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/RPGCharacterBase.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/SpecialEffect.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Item/SpecialEffect.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Food/FoodRecipe.h" />
@@ -50,8 +49,9 @@
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Crafting/Recipe.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Crafting/Recipe.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Crafting/CraftingActorBase.cpp" />
-      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/RPGCharacterBase.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Player/PlayerBase.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/RPGCharacterBase.h" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/RPGCharacterBase.cpp" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1jSDjgaV6fdvnuJSqu7NpLdyr2x" />

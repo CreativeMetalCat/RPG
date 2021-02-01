@@ -48,6 +48,9 @@ itemName##DisplayFlipbookComponent->Play();\
 	itemName##DisplayFlipbookComponent->Play();\
 	}
 
+#define CHECK_AND_UPDATE_CURRENT_ID(name,id)\
+	if(name > id){name--;}\
+	else if(name == id){name=INDEX_NONE;}
 
 	
 DEFINE_LOG_CATEGORY_STATIC(SideScrollerCharacter, Log, All);
@@ -165,6 +168,16 @@ UPaperFlipbook* ARPGCharacterBase::GetIdleAnimation()
 	default:
 		return IdleAnimationUp;
 	}
+}
+
+void ARPGCharacterBase::UpdateCurrentItemIds(int idOfRemoved)
+{
+	//because it was only on id that was removed we just shift the id of the rest
+	CHECK_AND_UPDATE_CURRENT_ID(CurrentWeaponId,idOfRemoved)
+	CHECK_AND_UPDATE_CURRENT_ID(TopPartArmorItemId,idOfRemoved)
+	CHECK_AND_UPDATE_CURRENT_ID(MiddlePartArmorItemId,idOfRemoved);
+	CHECK_AND_UPDATE_CURRENT_ID(BottomPartArmorItemId,idOfRemoved);
+	CHECK_AND_UPDATE_CURRENT_ID(ShieldItemId,idOfRemoved);
 }
 
 UPaperFlipbook* ARPGCharacterBase::GetRunningAnimation()
@@ -529,18 +542,26 @@ bool ARPGCharacterBase::RemoveItem(const FString &devName, int amount)
 	GetItemByName(devName,hasItem);//more compact check
 	if(hasItem)
 	{
+		int count = amount;
 		for (int i = 0; i < Items.Num(); i++)
 		{
 			if(Items[i].DevName == devName)
 			{
-				if(Items[i].CurrentAmount > amount)
+				if(Items[i].CurrentAmount < count)
 				{
-					Items[i].CurrentAmount -= amount;
+					count -= Items[i].CurrentAmount;
+					Items.RemoveAt(i);
+					UpdateCurrentItemIds(i);
+				}
+				if(Items[i].CurrentAmount > count)
+				{
+					Items[i].CurrentAmount -= count;
 					return true;//we successfully removed needed amount
 				}
-				else if(Items[i].CurrentAmount == amount)
+				else if(Items[i].CurrentAmount == count)
 				{
 					Items.RemoveAt(i);
+					UpdateCurrentItemIds(i);
 					return true;//we successfully removed item
 				}
 			}
@@ -597,45 +618,80 @@ bool ARPGCharacterBase::AddItem_Implementation(FItemInfo item)
 
 bool ARPGCharacterBase::SetCurrentItemById_Implementation(int id, EItemType type)
 {
-	bool hasItem = false;
-	const FItemInfo item = GetItemById(id, hasItem);
-	if (hasItem)
+	if(id != INDEX_NONE)
 	{
-		if (item.Type == type)
+		bool hasItem = false;
+		const FItemInfo item = GetItemById(id, hasItem);
+		if (hasItem)
 		{
-			switch (type)
+			if (item.Type == type)
 			{
-			case EItemType::EIT_ArmorTop:
-				TopPartArmorItemId = id;
-				ArmorTopPartInfo = item;
-				return true;
-			case EItemType::EIT_ArmorBottom:
-				BottomPartArmorItemId = id;
-				ArmorBottomPartInfo = item;
-				return true;
-			case EItemType::EIT_ArmorMiddle:
-				MiddlePartArmorItemId = id;
-				ArmorMiddlePartInfo = item;
-				return true;
-			case EItemType::EIT_Weapon:
-				CurrentWeaponId = id;
-				return true;
-			case EItemType::EIT_Shield:
-				ShieldItemId = id;
-				ShieldInfo = item;
-				return true;
-			case EItemType::EIT_Accessory:
-				if(AccessoryItemId != INDEX_NONE){TakeOffAccessory();}
-				AccessoryItemId = id;
-				GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,"EItemType::EIT_Accessory");
-				return PutOnAccessory();
-			default:
-				/*nothing else can be equipped*/
-				return false;
+				switch (type)
+				{
+				case EItemType::EIT_ArmorTop:
+					TopPartArmorItemId = id;
+					ArmorTopPartInfo = item;
+					return true;
+				case EItemType::EIT_ArmorBottom:
+					BottomPartArmorItemId = id;
+					ArmorBottomPartInfo = item;
+					return true;
+				case EItemType::EIT_ArmorMiddle:
+					MiddlePartArmorItemId = id;
+					ArmorMiddlePartInfo = item;
+					return true;
+				case EItemType::EIT_Weapon:
+					CurrentWeaponId = id;
+					return true;
+				case EItemType::EIT_Shield:
+					ShieldItemId = id;
+					ShieldInfo = item;
+					return true;
+				case EItemType::EIT_Accessory:
+					if(AccessoryItemId != INDEX_NONE){TakeOffAccessory();}
+					AccessoryItemId = id;
+					GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,"EItemType::EIT_Accessory");
+					return PutOnAccessory();
+				default:
+					/*nothing else can be equipped*/
+					return false;
+				}
 			}
 		}
+		return false;
 	}
-	return false;
+	else
+	{
+		switch (type)
+		{
+		case EItemType::EIT_ArmorTop:
+			TopPartArmorItemId = id;
+			ArmorTopPartInfo = FItemInfo();
+			return true;
+		case EItemType::EIT_ArmorBottom:
+			BottomPartArmorItemId = id;
+			ArmorBottomPartInfo = FItemInfo();
+			return true;
+		case EItemType::EIT_ArmorMiddle:
+			MiddlePartArmorItemId = id;
+			ArmorMiddlePartInfo = FItemInfo();
+			return true;
+		case EItemType::EIT_Weapon:
+			CurrentWeaponId = id;
+			return true;
+		case EItemType::EIT_Shield:
+			ShieldItemId = id;
+			ShieldInfo = FItemInfo();
+			return true;
+		case EItemType::EIT_Accessory:
+			TakeOffAccessory();
+			return true;
+		default:
+			/*nothing else can be equipped*/
+			return false;
+			return true;
+		}
+	}
 }
 
 void ARPGCharacterBase::Die_Implementation()

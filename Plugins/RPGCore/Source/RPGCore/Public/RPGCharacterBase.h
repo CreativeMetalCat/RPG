@@ -107,6 +107,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animations|Items")
 	UPaperFlipbookComponent*ShieldDisplayFlipbookComponent;
+
+	void UpdateCurrentItemIds(int idOfRemoved);
 public:
 
 	/* The animation to play while running around
@@ -354,7 +356,9 @@ public:
 	UFUNCTION(BlueprintCallable,Category=Items)
 	bool RemoveItem(const FString &devName,int amount);
 
-	/*Set current weapon,armor to be one of the items from inventory. Use this to equip weapons etc.*/
+	/*Set current weapon,armor to be one of the items from inventory. Use this to equip weapons etc.
+	 *passing -1 as id will result in current item of that type to be unequipped
+	 */
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent,Category=Items)
 	bool SetCurrentItemById(int id,EItemType type);
 
