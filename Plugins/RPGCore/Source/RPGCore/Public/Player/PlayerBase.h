@@ -47,6 +47,14 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnAbilitySlot4ButtonReleased OnAbilitySlot4ButtonReleased;
 #pragma endregion
+
+	//How much health can player have in the entire game
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=MaxStats,SaveGame)
+	float MaxHealthInAllGame = 2000.f;
+
+	//How much magicJuice can player have in the entire game
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=MaxStats,SaveGame)
+	float MaxMagicJuiceInAllGame = 1000.f;
 	
 	/*ALL quests that game has*/
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category=Quest,SaveGame)

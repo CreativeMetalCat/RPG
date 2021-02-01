@@ -928,6 +928,7 @@ void ARPGCharacterBase::EndDodgeRollCooldown()
 
 void ARPGCharacterBase::ReactToDamage_Implementation()
 {
+	UpdatePlayerInfo();
 	//Play camera shakes, damage anims, etc. here
 }
 
@@ -974,8 +975,8 @@ int ARPGCharacterBase::DealDamage_Implementation(int Damage,AActor*DamageDealer,
 	{
 		TotalArmor += bIsShieldPutUp ? item.Defence : 0;
 	}
-	
-	Health-=((Damage - TotalArmor) >=0 )?(Damage - TotalArmor): 0;
+
+	Health -= ((Damage - TotalArmor) >= 0) ? (Damage - TotalArmor) : 0;
 	if(Health <= 0){Health = 0; Die();}
 	else if(SpecialEffect)
 	{
