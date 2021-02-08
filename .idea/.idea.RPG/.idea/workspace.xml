@@ -36,7 +36,6 @@
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Audio/AudioInfo.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Item/PickupableItemBase.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/PickupableItemBase.h" />
-      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/EnemyCharacterBase.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Ability/AbilityInfo.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/ItemInfo.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/Item/SpecialEffect.h" />
@@ -51,6 +50,7 @@
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/Player/PlayerBase.cpp" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/RPGCharacterBase.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/RPGCharacterBase.cpp" />
+      <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Public/EnemyCharacterBase.h" />
       <option value="$PROJECT_DIR$/Plugins/RPGCore/Source/RPGCore/Private/EnemyCharacterBase.cpp" />
     </changedPaths>
   </component>

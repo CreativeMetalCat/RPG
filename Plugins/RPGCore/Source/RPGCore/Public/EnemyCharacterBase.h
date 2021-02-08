@@ -38,6 +38,9 @@ protected:
 public:
 
 	AEnemyCharacterBase();
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
+	UTextRenderComponent*ExpTextRenderComponent;
 
 	/*The controller to use if default controller is null on spawn */
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category = "AI")

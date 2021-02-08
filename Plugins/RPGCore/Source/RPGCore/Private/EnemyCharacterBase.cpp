@@ -7,6 +7,7 @@
 
 #include "AIController.h"
 #include "NavigationSystem.h"
+#include "Components/TextRenderComponent.h"
 #include "Item/PickupableItemBase.h"
 #include "Player/PlayerBase.h"
 
@@ -27,7 +28,10 @@
 
 
 AEnemyCharacterBase::AEnemyCharacterBase()
-{
+{  
+    ExpTextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("ExpText"));
+    ExpTextRenderComponent->SetupAttachment(RootComponent);
+        
     UpperCollision->OnComponentBeginOverlap.AddDynamic(this,& AEnemyCharacterBase::OnAttackCollisionOverlapBegin);
 
     LowerCollision->OnComponentBeginOverlap.AddDynamic(this,& AEnemyCharacterBase::OnAttackCollisionOverlapBegin);
@@ -43,6 +47,7 @@ AEnemyCharacterBase::AEnemyCharacterBase()
     LeftCollision->OnComponentEndOverlap.AddDynamic(this,&AEnemyCharacterBase::OnAttackCollisionEndOverlap);
 
     RightCollision->OnComponentEndOverlap.AddDynamic(this,&AEnemyCharacterBase::OnAttackCollisionEndOverlap);
+
 }
 
 
