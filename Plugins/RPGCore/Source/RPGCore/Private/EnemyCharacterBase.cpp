@@ -80,24 +80,46 @@ void AEnemyCharacterBase::CheckAttackCollision()
         if (bAnythingOverlappingUpperCollision)
         {
             CHECK_AND_ATTACK(Upper, Up);
-            //return;
+            return;
         }
         if (bAnythingOverlappingRightCollision)
         {
             CHECK_AND_ATTACK(Right, Right);
-            //return;
+            return;
         }
         if (bAnythingOverlappingLowerCollision)
         {
             CHECK_AND_ATTACK(Lower, Down);
-            //return;
+            return;
         }
         if (bAnythingOverlappingLeftCollision)
         {
             CHECK_AND_ATTACK(Left, Left);
-            //return;
+            return;
         }
     }
+}
+
+bool AEnemyCharacterBase::IsEnemy(AActor* Actor)
+{
+    if(Actor)
+    {
+        for (int i = 0; i < EnemyTags.Num(); i++)
+        {
+            if(Actor->Tags.Find(EnemyTags[i]) != INDEX_NONE)
+            {
+                if(ARPGCharacterBase * character = Cast<ARPGCharacterBase>(Actor))
+                {
+                    return !character->bDead;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 TArray<FName> AEnemyCharacterBase::GetEnemyTags_Implementation()
@@ -174,23 +196,41 @@ void AEnemyCharacterBase::OnAttackCollisionOverlapBegin(UPrimitiveComponent* Ove
     
     if(OverlappedComp == UpperCollision)
     {
-        CurrentDirection = EDirection::ED_Up;
-       bAnythingOverlappingUpperCollision = true;
+        if(IsEnemy((OtherActor)))
+        {
+            CurrentDirection = EDirection::ED_Up;
+            bAnythingOverlappingUpperCollision = true;
+        }
     }
     else if(OverlappedComp == LowerCollision)
     {
-        CurrentDirection = EDirection::ED_Down;
-        bAnythingOverlappingLowerCollision = true;
+        if(IsEnemy((OtherActor)))
+        {
+            CurrentDirection = EDirection::ED_Down;
+            bAnythingOverlappingLowerCollision = true;
+        }
     }
     else if(OverlappedComp == LeftCollision)
     {
-        CurrentDirection = EDirection::ED_Left;
-        bAnythingOverlappingLeftCollision = true;
+        if(IsEnemy((OtherActor)))
+        {
+            CurrentDirection = EDirection::ED_Left;
+            bAnythingOverlappingLeftCollision = true;
+        }
     }
     else if(OverlappedComp == RightCollision)
     {
-        CurrentDirection = EDirection::ED_Right;
-        bAnythingOverlappingRightCollision = true;
+        if(IsEnemy((OtherActor)))
+        {
+            CurrentDirection = EDirection::ED_Right;
+            bAnythingOverlappingRightCollision = true;
+        }
+    }
+
+    if(bAnythingOverlappingLeftCollision || bAnythingOverlappingLowerCollision
+        || bAnythingOverlappingRightCollision || bAnythingOverlappingUpperCollision)
+    {
+        bUpdateAnimationDirection = false;
     }
 }
 
@@ -205,7 +245,6 @@ void AEnemyCharacterBase::OnAttackCollisionEndOverlap(UPrimitiveComponent* Overl
         {
             bAnythingOverlappingUpperCollision = false;
         }
-        return;
     }
     else if (OverlappedComp == LowerCollision)
     {
@@ -215,7 +254,6 @@ void AEnemyCharacterBase::OnAttackCollisionEndOverlap(UPrimitiveComponent* Overl
         {
             bAnythingOverlappingLowerCollision = false;
         }
-        return;
     }
     else if (OverlappedComp == LeftCollision)
     {
@@ -225,7 +263,6 @@ void AEnemyCharacterBase::OnAttackCollisionEndOverlap(UPrimitiveComponent* Overl
         {     
             bAnythingOverlappingLeftCollision = false;
         }
-        return;
     }
     else if (OverlappedComp == RightCollision)
     {
@@ -234,7 +271,12 @@ void AEnemyCharacterBase::OnAttackCollisionEndOverlap(UPrimitiveComponent* Overl
         if(Overlapped.Num() == 0)
         {
             bAnythingOverlappingRightCollision = false;
-        }
-        return;      
+        } 
+    }
+
+    if(!bAnythingOverlappingLeftCollision && !bAnythingOverlappingLowerCollision
+        && !bAnythingOverlappingRightCollision && !bAnythingOverlappingUpperCollision)
+    {
+        bUpdateAnimationDirection = true;
     }
 }

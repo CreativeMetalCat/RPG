@@ -112,6 +112,9 @@ public:
 	
 	UFUNCTION(BlueprintCallable,Category = "AI|Attack")
 	void CheckAttackCollision();
+
+	UFUNCTION(BlueprintPure,Category="Enemies")
+    bool IsEnemy(AActor*Actor);
 	
 
 	virtual TArray<FName> GetEnemyTags_Implementation() override;

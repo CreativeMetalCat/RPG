@@ -243,6 +243,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Animations",SaveGame)
 	bool bUseAnimationSystem = true;
+	
+	UPROPERTY(BlueprintReadWrite,EditAnywhere,Category= "Animations",SaveGame)
+	bool bUpdateAnimationDirection = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations|Death")
 	UPaperFlipbook *DeathAnimation;

@@ -1096,7 +1096,7 @@ void ARPGCharacterBase::UpdateCharacter()
 	float VerticalDirection = FMath::RoundToInt(PlayerVelocity.Y/DefaultMovementSpeed);
 	
 	// Set the rotation so that the character faces his direction of travel.
-	if (Controller != nullptr)
+	if (Controller != nullptr && bUpdateAnimationDirection)
 	{
 		if(HorizontalDirection < 0.f  && VerticalDirection == 0.f)
 		{
