@@ -80,22 +80,22 @@ void AEnemyCharacterBase::CheckAttackCollision()
         if (bAnythingOverlappingUpperCollision)
         {
             CHECK_AND_ATTACK(Upper, Up);
-            return;
+            //return;
         }
         if (bAnythingOverlappingRightCollision)
         {
             CHECK_AND_ATTACK(Right, Right);
-            return;
+            //return;
         }
         if (bAnythingOverlappingLowerCollision)
         {
             CHECK_AND_ATTACK(Lower, Down);
-            return;
+            //return;
         }
         if (bAnythingOverlappingLeftCollision)
         {
             CHECK_AND_ATTACK(Left, Left);
-            return;
+            //return;
         }
     }
 }
